@@ -4,10 +4,10 @@ We are currently developing an **event finder web application** that allows user
 
 ### Directories
 
-[Team Roster Page]()
+..*[Team Roster Page]()
 
-[Software Design Page]()
+..*[Software Design Page]()
 
-[UI Design Page]()
+..*[UI Design Page]()
 
-[Project Plan Page]()
+..*[Project Plan Page]()
