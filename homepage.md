@@ -1,6 +1,6 @@
 ## Project Name - CS 2212 Team 18
 
-You can use the [editor on GitHub](https://github.com/jlee2967/CS2212-Group-18/edit/master/index.md) to maintain and preview the content for your website in Markdown files.
+We are currently developing an event finder web application that allows users to specify their interests and present nearby upcoming/on-going events that matches their interests.
 
 Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
 
