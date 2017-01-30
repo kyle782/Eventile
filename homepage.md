@@ -4,7 +4,7 @@ We are currently developing an **event finder web application** that allows user
 
 ### Directories
 
-    [Link]
+    [Link](https://www.facebook.com/)
 
 ```markdown
 Syntax highlighted code block
