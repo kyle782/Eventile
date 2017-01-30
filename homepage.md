@@ -1,4 +1,4 @@
-## Welcome to GitHub Pages
+## Project Name - CS 2212 Team 18
 
 You can use the [editor on GitHub](https://github.com/jlee2967/CS2212-Group-18/edit/master/index.md) to maintain and preview the content for your website in Markdown files.
 
