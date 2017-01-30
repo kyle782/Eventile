@@ -2,11 +2,9 @@
 
 We are currently developing an **event finder web application** that allows users to specify their interests and present nearby upcoming/on-going events that matches their interests.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+### Directories
 
-### Markdown
-
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+    [Link]
 
 ```markdown
 Syntax highlighted code block
