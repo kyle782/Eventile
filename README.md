@@ -4,7 +4,7 @@ We are currently developing an **event finder web application** that allows user
 
 ### Team Logo
 
-<center><img src="Example Logo.jpg" alt="Example Logo" style="width:100px; height:100px;"></center>
+<img src="Example Logo.jpg" alt="Example Logo" style="width:100px; height:100px;">
 
 ### Directories
 
