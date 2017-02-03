@@ -4,7 +4,6 @@
 
 **_Frank Jiao_**<br>
 Program: Computer Science and Medical Science<br>
-
 Year: 5<br>
 Skills: Java, C, Python, HTML<br>
 Background: Chinese<br>
