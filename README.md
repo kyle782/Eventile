@@ -8,6 +8,8 @@ We are currently developing an **event finder web application** that allows user
 
 ### Directories
 
+[Team Webpage](https://jlee2967.github.io/Eventile/)
+
 [Team Roster Page](GitHubPages/TEAMROSTER.md)
 
 [Software Design Page](GitHubPages/SOFTWAREDESIGN.md)
