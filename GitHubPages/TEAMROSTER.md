@@ -62,4 +62,4 @@ Background: Korean<br>
 Hobbies: Fishing, Gaming, Table Tennis, watching anime<br>
 Roles:<br>
 
-[Go back to Home Page](README.md)
+[Go back to Home Page](../README.md)
