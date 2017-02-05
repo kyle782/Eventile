@@ -4,7 +4,7 @@ We are currently developing an **event finder web application** that allows user
 
 ### Team Logo
 
-<img src="GitHubPages/Images/Eventile Logo.jpg" alt="Example Logo" style="width:100px; height:100px;">
+<img src="GitHubPages/Images/Eventile Logo.jpg" alt="Eventile Logo" style="width:100px; height:100px;">
 
 ### Directories
 
