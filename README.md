@@ -10,7 +10,7 @@ We are currently developing an **event finder web application** that allows user
 
 [Team Roster Page](GitHubPages/TEAMROSTER.md)
 
-[Software Design Page]()
+[Software Design Page](GitHubPages/SOFTWAREDESIGN.md)
 
 [UI Design Page]()
 
