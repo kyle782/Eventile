@@ -11,7 +11,7 @@ Online Diagram Software [**Creately**](https://creately.com/) was used to create
 
 ### Material Design
 
-We wanted the aesthetic of our web app to follow Material Design principles in order to create a clean, modern, and responsive interface for the user. 
+We wanted the aesthetic of our web app to follow Material Design principles in order to create a clean, modern, and responsive interface for the user. [Here is an example that encapsulates our intended design](http://materializecss.com/images/showcase/adbeus.png)
 
 #### Colours
 
