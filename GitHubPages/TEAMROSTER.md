@@ -16,7 +16,7 @@ Year: 5<br>
 Skills: Java, C, Python, R, Perl<br>
 Background: Hungarian/Scottish<br>
 Hobbies: Litsening to/Playing/Teaching Music, Wilderness Camping<br>
-Roles:<br>
+Roles: Creative artistic director of UML<br>
 
 **_Kenny Galang_**<br>
 Program: Honours & Specialization in Computer Science<br>
