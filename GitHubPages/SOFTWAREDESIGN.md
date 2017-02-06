@@ -11,7 +11,7 @@ Online Diagram Software [**Creately**](https://creately.com/) was used to create
 
 ### Material Design
 
-We wanted the aesthetic of our web app to follow Material Design principles in order to create a clean, modern, and responsive interface for the user. [Here is an example that encapsulates our intended design](http://materializecss.com/images/showcase/adbeus.png)
+We wanted the aesthetic of our web app to follow Material Design principles in order to create a clean, modern, and responsive interface for the user. 
 
 #### Colours
 
@@ -39,7 +39,37 @@ The top navigation bar will consist of flat buttons that redirect the user to th
 
 By clicking on the event's tile, users will be redirected to the event's corresponding page, containing more information about the event. 
 
+### Welcome Page
 
+This page is the default page for new visitors, and users who are not logged in. The main component contains a slideshow containing information about our website, with a button that will scroll the page down to the "Popular Events Near [Location" section. 
+
+In this section, users are presented with popular events that are near their current location, obtained through the browser. Users are able to click on any of the event tiles, and will be redirected to the corresponding event's page. 
+
+If there are more nearby events, the user can click on page naviation buttons to view more popular events nearby. 
+
+### Registration Page
+
+This page allows users to enter their credentials and basic information into the text fields. Upon clicking "Submit", their account will be created using their information, and they will be redirected to the Preferences page. 
+
+### Preferences Page
+
+This page will allow users to select from a group of tags what type of events they are interested in. 
+
+### Login Page
+
+This page is a basic login form that allows users to enter their email and password. Upon clicking "Submit", their credentials are verified, and they will be redirected to their personal Homepage. 
+
+### Homepage 
+
+This is the main page of the app. After users login, they are redirected to this page. It will contain all the nearby events that match their criteria, organized into tiles in a grid layout. 
+
+The user will also have the ability to use the Filter feature, allowing them to filter out events by distance, price, etc. 
+
+### Individual Event Page
+
+Users are redirected to this page when they click on an event tile, from either the Welcome page or Homepage. It will contain more information about the event. 
+
+Users can scroll down to view other nearby events, and the user can use the page navigation buttons to view more nearby events, similar to the Welcome page. 
 
 
 [Go back to Home Page](../README.md)
