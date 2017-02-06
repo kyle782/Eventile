@@ -14,6 +14,6 @@ We are currently developing an **event finder web application** that allows user
 
 [Software Design Page](GitHubPages/SOFTWAREDESIGN.md)
 
-[UI Design Page]()
+[UI Design Page](GitHubPages/UIDESIGN.md)
 
 [Project Plan Page]()
