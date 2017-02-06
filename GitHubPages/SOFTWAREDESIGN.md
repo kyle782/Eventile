@@ -6,4 +6,9 @@ This is the current UML Diagram for our web application **Eventile**.
 
 Online Diagram Software [**Creately**](https://creately.com/) was used to create this UML diagram.
 
+
+## UI Design Philosophy
+
+test 
+
 [Go back to Home Page](../README.md)
