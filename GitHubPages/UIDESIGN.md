@@ -68,6 +68,6 @@ Users can scroll down to view other nearby events, and the user can use the page
 
 <img src="../GitHubPages/Images/UI-Mockup-1.png" alt="UI-Mockup">
 <img src="GitHubPages/Images/UI-Mockup-1.png" alt="UI-Mockup" style="width:100px; height:100px;">
-
+<img src="https://i.imgur.com/Vyxxgir.jpg">
 
 [Go back to Home Page](../README.md)
