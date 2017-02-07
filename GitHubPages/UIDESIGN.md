@@ -26,7 +26,7 @@ Google's specifications for Materiam Design's responsive UI is based on a 12-col
 
 ## User Interactions
 
-Users will primarily interact with our app using buttons. Events will be displayed to the user in a grid layout, with each event being contained in a "tile". Users will also be able to click on the tile to be redirected to the selected event. 
+Users will primarily interact with our app using buttons/hyperlinks. Events will be displayed to the user in a grid layout, with each event being contained in a "tile". Users will also be able to click on the tile to be redirected to the selected event. 
 
 The top navigation bar will consist of flat buttons that redirect the user to the destination page. 
 
@@ -63,6 +63,10 @@ The user will also have the ability to use the Filter feature, allowing them to 
 Users are redirected to this page when they click on an event tile, from either the Welcome page or Homepage. It will contain more information about the event. 
 
 Users can scroll down to view other nearby events, and the user can use the page navigation buttons to view more nearby events, similar to the Welcome page. 
+
+## UI Mockup
+
+[[]]
 
 
 [Go back to Home Page](../README.md)
