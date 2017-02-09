@@ -60,6 +60,6 @@ Year: 3rd<br>
 Skills: Java, C/C++, Python, HTML5, XML, VBA, Assembly, Lisp<br>
 Background: Korean<br>
 Hobbies: Fishing, Gaming, Table Tennis, watching anime<br>
-Roles:<br>
+Roles: GitPage Mastermind<br>
 
 [Go back to Home Page](../README.md)

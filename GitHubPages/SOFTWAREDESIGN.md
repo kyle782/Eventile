@@ -1,4 +1,4 @@
-# Software Design Page of Eventile
+# Software Design Page for Eventile
 
 This is the current UML Diagram for our web application **Eventile**.
 

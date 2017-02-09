@@ -6,6 +6,10 @@ We are currently developing an **event finder web application** that allows user
 
 <img src="GitHubPages/Images/Eventile Logo.png" alt="Eventile Logo" style="width:100px; height:100px;">
 
+### Software Description
+
+
+
 ### Directories
 
 [Team Webpage](https://jlee2967.github.io/Eventile/)
