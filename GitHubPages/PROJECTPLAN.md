@@ -21,9 +21,10 @@
   Events will be sorted by categories depending on the categorization in the given API. 
 
 **_Sorting Events (by location, price, ect.)_** <br>
-  Users can sort their displayed list of events depending on a specific criteria or filter that they choose.
+  Users can sort their displayed list of events depending on a specific criteria or filter that they choose. This can be done on any page 
 
 **_See People Going to Event_** <br>
+  
   
   
 
