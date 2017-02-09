@@ -2,6 +2,10 @@
 
 We are currently developing an **event finder web application** that allows users to specify their interests and present nearby upcoming/on-going events that matches their interests.
 
+## Software
+
+We will be using Grails for our web application framework. Our back-end database will be using MySQL, and our front-end will use the Bootstrap framework, and possibly React. 
+
 ### Team Logo
 
 <img src="GitHubPages/Images/Eventile Logo.png" alt="Eventile Logo" style="width:100px; height:100px;">
