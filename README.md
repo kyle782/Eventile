@@ -10,6 +10,10 @@ We will be using Grails for our web application framework. Our back-end database
 
 <img src="GitHubPages/Images/Eventile Logo.png" alt="Eventile Logo" style="width:100px; height:100px;">
 
+### Team Banner
+
+<img src="http://kalendarz.samorzad.agh.edu.pl/css/index/logo.png">
+
 ### Software Description
 
 
