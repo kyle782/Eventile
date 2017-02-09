@@ -26,6 +26,6 @@ We will be using Grails for our web application framework. Our back-end database
 
 [UI Design Page](GitHubPages/UIDESIGN.md)
 
-[Project Plan Page](GithubPages/PROJECTPLAN.md)
+[Project Plan Page](GitHubPages/PROJECTPLAN.md)
 
 
