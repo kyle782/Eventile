@@ -1,8 +1,8 @@
 # Project Plan Page for Eventile
 
-### Implementation Plan
+**_User Profile Stores Information** <br>
 
-**_User Profile Stores Preferences_** <br>
+**_Suggested events_** <br>
   Based on themes either manually entered by the user or taken from the events themselves, Eventile notifies the user of events they may prefer. User profile information like this is stored in our database and the themes to categorize events come with the events found by API calls to Eventbrite, Ticketmaster, or Eventful.
   
 **_Event Searching_** <br>
@@ -10,6 +10,17 @@
   
 **_Event Browsing_** <br>
   Without even searching, the user's event page will use API calls to Eventbrite and load a steady stream of events to browse through.
+  
+**_Event Advertising_** <br>
+
+**_Event Rating With Comments_** <br>
+
+**_Event Categories_** <br>
+
+**_Sorting Events (by location, price, ect.)_** <br>
+
+**_See People Going to Event_** <br>
+
   
 
 
