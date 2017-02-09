@@ -8,7 +8,7 @@ Year: 5<br>
 Skills: Java, C, Python, HTML<br>
 Background: Chinese<br>
 Hobbies: Sports, reading<br>
-Roles:<br>
+Roles:SQL Master Wannabe<br>
 
 **_Connor Chato_**<br>
 Program: Honours Specialization in Biology with Computer Sciences Minor<br>
