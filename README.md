@@ -8,11 +8,11 @@ We will be using Grails for our web application framework. Our back-end database
 
 ## Team Branding
 
-## Team Logo
+### Team Logo
 
 <img src="GitHubPages/Images/Eventile Logo.png" alt="Eventile Logo" style="width:100px; height:100px;">
 
-## Alternative Team Logo
+### Alternative Team Logo
 
 <img src="http://kalendarz.samorzad.agh.edu.pl/css/index/logo.png">
 
