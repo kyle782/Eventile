@@ -12,15 +12,19 @@
   Without even searching, the user's event page will use API calls to Eventbrite and load a steady stream of events to browse through.
   
 **_Event Advertising_** <br>
+  
 
 **_Event Rating With Comments_** <br>
-
+  Events will have a rating associated in order to notify users of how previous attendees felt about it. A comments section will also be available for past attendees to 
+  
 **_Event Categories_** <br>
+  Events will be sorted by categories depending on the categorization in the given API. 
 
 **_Sorting Events (by location, price, ect.)_** <br>
+  Users can sort their displayed list of events depending on a specific criteria or filter that they choose.
 
 **_See People Going to Event_** <br>
-
+  
   
 
 
