@@ -14,7 +14,7 @@ We will be using Grails for our web application framework. Our back-end database
 
 ### Alternative Team Logo
 
-<img src="http://kalendarz.samorzad.agh.edu.pl/css/index/logo.png">
+<img src="GitHubPages/Images/eventile_alt_logo.png" alt="Alt_Logo">
 
 ### Directories
 
