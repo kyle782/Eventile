@@ -42,7 +42,7 @@ Year: 3<br>
 Skills: Java, C, Python, Javascript<br>
 Background: Chinese<br>
 Hobbies: Basketball, gaming, Netflix<br>
-Roles:<br>
+Roles: Front-End Picasso <br>
 
 **_Chris Steward_**<br>
 name: Christopher Steward<br>
