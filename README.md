@@ -6,7 +6,7 @@ We are currently developing an **event finder web application** that allows user
 
 We will be using Grails for our web application framework. Our back-end database will be using MySQL, and our front-end will use the Bootstrap framework, and possibly React. 
 
-## Team Branding
+## Branding
 
 ### Team Logo
 
