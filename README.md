@@ -6,17 +6,15 @@ We are currently developing an **event finder web application** that allows user
 
 We will be using Grails for our web application framework. Our back-end database will be using MySQL, and our front-end will use the Bootstrap framework, and possibly React. 
 
-### Team Logo
+## Team Branding
+
+## Team Logo
 
 <img src="GitHubPages/Images/Eventile Logo.png" alt="Eventile Logo" style="width:100px; height:100px;">
 
-### Team Banner
+## Alternative Team Logo
 
 <img src="http://kalendarz.samorzad.agh.edu.pl/css/index/logo.png">
-
-### Software Description
-
-
 
 ### Directories
 
