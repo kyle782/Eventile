@@ -32,7 +32,7 @@ Year: 5<br>
 Skills: Java, C, Javascript, HTML, CSS, Ruby<br>
 Background: Sri Lankan<br>
 Hobbies: Thrifting/fashion, painting, trying new foods/restaurants<br>
-Roles:<br>
+Roles: Java Jester<br>
 
 ### Front End Development Team
 
