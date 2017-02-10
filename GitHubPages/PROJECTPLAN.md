@@ -27,10 +27,10 @@ EvenTile is the one stop shop for events happening across the major event platfo
   Users will be able to create their own events through our events creation page. Their created event will then show up in searches dependent on the tags and categories that they provide in the event creation page.
 
 **_Event Rating With Comments_** <br>
-  Events will have a rating associated in order to notify users of how previous attendees felt about it. A comments section will also be available for past attendees to write about their experience
+  Events will have a rating associated in order to notify users of how previous attendees felt about it. A comments section will also be available for past attendees to write about their experience at the event or previous events by the same host.
   
 **_Event Categories_** <br>
-  Events will be sorted by categories depending on the categorization in the given API. When a user signs up for a profile, they will be asked to pick categories of events
+  Events will be sorted by categories depending on the categorization in the given API. When a user signs up for a profile, they will be asked to pick categories of events that they are interested in. They then will have a homepage dashboard filled with events pulled from various major event websites that will display events related to their interests.
 
 **_Sorting Events (by location, price, ect.)_** <br>
   Users can sort their displayed list of events depending on a specific criteria or filter that they choose. This can be done on any page and allows for users to see events in descending order depending on the filter that they chose. 
