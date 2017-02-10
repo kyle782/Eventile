@@ -1,6 +1,7 @@
 # Project Plan Page for Eventile
 
 
+
 ## Basic Features
 
 **_User Profile Stores Information_** <br>
@@ -27,9 +28,14 @@
   Users can sort their displayed list of events depending on a specific criteria or filter that they choose. This can be done on any page and allows for users to see events in descending order depending on the filter that they chose. 
 
 **_See People Going to Event_** <br>
-  Users are able to see
+  Users are able to see others users who RSVP'ed to an event on the event page.
   
   
+## Possible Advanced Features
+
+**_Social Media Integration_** <br>
+  We have been looking into integrating the Facebook API into the application. This will allow for users to connect their EvenTile profile to their Facebook accounts so that they can keep track of their friends' events.
+
 
 
 [Go back to Home Page](../README.md)
