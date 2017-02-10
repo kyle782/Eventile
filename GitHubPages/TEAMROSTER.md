@@ -24,7 +24,7 @@ Year: 2<br>
 Skills: Python, Java, C, C++<br>
 Background: Filipino<br>
 Hobbies: Gaming/League, Working out, Beatboxing, Netflix<br>
-Roles:<br>
+Roles: Back-End Prodigy <br>
 
 **_Valli Subasri_**<br>
 Program: Honours Bachelor of Science -- Computer Science & Medical Science<br>
