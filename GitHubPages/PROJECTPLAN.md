@@ -1,6 +1,9 @@
 # Project Plan Page for Eventile
 
-**_User Profile Stores Information** <br>
+
+## Basic Features
+
+**_User Profile Stores Information_** <br>
 
 **_Suggested events_** <br>
   Based on themes either manually entered by the user or taken from the events themselves, Eventile notifies the user of events they may prefer. User profile information like this is stored in our database and the themes to categorize events come with the events found by API calls to Eventbrite, Ticketmaster, or Eventful.
