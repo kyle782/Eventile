@@ -4,7 +4,7 @@
 
 ## Description
 
-EvenTile is the one stop shop for events happening across the major event platforms (EventBrite, Ticketmaster, etc) on the internet. EvenTile allows for users to search for events across the major platforms and displays the events as tiles in the browser. EvenTile also allows users to create their own customized profile where they can pick and choose event categories that they are interested in. The users will then be shown events matching their interest. Below are some of the basic features that will be implemented in EvenTile.
+Eventile is the one stop shop for events happening across the major event platforms (EventBrite, Ticketmaster, etc) on the internet. Eventile allows for users to search for events across the major platforms and displays the events as tiles in the browser. Eventile also allows users to create their own customized profile where they can pick and choose event categories that they are interested in. The users will then be shown events matching their interest. Below are some of the basic features that will be implemented in Eventile.
 
 
 
@@ -12,10 +12,10 @@ EvenTile is the one stop shop for events happening across the major event platfo
 ## Basic Features
 
 **_User Profile Stores Information_** <br>
-  Users of EvenTile can sign up for a profile where they will be asked to provide their interests in terms of event categories. Such categories are decided depending on the APIs of the various event platforms that EvenTile will be pulling from. Examples are concerts, seminars, parties, etc.
+  Users of Eventile can sign up for a profile where they will be asked to provide their interests in terms of event categories. Such categories are decided depending on the APIs of the various event platforms that Eventile will be pulling from. Examples are concerts, seminars, parties, etc.
 
 **_Suggested events_** <br>
-  Based on themes either manually entered by the user or taken from the events themselves, Eventile notifies the user of events they may prefer. User profile information like this is stored in our database and the themes to categorize events come with the events found by API calls to Eventbrite, Ticketmaster, or Eventful.
+  Based on themes either manually entered by the user or taken from the events themselves, Eventile notifies the user of events they may prefer. User profile information like this is stored in our database and the themes to categorize events come with the events found by API calls to EventBrite, Ticketmaster, or Eventful.
   
 **_Event Searching_** <br>
   When searching for a particular event Eventile's, event searching runs through multiple different databases of events in sequence. Eventile will make API calls first to Eventbrite, then to Ticketmaster then to Eventful in sequence to call to find the best match to whatever the user is searching for. 
@@ -44,7 +44,7 @@ EvenTile is the one stop shop for events happening across the major event platfo
 ## Possible Advanced Features
 
 **_Social Media Integration_** <br>
-  We have been looking into integrating the Facebook API into the application. This will allow for users to connect their EvenTile profile to their Facebook accounts so that they can keep track of their friends' events.
+  We have been looking into integrating the Facebook API into the application. This will allow for users to connect their Eventile profile to their Facebook accounts so that they can keep track of their friends' events.
 
 
 
