@@ -4,7 +4,7 @@
 
 ## Description
 
-EvenTile is the one stop shop for events happening across the major event platforms (EventBrite, Ticketmaster, etc) on the internet. EvenTile allows for users to search for events across the major platforms and displays the events as tiles in their dashboard. EvenTile also allows users to create their own customized profile where they can pick and choose event categories that they are interested in. The users will then be notified of events matching their interest. Below are some of the basic features that will be implemented in EvenTile.
+EvenTile is the one stop shop for events happening across the major event platforms (EventBrite, Ticketmaster, etc) on the internet. EvenTile allows for users to search for events across the major platforms and displays the events as tiles in the browser. EvenTile also allows users to create their own customized profile where they can pick and choose event categories that they are interested in. The users will then be shown events matching their interest. Below are some of the basic features that will be implemented in EvenTile.
 
 
 
