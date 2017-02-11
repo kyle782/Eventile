@@ -4,7 +4,7 @@
 
 ## Description
 
-Eventile is the one stop shop for events happening across the major event platforms (EventBrite, Ticketmaster, etc) on the internet. Eventile allows for users to search for events across the major platforms and displays the events as tiles in the browser. Eventile also allows users to create their own customized profile where they can pick and choose event categories that they are interested in. The users will then be shown events matching their interest. Below are some of the basic features that will be implemented in Eventile.
+Eventile is the one stop shop for events happening across the major event platforms (EventBrite, Ticketmaster, etc.) on the internet. Eventile allows for users to search for events across the major platforms and displays the events as tiles in the browser. Eventile also allows users to create their own customized profile where they can pick and choose event categories that they are interested in. The users will then be shown events matching their interest. Below are some of the basic features that will be implemented in Eventile.
 
 
 
@@ -18,7 +18,7 @@ Eventile is the one stop shop for events happening across the major event platfo
   Based on themes either manually entered by the user or taken from the events themselves, Eventile notifies the user of events they may prefer. User profile information like this is stored in our database and the themes to categorize events come with the events found by API calls to EventBrite, Ticketmaster, or Eventful.
   
 **_Event Searching_** <br>
-  When searching for a particular event Eventile's, event searching runs through multiple different databases of events in sequence. Eventile will make API calls first to Eventbrite, then to Ticketmaster then to Eventful in sequence to call to find the best match to whatever the user is searching for. 
+  When searching for a particular event Eventile's, event searching runs through multiple different databases of events in sequence. Eventile will make API call to Eventbrite, then to Ticketmaster, then to Eventful, in sequence to call to find the best match to whatever the user is searching for. 
   
 **_Event Browsing_** <br>
   Without even searching, the user's event page will use API calls to Eventbrite and load a steady stream of events to browse through. 
