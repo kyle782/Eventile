@@ -15,7 +15,7 @@ Program: Honours Specialization in Biology with Computer Sciences Minor<br>
 Year: 5<br>
 Skills: Java, C, Python, R, Perl<br>
 Background: Hungarian/Scottish<br>
-Hobbies: Litsening to/Playing/Teaching Music, Wilderness Camping<br>
+Hobbies: Listening to/Playing/Teaching Music, Wilderness Camping<br>
 Roles: Creative artistic director of UML<br>
 
 **_Kenny Galang_**<br>
