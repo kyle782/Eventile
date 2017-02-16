@@ -3,7 +3,7 @@
 
 <head>
     <title>Eventile</title>
-
+    <meta name="layout" content="main" />
     <asset:link rel="icon" href="favicon.ico" type="image/x-ico" />
 </head>
 
