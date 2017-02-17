@@ -9,8 +9,11 @@
 
 <body>
 
-    <h1> Hello World </h1>
-    <p> this is the welcome page </p>
+    <div class="container">
+        <h1> Hello World </h1>
+        <p> this is the welcome page </p>
+    </div>
+
 
 </body>
 </html>
