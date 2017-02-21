@@ -31,6 +31,7 @@
                     <g:if test="${session.user==null}" >
                         <li class="active"><a href="/">Welcome Page</a></li>
                     </g:if>
+                    <li><a href="/search/create">Search</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
 

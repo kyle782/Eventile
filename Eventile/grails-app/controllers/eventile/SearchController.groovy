@@ -26,7 +26,7 @@ class SearchController {
     def save(Search search) {
 
         String apikey = "<YOUR KEY>";
-        DiscoveryApi api = new DiscoveryApi(apikey);
+
 
         if (search == null) {
             transactionStatus.setRollbackOnly()
@@ -45,7 +45,7 @@ class SearchController {
         request.withFormat {
             form multipartForm {
                 flash.message = message(code: 'default.created.message', args: [message(code: 'search.label', default: 'Search'), search.id])
-                redirect search
+                redirect view:'home/index'
             }
             '*' { respond search, [status: CREATED] }
         }
