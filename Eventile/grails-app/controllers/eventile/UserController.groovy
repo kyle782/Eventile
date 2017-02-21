@@ -13,7 +13,7 @@ class UserController {
         if (user) {
             session.user = user
             flash.message = "Hello ${user.name}!"
-            redirect(controller:"user", action:"index")
+            redirect(controller:"home", action:"index")
         } else {
             flash.message = "Sorry, ${params.login}. Please try again."
             redirect(action:"login")
@@ -21,9 +21,8 @@ class UserController {
     }
 
     def logout = {
-        flash.message = "Goodbye ${session.user.name}"
         session.user = null
-        redirect(controller:"entry", action:"list")
+        redirect(view:"/index")
     }
 
     def index() { }

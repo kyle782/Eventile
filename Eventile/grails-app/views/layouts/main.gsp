@@ -28,13 +28,21 @@
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="/">Welcome Page</a></li>
-                    <!-- <li><a href="#about">About</a></li>
-                    <li><a href="#contact">Contact</a></li> -->
+                    <g:if test="${session.user==null}" >
+                        <li class="active"><a href="/">Welcome Page</a></li>
+                    </g:if>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="/user/login">Login</a></li>
-                    <li><a href="/user/create">Register</a></li>
+
+                    <!-- Change navbar buttons depending if user logged in or not -->
+                    <g:if test="${session.user==null}" >
+                        <li><a href="/user/login">Login</a></li>
+                        <li><a href="/user/create">Register</a></li>
+                    </g:if>
+                    <g:if test="${session.user!=null}" >
+                        <li><a href="/user#logout">Log Out</a></li>
+                    </g:if>
+
                 </ul>
             </div><!--/.nav-collapse -->
         </div>
