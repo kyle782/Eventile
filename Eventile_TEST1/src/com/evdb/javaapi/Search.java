@@ -4,20 +4,25 @@ import com.evdb.javaapi.data.SearchResult;
 import com.evdb.javaapi.data.request.EventSearchRequest;
 import com.evdb.javaapi.operations.EventOperations;
 
+import com.evdb.javaapi.APIConfiguration;
+import com.evdb.javaapi.EVDBAPIException;
+import com.evdb.javaapi.EVDBRuntimeException;
+
 /**
  * Created by gary on 2017-02-27.
  */
 public class Search {
 
     public static void main(String[] args){
-        APIConfiguration api_config = new APIConfiguration();
-        api_config.setApiKey("3GZZwncKn3BHQ4rw");
+        APIConfiguration.setApiKey("3GZZwncKn3BHQ4rw");
+        APIConfiguration.setEvdbUser("camboppolo2@gmail.com");
+        APIConfiguration.setEvdbPassword("testing123");
 
         EventOperations eo = new EventOperations();
         EventSearchRequest esr = new EventSearchRequest();
 
-        esr.setLocation("San Diego");
-        esr.setDateRange("2012050200-2013052100");
+        esr.setLocation("London");
+        esr.setDateRange("2016050200-2017052100");
         esr.setPageSize(20);
         esr.setPageNumber(1);
         // These 2 lines will set the timeout to 60 seconds.Normally not needed
@@ -27,14 +32,17 @@ public class Search {
         SearchResult sr = null;
         try {
             sr = eo.search(esr);
+            System.out.println("yeyeye");
             if (sr.getTotalItems() > 1) {
 
-                System.out.println("Total items: " + sr.getTotalItems());
+                System.out.println("Total items: " + sr.getTotalItems() + " and ");
             }
         }catch(EVDBRuntimeException var){
-            System.out.println("Opps got runtime an error...");
+            System.out.println("Opps got runtime an error...RUNTIME");
+            var.printStackTrace();
         } catch( EVDBAPIException var){
-            System.out.println("Opps got runtime an error...");
+            System.out.println("Opps got runtime an error...API");
+            var.printStackTrace();
         }
 
 
