@@ -21,7 +21,7 @@ public class Search {
         EventOperations eo = new EventOperations();
         EventSearchRequest esr = new EventSearchRequest();
 
-        esr.setLocation("London");
+        esr.setLocation("San Diego");
         esr.setDateRange("2016050200-2017052100");
         esr.setPageSize(20);
         esr.setPageNumber(1);
@@ -35,7 +35,7 @@ public class Search {
             System.out.println("yeyeye");
             if (sr.getTotalItems() > 1) {
 
-                System.out.println("Total items: " + sr.getTotalItems() + " and ");
+                System.out.println("Total items: " + sr.getTotalItems());
             }
         }catch(EVDBRuntimeException var){
             System.out.println("Opps got runtime an error...RUNTIME");
