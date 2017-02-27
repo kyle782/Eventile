@@ -53,6 +53,19 @@ dependencies {
     testCompile "org.grails.plugins:geb"
     testRuntime "org.seleniumhq.selenium:selenium-htmlunit-driver:2.47.1"
     testRuntime "net.sourceforge.htmlunit:htmlunit:2.18"
+
+    compile 'com.ticketmaster.api:discovery-java:0.1.2'
+
+    compile 'com.squareup.okhttp3:okhttp:3.1.2'
+    compile 'com.fasterxml.jackson.core:jackson-core:2.7.0'
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.7.0'
+    compile 'com.fasterxml.jackson.datatype:jackson-datatype-joda:2.7.0'
+    compile 'joda-time:joda-time:2.9.2'
+    compile 'org.slf4j:slf4j-api:1.7.16'
+
+
+    compile 'com.ticketmaster.api:discovery-java:0.1.2'
+
 }
 
 bootRun {

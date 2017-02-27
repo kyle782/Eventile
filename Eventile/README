@@ -1,0 +1,27 @@
+============================
+
+EVENTFUL JAVA API
+
+============================
+
+The Eventful API allows you to build tools and applications that interact 
+with Eventful.  (See http://eventful.com.)  This module provides a Java
+interface to that API.  
+
+See http://api.eventful.com/ for details.
+
+Copyright 2007 Eventful, Inc.  All rights reserved.  This module may be
+redistributed under the same terms as the Perl Artistic Language.
+
+Changes:
+
+v 0.3 12/17/2007
+- Added Location object and LocationOperations object
+v 0.43 05/09/2012
+- Added read and connection timeout calls for users of Google App Engine
+v 0.44 05/09/2012
+- Added in change_multi_day_start parameter to change an events start data to the start of the query 
+- if the event is multi day (a year long art gallery exhibit for example)
+v 0.45 06/09/2014
+- Venue sorting by popularity added.
+- include= parameter allowed for event seaches (this allows the categories to come back and be retriable via getCategories)
