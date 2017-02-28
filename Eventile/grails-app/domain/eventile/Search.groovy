@@ -1,11 +1,13 @@
 package eventile
 
+import com.evdb.javaapi.data.SearchResult
 import grails.rest.*
 
-@Resource(uri='/api/events')
+
 class Search {
 
-    String query;
+    String query
+    SearchResult sr
 
     static constraints = {
     }

@@ -1,5 +1,12 @@
 package eventile
 
+import com.evdb.javaapi.APIConfiguration
+import com.evdb.javaapi.EVDBAPIException
+import com.evdb.javaapi.EVDBRuntimeException
+import com.evdb.javaapi.data.SearchResult
+import com.evdb.javaapi.data.request.EventSearchRequest
+import com.evdb.javaapi.operations.EventOperations
+
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
 
@@ -25,35 +32,38 @@ class SearchController {
     @Transactional
     def save(Search search) {
 
-        String apikey = "<YOUR KEY>";
-
-
         if (search == null) {
             transactionStatus.setRollbackOnly()
             notFound()
             return
         }
 
-        if (search.hasErrors()) {
-            transactionStatus.setRollbackOnly()
-            respond search.errors, view:'create'
-            return
+        APIConfiguration.setApiKey("3GZZwncKn3BHQ4rw")
+        APIConfiguration.setEvdbUser("camboppolo2@gmail.com")
+        APIConfiguration.setEvdbPassword("testing123")
+
+        EventOperations eo = new EventOperations()
+        EventSearchRequest esr = new EventSearchRequest()
+
+        esr.setKeywords(search.query)
+
+        SearchResult sr = null
+
+        try {
+            sr = eo.search(esr)
+        } catch (EVDBRuntimeException var){
+            System.out.println("Opps got runtime an error...RUNTIME")
+        } catch (EVDBAPIException var){
+            System.out.println("Opps got runtime an error...API")
         }
 
-        search.save flush:true
+        search.setSr(sr)
+        System.out.println("it is " + sr.toString())
 
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.created.message', args: [message(code: 'search.label', default: 'Search'), search.id])
-                redirect view:'home/index'
-            }
-            '*' { respond search, [status: CREATED] }
-        }
+        search.save (flush:true)
+        redirect(action: "show", id: search.getId())
+
     }
-
-
-
-
 
     protected void notFound() {
         request.withFormat {
