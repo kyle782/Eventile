@@ -5,9 +5,6 @@ buildscript {
     repositories {
         mavenLocal()
         maven { url "https://repo.grails.org/grails/core" }
-//        maven {
-////            url "https://plugins.gradle.org/m2/"
-//        }
     }
     dependencies {
         classpath "org.grails:grails-gradle-plugin:$grailsVersion"
@@ -25,7 +22,7 @@ apply plugin:"war"
 apply plugin:"org.grails.grails-web"
 apply plugin:"org.grails.grails-gsp"
 apply plugin:"asset-pipeline"
-apply plugin: "com.moowork.node"
+apply plugin:"com.moowork.node"
 
 ext {
     grailsVersion = project.grailsVersion
@@ -69,7 +66,7 @@ dependencies {
     compile("org.grails.plugins:spring-security-rest:2.0.0.M2")
     compile "org.twitter4j:twitter4j-core:4.0.4"
 
-    // Grails REST Plugin
+    compile 'org.grails:grails-datastore-rest-client'
 
 
 }

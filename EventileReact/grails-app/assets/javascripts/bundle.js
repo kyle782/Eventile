@@ -90,20 +90,7 @@
 	};
 
 	var Greet = function Greet() {
-	    return undefined.state.loggedIn ? _react2.default.createElement(
-	        'div',
-	        { className: 'jumbotron' },
-	        _react2.default.createElement(
-	            'h1',
-	            null,
-	            'Hello, world!'
-	        ),
-	        _react2.default.createElement(
-	            'p',
-	            null,
-	            'Here you can search tweets from Twitter'
-	        )
-	    ) : _react2.default.createElement(
+	    return _react2.default.createElement(
 	        'div',
 	        { className: 'jumbotron' },
 	        _react2.default.createElement(
