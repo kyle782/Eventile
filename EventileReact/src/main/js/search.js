@@ -24,7 +24,7 @@ class Search extends React.Component {
         this.success = this.success.bind(this);
 
         this.state = {
-            tweets: [],
+            events: [],
             auth: JSON.parse(localStorage.auth)
         }
     }
@@ -47,9 +47,9 @@ class Search extends React.Component {
         .catch(this.fail)
     }
 
-    success(tweets) {
-        console.log("Search result", tweets);
-        this.setState({tweets: tweets, inProgress: false});
+    success(events) {
+        console.log("Search result", events);
+        this.setState({events: events, inProgress: false});
     }
 
     fail(error) {
@@ -66,10 +66,10 @@ class Search extends React.Component {
 
     render() {
 
-        let tweets = this.state.tweets.map( (tweet) => {
-            let userLink = "https://twitter.com/" + tweet.user;
-            return <div className="col-sm-12 col-md-12 col-lg-12 tweet" key={tweet.id}>
-                <a href={userLink} target="_blank"><b>{tweet.user}</b></a>: {tweet.text}
+        let events = this.state.events.map( (event) => {
+            let eventLink = event.eventbrite_url;
+            return <div className="col-sm-12 col-md-12 col-lg-12 tweet" key={event.eventbrite_id}>
+                <a href={eventLink} target="_blank"><b>{event.name}</b></a>: {event.description}
             </div>
         });
         return (
@@ -91,7 +91,7 @@ class Search extends React.Component {
                         </form>
 
                         <div className="col-lg-12">
-                            {tweets}
+                            {events}
                         </div>
                     </div>
 

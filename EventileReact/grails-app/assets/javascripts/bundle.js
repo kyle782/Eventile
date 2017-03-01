@@ -180,7 +180,7 @@
 	    _react2.default.createElement(
 	        _reactRouter.Route,
 	        { path: '/', component: _app2.default },
-	        undefined.state.loggedIn ? _react2.default.createElement(_reactRouter.IndexRoute, { component: Welcome }) : _react2.default.createElement(_reactRouter.IndexRoute, { component: Greet }),
+	        _react2.default.createElement(_reactRouter.IndexRoute, { component: Greet }),
 	        _react2.default.createElement(_reactRouter.Route, { path: Paths.SIGNIN, component: _signin2.default, onEnter: checkAuth }),
 	        _react2.default.createElement(_reactRouter.Route, { path: Paths.SEARCH, component: _search2.default, onEnter: checkAuth }),
 	        _react2.default.createElement(_reactRouter.Route, { path: Paths.LOGOUT, component: _logout2.default }),
@@ -28479,7 +28479,7 @@
 	        _this.success = _this.success.bind(_this);
 
 	        _this.state = {
-	            tweets: [],
+	            events: [],
 	            auth: JSON.parse(localStorage.auth)
 	        };
 	        return _this;
@@ -28503,9 +28503,9 @@
 	        }
 	    }, {
 	        key: 'success',
-	        value: function success(tweets) {
-	            console.log("Search result", tweets);
-	            this.setState({ tweets: tweets, inProgress: false });
+	        value: function success(events) {
+	            console.log("Search result", events);
+	            this.setState({ events: events, inProgress: false });
 	        }
 	    }, {
 	        key: 'fail',
@@ -28524,22 +28524,22 @@
 	        key: 'render',
 	        value: function render() {
 
-	            var tweets = this.state.tweets.map(function (tweet) {
-	                var userLink = "https://twitter.com/" + tweet.user;
+	            var events = this.state.events.map(function (event) {
+	                var eventLink = event.eventbrite_url;
 	                return _react2.default.createElement(
 	                    'div',
-	                    { className: 'col-sm-12 col-md-12 col-lg-12 tweet', key: tweet.id },
+	                    { className: 'col-sm-12 col-md-12 col-lg-12 event', key: event.eventbrite_id },
 	                    _react2.default.createElement(
 	                        'a',
-	                        { href: userLink, target: '_blank' },
+	                        { href: eventLink, target: '_blank' },
 	                        _react2.default.createElement(
 	                            'b',
 	                            null,
-	                            tweet.user
+	                            event.name
 	                        )
 	                    ),
 	                    ': ',
-	                    tweet.text
+	                    event.description
 	                );
 	            });
 	            return _react2.default.createElement(
@@ -28576,7 +28576,7 @@
 	                    _react2.default.createElement(
 	                        'div',
 	                        { className: 'col-lg-12' },
-	                        tweets
+	                        events
 	                    )
 	                )
 	            );

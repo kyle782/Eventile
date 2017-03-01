@@ -8,4 +8,5 @@ class Event {
     String description
     int eventbrite_id
     String start_date
+    String eventbrite_url
 }

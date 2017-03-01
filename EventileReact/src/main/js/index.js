@@ -57,8 +57,8 @@ ReactDOM.render(
     <Router history={browserHistory}>
         <Route path="/" component={App}>
 
-            <IndexRoute component={Welcome}/> <!-- for when user is signed in -->
-            <IndexRoute component={Greet}/> <!-- for when user is not signed in -->
+            {/* <IndexRoute component={Welcome}/>  for when user is signed in */}
+            <IndexRoute component={Greet}/>
 
             <Route path={Paths.SIGNIN} component={SignIn} onEnter={checkAuth} />
             <Route path={Paths.SEARCH} component={Search} onEnter={checkAuth} />
