@@ -1,3 +1,4 @@
+<%@ page import="eventile.Search" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -16,10 +17,16 @@
         </div>
         <div id="show-search" class="content scaffold-show" role="main">
             <h1><g:message code="default.show.label" args="[entityName]" /></h1>
-            <g:if test="${flash.message}">
-            <div class="message" role="status">${flash.message}</div>
-            </g:if>
-            <f:display bean="search" />
+
+            <f:display property="sr" bean="search" />
+
+            <!-- iterate through the search object's events here -->
+            <g:each var="result" in="${this.search}">
+                <% System.out.println("watttt " + result) %>
+            </g:each>
+
+
+
             <g:form resource="${this.search}" method="DELETE">
                 <fieldset class="buttons">
                     <g:link class="edit" action="edit" resource="${this.search}"><g:message code="default.button.edit.label" default="Edit" /></g:link>

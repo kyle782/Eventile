@@ -15,9 +15,11 @@
         </div>
         <div id="create-search" class="content scaffold-create" role="main">
             <h1><g:message code="default.create.label" args="[entityName]" /></h1>
+
             <g:if test="${flash.message}">
             <div class="message" role="status">${flash.message}</div>
             </g:if>
+
             <g:hasErrors bean="${this.search}">
             <ul class="errors" role="alert">
                 <g:eachError bean="${this.search}" var="error">
@@ -25,9 +27,10 @@
                 </g:eachError>
             </ul>
             </g:hasErrors>
+
             <g:form action="save">
                 <fieldset class="form">
-                    <f:all bean="search"/>
+                    <f:field property="query" bean="search"/>
                 </fieldset>
                 <fieldset class="buttons">
                     <g:submitButton name="create" class="save" value="${message(code: 'default.button.create.label', default: 'Create')}" />
