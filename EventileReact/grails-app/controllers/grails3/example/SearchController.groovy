@@ -2,7 +2,6 @@ package grails3.example
 
 import grails.plugin.springsecurity.annotation.Secured
 import org.springframework.http.HttpStatus
-import grails.plugins.rest.client.RestBuilder
 
 @Secured(['ROLE_USER'])
 class SearchController {
@@ -10,6 +9,7 @@ class SearchController {
     static responseFormats = ['json']
 
     def searchService
+    def EventbriteService
     def springSecurityService
 
     def search(String q) {
@@ -17,12 +17,10 @@ class SearchController {
         def info = springSecurityService.currentUser.username
         log.debug("Searching by query = ${q}...")
 
-        // perform a GET requestion to Eventbrite's API
-        def response = new RestBuilder().get("https://www.eventbriteapi.com/v3/events/search/?q={query}"){
-            header "Authorization", "Bearer 2S34UCIHKW5MXVP4S5M7" // authenticate
-            urlVariables query:q
-        }
-        System.out.println(response.json.toString())
+        // perform a GET requestion to Eventbrite's API using EventbriteService class
+        def response_eventbrite = EventbriteService.search(q)
+        System.out.println("yaya")
+        System.out.println(response_eventbrite.json.toString())
 
 
 

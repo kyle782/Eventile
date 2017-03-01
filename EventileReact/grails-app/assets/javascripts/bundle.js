@@ -115,6 +115,32 @@
 	    );
 	};
 
+	var Welcome = function Welcome() {
+	    return _react2.default.createElement(
+	        'div',
+	        { className: 'jumbotron' },
+	        _react2.default.createElement(
+	            'h1',
+	            null,
+	            'Welcome!'
+	        ),
+	        _react2.default.createElement(
+	            'p',
+	            null,
+	            'You can now search for Events!'
+	        ),
+	        _react2.default.createElement(
+	            'p',
+	            null,
+	            _react2.default.createElement(
+	                _reactRouter.Link,
+	                { to: Paths.SEARCH, className: 'btn btn-primary btn-lg' },
+	                'Search'
+	            )
+	        )
+	    );
+	};
+
 	var NotFound = function NotFound() {
 	    return _react2.default.createElement(
 	        'div',
@@ -154,7 +180,7 @@
 	    _react2.default.createElement(
 	        _reactRouter.Route,
 	        { path: '/', component: _app2.default },
-	        _react2.default.createElement(_reactRouter.IndexRoute, { component: Greet }),
+	        undefined.state.loggedIn ? _react2.default.createElement(_reactRouter.IndexRoute, { component: Welcome }) : _react2.default.createElement(_reactRouter.IndexRoute, { component: Greet }),
 	        _react2.default.createElement(_reactRouter.Route, { path: Paths.SIGNIN, component: _signin2.default, onEnter: checkAuth }),
 	        _react2.default.createElement(_reactRouter.Route, { path: Paths.SEARCH, component: _search2.default, onEnter: checkAuth }),
 	        _react2.default.createElement(_reactRouter.Route, { path: Paths.LOGOUT, component: _logout2.default }),
@@ -27409,7 +27435,7 @@
 	                        _react2.default.createElement(
 	                            _reactRouter.Link,
 	                            { to: '/', className: 'navbar-brand' },
-	                            'Grails3 \u2764\uFE0F React'
+	                            'Eventile'
 	                        )
 	                    ),
 	                    this.state.loggedIn ? _react2.default.createElement(

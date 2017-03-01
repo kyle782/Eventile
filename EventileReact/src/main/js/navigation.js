@@ -29,7 +29,7 @@ class Navigation extends React.Component {
             <nav className="navbar navbar-default navbar-static-top">
                 <div className="container-fluid">
                     <div className="navbar-header">
-                        <Link to="/" className="navbar-brand">Grails3 ❤️ React</Link>
+                        <Link to="/" className="navbar-brand">Eventile</Link>
                     </div>
                     { this.state.loggedIn ?
                         <ul className="nav navbar-nav">

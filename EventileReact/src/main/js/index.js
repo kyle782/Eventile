@@ -22,6 +22,13 @@ const Greet = () =>
         <p><Link to={Paths.SIGNIN} className="btn btn-primary btn-lg">Sign in</Link></p>
     </div>;
 
+const Welcome = () =>
+    <div className="jumbotron">
+        <h1>Welcome!</h1>
+        <p>You can now search for Events!</p>
+        <p><Link to={Paths.SEARCH} className="btn btn-primary btn-lg">Search</Link></p>
+    </div>;
+
 const NotFound = () =>
     <div className="row">
         <div className="col-lg-12">
@@ -49,7 +56,10 @@ function checkAuth(next, replace) {
 ReactDOM.render(
     <Router history={browserHistory}>
         <Route path="/" component={App}>
-            <IndexRoute component={Greet}/>
+
+            <IndexRoute component={Welcome}/> <!-- for when user is signed in -->
+            <IndexRoute component={Greet}/> <!-- for when user is not signed in -->
+
             <Route path={Paths.SIGNIN} component={SignIn} onEnter={checkAuth} />
             <Route path={Paths.SEARCH} component={Search} onEnter={checkAuth} />
             <Route path={Paths.LOGOUT} component={Logout}/>
