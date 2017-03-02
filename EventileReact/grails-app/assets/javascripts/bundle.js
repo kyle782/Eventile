@@ -28525,13 +28525,12 @@
 	        value: function render() {
 
 	            var events = this.state.events.map(function (event) {
-	                var eventLink = event.eventbrite_url;
 	                return _react2.default.createElement(
 	                    'div',
-	                    { className: 'col-sm-12 col-md-12 col-lg-12 event', key: event.eventbrite_id },
+	                    { className: 'col-sm-12 col-md-12 col-lg-12 tweet' },
 	                    _react2.default.createElement(
 	                        'a',
-	                        { href: eventLink, target: '_blank' },
+	                        { href: event.eventbrite_url, target: '_blank' },
 	                        _react2.default.createElement(
 	                            'b',
 	                            null,
