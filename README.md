@@ -31,6 +31,12 @@ If you are using Unix/MacOS, we recommend installing Grails via SDKMAN, linked a
 
 #### Building and Running the Project
 
+##### 0. Prerequisits 
+- Grails (ver 3.2.6)
+- Groovy (ver 2.4.7)
+- JVM (ver 1.8.0)
+- Gradle (ver 3.4)
+
 ##### 1. Clone the repository
 
 - Create a new directory for the project
@@ -51,7 +57,7 @@ If you are using Unix/MacOS, we recommend installing Grails via SDKMAN, linked a
 
 > grails run-app
 
--- Grails will then resolve all dependencies using Gradle (enable???), and then start the application server. 
+-- Grails will then resolve all dependencies using Gradle, and then start the application server. 
 
 - Navigate to [http://localhost:8080](http://localhost:8080) in your favourite web browser to enjoy.
 
