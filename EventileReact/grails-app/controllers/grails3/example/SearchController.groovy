@@ -18,6 +18,8 @@ class SearchController {
 
         // perform a GET requestion to Eventbrite's API using EventbriteService class
         def response_eventbrite = EventbriteService.search(q)
+        def getCategories = EventbriteService.get_eventbrite_categories()
+        System.out.println(getCategories.toString())
 
         respond response_eventbrite
     }

@@ -44,8 +44,6 @@ class EventbriteService {
             String event_name = obj["events"][i].name.text
             String event_description_full = obj["events"][i].description.text
 
-
-
             // clean and/or truncate the description (truncate if > 140 characters long)
             String event_description_trimmed = null
             if (event_description_full != "" && event_description_full != null){
@@ -55,6 +53,7 @@ class EventbriteService {
                     event_description_trimmed = event_description_full.replaceAll("\n", " ")
                 }
             }
+
 
             // create new Event object
             Event new_event = new Event(name: event_name, description: event_description_trimmed, start_date: null, eventbrite_url: obj["events"][i].url, eventbrite_id: 0)
@@ -67,6 +66,14 @@ class EventbriteService {
 
         return event_results
 
+    }
+
+    def get_eventbrite_categories(){
+        // perform a GET call to Eventbrite's REST API, returns JSON response
+        def categories_response = new RestBuilder().get("https://www.eventbriteapi.com/v3/categories/"){
+            header "Authorization", "Bearer 2S34UCIHKW5MXVP4S5M7" // authenticate with header
+        }
+        return categories_response.json
     }
 
 }
