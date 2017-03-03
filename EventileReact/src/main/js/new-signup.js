@@ -9,9 +9,25 @@ import 'whatwg-fetch';
 class UserForm extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            pref_music: false,
+            pref_bus_prof: false
+        };
+
+        this.handleInputChange = this.handleInputChange.bind(this);
     }
 
-    render () {
+    handleInputChange(event) {
+        const target = event.target;
+        const value = target.type === 'checkbox' ? target.checked : target.value;
+        const name = target.name;
+
+        this.setState({
+            [name]: value
+        });
+    }
+
+    render() {
         return (
 
             <form className="form-horizontal" name="signInForm" onSubmit={this.props.onSubmit} ref="signInForm">
@@ -59,6 +75,41 @@ class UserForm extends React.Component {
                     </div>
                 </div>
 
+                {/** Checkboxes for preferences **/}
+
+                <div className="form-group">
+                    <label htmlFor="pref_music" className="col-sm-3 control-label">Music</label>
+                    <div className="col-sm-9">
+                        <input
+                            name="pref_music"
+                            className="form-check" /** might have to change this to align horizontally **/
+                            type="checkbox"
+                            checked={this.state.pref_music}
+                            onChange={this.handleInputChange}
+                            ref="pref_music"
+                        />
+                    </div>
+                </div>
+
+                <div className="form-group">
+                    <label htmlFor="pref_bus_prof" className="col-sm-3 control-label">Business & Professional</label>
+                    <div className="col-sm-9">
+                        <input
+                            name="pref_bus_prof"
+                            className="form-check"
+                            type="checkbox"
+                            checked={this.state.pref_bus_prof}
+                            onChange={this.handleInputChange}
+                            ref="pref_bus_prof"
+                        />
+                    </div>
+                </div>
+
+
+
+
+                {/** Submit button **/}
+
                 <div className="form-group">
                     <div className="col-sm-offset-3 col-sm-9">
                         <button type="submit" className="btn btn-default">{this.props.submitLabel}</button>
@@ -70,10 +121,17 @@ class UserForm extends React.Component {
 
     data() {
         let name = ReactDOM.findDOMNode(this.refs.name).value.trim(),
-            password = ReactDOM.findDOMNode(this.refs.password).value.trim();
+            password = ReactDOM.findDOMNode(this.refs.password).value.trim(),
+            age = ReactDOM.findDOMNode(this.refs.age).value.trim(),
+            location = ReactDOM.findDOMNode(this.refs.location).value.trim();
+        console.log(ReactDOM.findDOMNode(this.refs.pref_music).checked);
+        console.log(ReactDOM.findDOMNode(this.refs.pref_bus_prof).checked);
+
         return {
             username: name,
-            password: password
+            password: password,
+            age: age,
+            location: location
         }
     }
 

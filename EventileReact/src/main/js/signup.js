@@ -29,7 +29,7 @@ class SignUp extends React.Component {
         let form = this.form.data();
         console.log("Signing in...", form);
 
-        let body = "username=" + form.username + "&password=" + form.password + "&age=" + form.age + "&location=" + form.location
+        let body = "username=" + form.username + "&password=" + form.password + "&age=" + form.age + "&location=" + form.location;
 
         fetch("/api/signup", {
             method: 'POST',

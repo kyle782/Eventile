@@ -28383,6 +28383,8 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -28398,10 +28400,27 @@
 	    function UserForm(props) {
 	        _classCallCheck(this, UserForm);
 
-	        return _possibleConstructorReturn(this, (UserForm.__proto__ || Object.getPrototypeOf(UserForm)).call(this, props));
+	        var _this = _possibleConstructorReturn(this, (UserForm.__proto__ || Object.getPrototypeOf(UserForm)).call(this, props));
+
+	        _this.state = {
+	            pref_music: false,
+	            pref_bus_prof: false
+	        };
+
+	        _this.handleInputChange = _this.handleInputChange.bind(_this);
+	        return _this;
 	    }
 
 	    _createClass(UserForm, [{
+	        key: 'handleInputChange',
+	        value: function handleInputChange(event) {
+	            var target = event.target;
+	            var value = target.type === 'checkbox' ? target.checked : target.value;
+	            var name = target.name;
+
+	            this.setState(_defineProperty({}, name, value));
+	        }
+	    }, {
 	        key: 'render',
 	        value: function render() {
 	            return _react2.default.createElement(
@@ -28486,6 +28505,48 @@
 	                    'div',
 	                    { className: 'form-group' },
 	                    _react2.default.createElement(
+	                        'label',
+	                        { htmlFor: 'pref_music', className: 'col-sm-3 control-label' },
+	                        'Music'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-sm-9' },
+	                        _react2.default.createElement('input', {
+	                            name: 'pref_music',
+	                            className: 'form-check' /** might have to change this to align horizontally **/
+	                            , type: 'checkbox',
+	                            checked: this.state.pref_music,
+	                            onChange: this.handleInputChange,
+	                            ref: 'pref_music'
+	                        })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'form-group' },
+	                    _react2.default.createElement(
+	                        'label',
+	                        { htmlFor: 'pref_bus_prof', className: 'col-sm-3 control-label' },
+	                        'Business & Professional'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-sm-9' },
+	                        _react2.default.createElement('input', {
+	                            name: 'pref_bus_prof',
+	                            className: 'form-check',
+	                            type: 'checkbox',
+	                            checked: this.state.pref_bus_prof,
+	                            onChange: this.handleInputChange,
+	                            ref: 'pref_bus_prof'
+	                        })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'form-group' },
+	                    _react2.default.createElement(
 	                        'div',
 	                        { className: 'col-sm-offset-3 col-sm-9' },
 	                        _react2.default.createElement(
@@ -28501,10 +28562,17 @@
 	        key: 'data',
 	        value: function data() {
 	            var name = _reactDom2.default.findDOMNode(this.refs.name).value.trim(),
-	                password = _reactDom2.default.findDOMNode(this.refs.password).value.trim();
+	                password = _reactDom2.default.findDOMNode(this.refs.password).value.trim(),
+	                age = _reactDom2.default.findDOMNode(this.refs.age).value.trim(),
+	                location = _reactDom2.default.findDOMNode(this.refs.location).value.trim();
+	            console.log(_reactDom2.default.findDOMNode(this.refs.pref_music).checked);
+	            console.log(_reactDom2.default.findDOMNode(this.refs.pref_bus_prof).checked);
+	            //let pref_music = ReactDOM.findDOMNode(this.refs.pref_music.checked).value.trim();
 	            return {
 	                username: name,
-	                password: password
+	                password: password,
+	                age: age,
+	                location: location
 	            };
 	        }
 	    }]);
