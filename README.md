@@ -43,7 +43,7 @@ Each team member has their own branch, where we each implemented our own assigne
 
 > grails run-app
 
-#### Enjoy!
+#### 3. Enjoy!
 
 ## Branding
 
