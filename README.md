@@ -49,7 +49,7 @@ The project will require [Grails 3](https://grails.org/download.html). Please do
 
 > grails run-app
 
--- Grails will then resolve all dependencie using Gradle, and then start the application server. 
+-- Grails will then resolve all dependencies using Gradle, and then start the application server. 
 
 - Navigate to [http://localhost:8080](http://localhost:8080) in your favourite web browser to enjoy.
 
