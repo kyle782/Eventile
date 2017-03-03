@@ -44,6 +44,8 @@ class EventbriteService {
             String event_name = obj["events"][i].name.text
             String event_description_full = obj["events"][i].description.text
 
+
+
             // clean and/or truncate the description (truncate if > 140 characters long)
             String event_description_trimmed = null
             if (event_description_full != "" && event_description_full != null){
@@ -55,7 +57,7 @@ class EventbriteService {
             }
 
             // create new Event object
-            Event new_event = new Event(name: event_name, description: event_description_trimmed, start_date: null, eventbrite_url: null, eventbrite_id: 0)
+            Event new_event = new Event(name: event_name, description: event_description_trimmed, start_date: null, eventbrite_url: obj["events"][i].url, eventbrite_id: 0)
 
             // add to the collection
             event_results.add(new_event)
