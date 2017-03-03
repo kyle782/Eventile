@@ -23,13 +23,17 @@ Each team member has their own branch, where we each implemented our own assigne
 
 ### Installation/Run Instructions
 
-#### Mac & Unix
+#### Dependencies
+
+The project will require [Grails 3](https://grails.org/download.html). Please download and install Grails according to your platform. If you are running Unix/Mac, we recommend installing Grails via SDKMAN, linked above. 
+
+#### Building and Running the Project
 
 ##### 1. Clone the repository
 
 - Create a new directory for the project
 
-- Open a Terminal window inside the new directory
+- Open a Terminal/Command Prompt window inside the new directory
 
 - Execute the following command: 
 
@@ -37,15 +41,13 @@ Each team member has their own branch, where we each implemented our own assigne
 
 ##### 2. Build and run the project
 
-- Navigate to /EventileReact/ in the Terminal window:
+- Navigate to /EventileReact/ in the Terminal/cmd window:
 
 > cd EventileReact
 
 - Build and run the project:
 
 > grails run-app
-
-##### 3. Enjoy!
 
 ## Branding
 
