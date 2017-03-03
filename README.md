@@ -33,9 +33,9 @@ Ideally, the most recent update of the following pieces of software are suggeste
 - Gradle (ver 3.4)
 
 Once the JVM is obtained. Grails can be downloaded and installed through terminal using the following commanmds.
-> $ curl -s get.sdkman.io | bash <br/>
-> $ source "$HOME/.sdkman/bin/sdkman-init.sh" <br/>
-> $ sdk install grails <br/>
+> curl -s get.sdkman.io | bash <br/>
+> source "$HOME/.sdkman/bin/sdkman-init.sh" <br/>
+> sdk install grails <br/>
 
 #### Building and Running the Project
 
@@ -61,7 +61,7 @@ Once the JVM is obtained. Grails can be downloaded and installed through termina
 
 -- Grails will then resolve all dependencies using Gradle, and then start the application server. 
 
-- Navigate to [http://localhost:8080](http://localhost:8080) in your favourite web browser to enjoy.
+- Navigate to [http://localhost:8080](http://localhost:8080) in your favourite web browser and enjoy.
 
 ## Branding
 
