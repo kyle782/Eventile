@@ -12,7 +12,7 @@ Eventile is the one stop shop for events happening across the major event platfo
 **_User Profile Stores Information_** <br> 
   Users of Eventile can sign up for a profile where they will be asked to provide their interests in terms of event categories. Such categories are decided depending on the APIs of the various event platforms that Eventile will be pulling from. Examples are concerts, seminars, parties, etc.
   
-  _Implemented in Stage 2 using a grails user domain. A signup form takes in user name, email, password, and preferences     and creates their lasting account_
+  >_Implemented in Stage 2 using a grails user domain. A signup form takes in user name, email, password, and preferences     and creates their lasting account_
 
 **_Suggested events_** <br>
   Based on themes either manually entered by the user or taken from the events themselves, Eventile notifies the user of events they may prefer. User profile information like this is stored in our database and the themes to categorize events come with the events found by API calls to EventBrite, Ticketmaster, or Eventful.
@@ -34,7 +34,7 @@ Eventile is the one stop shop for events happening across the major event platfo
 **_Event Categories_** <br>
   Events will be sorted by categories depending on the categorization in the given API. When a user signs up for a profile, they will be asked to pick categories of events that they are interested in. They then will have a homepage dashboard filled with events pulled from various major event websites that will display events related to their interests.
   
-  _Implemented in Stage 2 using Eventbrite's categories. Categories are represented by a groovy domain and when a user is   created, they are given the opportunity to add interests representing categories._
+  >_Implemented in Stage 2 using Eventbrite's categories. Categories are represented by a groovy domain and when a user is   created, they are given the opportunity to add interests representing categories._
 
 **_Sorting Events (by location, price, ect.)_** <br>
   Users can sort their displayed list of events depending on a specific criteria or filter that they choose. This can be done on any page and allows for users to see events in descending order depending on the filter that they chose. 
