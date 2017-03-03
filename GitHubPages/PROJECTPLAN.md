@@ -50,5 +50,5 @@ Eventile is the one stop shop for events happening across the major event platfo
 [Go back to Home Page](../README.md)
 
 ## Looking Forward (ver 1.2) <br>
-  Next features for implementation are the event sorting and event browsing features. In addition, catering events to a user's preferences.
+  Next features for implementation are the event sorting and event browsing features. In addition, catering events to a user's preferences is expected to be done before Stage 3 completion.
 
