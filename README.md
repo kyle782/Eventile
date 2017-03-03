@@ -59,8 +59,6 @@ Once the JVM is obtained. Grails can be downloaded and installed through termina
 
 > grails run-app
 
--- Grails will then resolve all dependencies using Gradle, and then start the application server. 
-
 - Navigate to [http://localhost:8080](http://localhost:8080) in your favourite web browser and enjoy.
 
 ## Branding
