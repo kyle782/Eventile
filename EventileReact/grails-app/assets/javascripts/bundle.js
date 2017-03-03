@@ -28005,7 +28005,7 @@
 
 	      if (!this.headers.get('content-type')) {
 	        if (typeof body === 'string') {
-	          this.headers.set('content-type', 'text/plain;charset=UTF-8')
+          this.headers.set('content-type', 'text/plain;charset=UTF-8')
 	        } else if (this._bodyBlob && this._bodyBlob.type) {
 	          this.headers.set('content-type', this._bodyBlob.type)
 	        } else if (support.searchParams && URLSearchParams.prototype.isPrototypeOf(body)) {
@@ -28680,13 +28680,14 @@
 	        value: function render() {
 
 	            var events = this.state.events.map(function (event) {
-	                var eventLink = event.eventbrite_url;
 	                return _react2.default.createElement(
 	                    'div',
-	                    { className: 'col-sm-12 col-md-12 col-lg-12 tweet', key: event.eventbrite_id },
+
+	                    { className: 'col-sm-12 col-md-12 col-lg-12 tweet' },
+
 	                    _react2.default.createElement(
 	                        'a',
-	                        { href: eventLink, target: '_blank' },
+	                        { href: event.eventbrite_url, target: '_blank' },
 	                        _react2.default.createElement(
 	                            'b',
 	                            null,
@@ -28694,7 +28695,11 @@
 	                        )
 	                    ),
 	                    ': ',
-	                    event.description
+	                    event.description,
+	                    ' ',
+	                    _react2.default.createElement('br', null),
+	                    ' Category: ',
+	                    event.category_name
 	                );
 	            });
 	            return _react2.default.createElement(

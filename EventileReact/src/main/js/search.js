@@ -67,9 +67,8 @@ class Search extends React.Component {
     render() {
 
         let events = this.state.events.map( (event) => {
-            let eventLink = event.eventbrite_url;
-            return <div className="col-sm-12 col-md-12 col-lg-12 tweet" key={event.eventbrite_id}>
-                <a href={eventLink} target="_blank"><b>{event.name}</b></a>: {event.description}
+            return <div className="col-sm-12 col-md-12 col-lg-12 tweet">
+                <a href={event.eventbrite_url} target="_blank"><b>{event.name}</b></a>: {event.description} <br/> Category: {event.category_name}
             </div>
         });
         return (

@@ -1,0 +1,25 @@
+{
+  "categories": {
+    "103": "Music",
+    "101": "Business & Professional",
+    "110": "Food & Drink",
+    "113": "Community & Culture",
+    "105": "Performing & Visual Arts",
+    "104": "Film, Media & Entertainment",
+    "108": "Sports & Fitness",
+    "107": "Health & Wellness",
+    "102": "Science & Technology",
+    "109": "Travel & Outdoor",
+    "111": "Charity & Games",
+    "114": "Religion & Spirituality",
+    "115": "Family & Education",
+    "116": "Seasonal & Holiday",
+    "112": "Government & Politics",
+    "106": "Fashion & Beauty",
+    "117": "Home & Lifestyle",
+    "118": "Auto, Boat & Air",
+    "119": "Hobbies & Special Interest",
+    "199": "Other"
+  }
+}
+
