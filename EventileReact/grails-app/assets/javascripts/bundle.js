@@ -28551,7 +28551,11 @@
 	                        )
 	                    ),
 	                    ': ',
-	                    event.description
+	                    event.description,
+	                    ' ',
+	                    _react2.default.createElement('br', null),
+	                    ' Category: ',
+	                    event.category_name
 	                );
 	            });
 	            return _react2.default.createElement(

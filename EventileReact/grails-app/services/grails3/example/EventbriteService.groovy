@@ -3,9 +3,9 @@ package grails3.example
 import grails.converters.JSON
 import grails.plugins.rest.client.RestBuilder
 import grails.transaction.Transactional
+import org.grails.datastore.mapping.query.Query
 import org.grails.web.json.JSONObject
-
-import java.util.LinkedList
+import groovy.json.JsonSlurper
 
 @Transactional
 class EventbriteService {
@@ -36,6 +36,9 @@ class EventbriteService {
         // cast response to JSON object
         JSONObject obj = (JSONObject) response_eventbrite.json
 
+        // create the JSON object to get Eventbrite's categories
+        JSONObject eventbrite_categories_dictionary = import_eventbrite_category_dictionary()
+
         // read through JSON object, create new Events using the JSON properties
         int i=0
         while (obj["events"][i] != null){
@@ -54,9 +57,18 @@ class EventbriteService {
                 }
             }
 
+            /** get the category name from the eventbrite_id **/
+            String eventbrite_category_id = obj["events"][i].category_id
+            String eventbrite_category_name
+            if (eventbrite_category_id != null){
+                eventbrite_category_name = eventbrite_categories_dictionary["categories"][eventbrite_category_id]
+            } else {
+                eventbrite_category_name = "Unspecified"
+            }
 
             // create new Event object
-            Event new_event = new Event(name: event_name, description: event_description_trimmed, start_date: null, eventbrite_url: obj["events"][i].url, eventbrite_id: 0)
+            Event new_event = new Event(name: event_name, description: event_description_trimmed, start_date: null,
+                    eventbrite_url: obj["events"][i].url, eventbrite_id: 0, category_name: eventbrite_category_name)
 
             // add to the collection
             event_results.add(new_event)
@@ -74,6 +86,12 @@ class EventbriteService {
             header "Authorization", "Bearer 2S34UCIHKW5MXVP4S5M7" // authenticate with header
         }
         return categories_response.json
+    }
+
+    JSONObject import_eventbrite_category_dictionary(){
+        def inputFile = new File("eventbrite_categories.txt")
+        JSONObject inputJSON = (JSONObject) new JsonSlurper().parseText(inputFile.text)
+        return inputJSON
     }
 
 }
