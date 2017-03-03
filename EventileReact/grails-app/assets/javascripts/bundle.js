@@ -68,11 +68,11 @@
 
 	var _signup2 = _interopRequireDefault(_signup);
 
-	var _logout = __webpack_require__(248);
+	var _logout = __webpack_require__(249);
 
 	var _logout2 = _interopRequireDefault(_logout);
 
-	var _search = __webpack_require__(249);
+	var _search = __webpack_require__(250);
 
 	var _search2 = _interopRequireDefault(_search);
 
@@ -28005,7 +28005,7 @@
 
 	      if (!this.headers.get('content-type')) {
 	        if (typeof body === 'string') {
-	          this.headers.set('content-type', 'text/plain;charset=UTF-8')
+          this.headers.set('content-type', 'text/plain;charset=UTF-8')
 	        } else if (this._bodyBlob && this._bodyBlob.type) {
 	          this.headers.set('content-type', this._bodyBlob.type)
 	        } else if (support.searchParams && URLSearchParams.prototype.isPrototypeOf(body)) {
@@ -28254,9 +28254,9 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _userForm = __webpack_require__(245);
+	var _newSignup = __webpack_require__(248);
 
-	var _userForm2 = _interopRequireDefault(_userForm);
+	var _newSignup2 = _interopRequireDefault(_newSignup);
 
 	__webpack_require__(246);
 
@@ -28304,7 +28304,7 @@
 	            var form = this.form.data();
 	            console.log("Signing in...", form);
 
-	            var body = "username=" + form.username + "&password=" + form.password;
+	            var body = "username=" + form.username + "&password=" + form.password + "&age=" + form.age + "&location=" + form.location;
 
 	            fetch("/api/signup", {
 	                method: 'POST',
@@ -28347,7 +28347,7 @@
 	                'div',
 	                { className: 'col-sm-4 col-sm-offset-4' },
 	                this.state.error ? _react2.default.createElement(Error, null) : null,
-	                _react2.default.createElement(_userForm2.default, { submitLabel: 'Sign up', onSubmit: this.signUp, ref: function ref(_ref) {
+	                _react2.default.createElement(_newSignup2.default, { submitLabel: 'Sign up', onSubmit: this.signUp, ref: function ref(_ref) {
 	                        return _this2.form = _ref;
 	                    } })
 	            );
@@ -28361,6 +28361,161 @@
 
 /***/ },
 /* 248 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactDom = __webpack_require__(32);
+
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+
+	__webpack_require__(246);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Created by FrankJiao on 2017-03-02.
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
+
+	var UserForm = function (_React$Component) {
+	    _inherits(UserForm, _React$Component);
+
+	    function UserForm(props) {
+	        _classCallCheck(this, UserForm);
+
+	        return _possibleConstructorReturn(this, (UserForm.__proto__ || Object.getPrototypeOf(UserForm)).call(this, props));
+	    }
+
+	    _createClass(UserForm, [{
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'form',
+	                { className: 'form-horizontal', name: 'signInForm', onSubmit: this.props.onSubmit, ref: 'signInForm' },
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'form-group' },
+	                    _react2.default.createElement(
+	                        'label',
+	                        { htmlFor: 'signin-name', className: 'col-sm-3 control-label' },
+	                        'Username'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-sm-9' },
+	                        _react2.default.createElement('input', { type: 'text',
+	                            className: 'form-control', id: 'signin-name',
+	                            placeholder: 'Name',
+	                            ref: 'name'
+	                        })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'form-group' },
+	                    _react2.default.createElement(
+	                        'label',
+	                        { htmlFor: 'inputPassword3', className: 'col-sm-3 control-label' },
+	                        'Password'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-sm-9' },
+	                        _react2.default.createElement('input', { type: 'password',
+	                            className: 'form-control',
+	                            id: 'signin-password',
+	                            placeholder: 'Password',
+	                            ref: 'password'
+	                        })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'form-group' },
+	                    _react2.default.createElement(
+	                        'label',
+	                        { htmlFor: 'signin-age', className: 'col-sm-3 control-label' },
+	                        'Age'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-sm-9' },
+	                        _react2.default.createElement('input', { type: 'age',
+	                            className: 'form-control',
+	                            id: 'signin-age',
+	                            placeholder: 'Age',
+	                            ref: 'age'
+	                        })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'form-group' },
+	                    _react2.default.createElement(
+	                        'label',
+	                        { htmlFor: 'userlocation', className: 'col-sm-3 control-label' },
+	                        'Location'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-sm-9' },
+	                        _react2.default.createElement('input', { type: 'location',
+	                            className: 'form-control',
+	                            id: 'signin-location',
+	                            placeholder: 'Location',
+	                            ref: 'location'
+	                        })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'form-group' },
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-sm-offset-3 col-sm-9' },
+	                        _react2.default.createElement(
+	                            'button',
+	                            { type: 'submit', className: 'btn btn-default' },
+	                            this.props.submitLabel
+	                        )
+	                    )
+	                )
+	            );
+	        }
+	    }, {
+	        key: 'data',
+	        value: function data() {
+	            var name = _reactDom2.default.findDOMNode(this.refs.name).value.trim(),
+	                password = _reactDom2.default.findDOMNode(this.refs.password).value.trim();
+	            return {
+	                username: name,
+	                password: password
+	            };
+	        }
+	    }]);
+
+	    return UserForm;
+	}(_react2.default.Component);
+
+	exports.default = UserForm;
+
+/***/ },
+/* 249 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -28421,7 +28576,7 @@
 	exports.default = (0, _reactRouter.withRouter)(Logout);
 
 /***/ },
-/* 249 */
+/* 250 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -28527,7 +28682,9 @@
 	            var events = this.state.events.map(function (event) {
 	                return _react2.default.createElement(
 	                    'div',
+
 	                    { className: 'col-sm-12 col-md-12 col-lg-12 tweet' },
+
 	                    _react2.default.createElement(
 	                        'a',
 	                        { href: event.eventbrite_url, target: '_blank' },

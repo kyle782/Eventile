@@ -12,9 +12,9 @@ class UserController {
 
     def userService
 
-    def signUp(@RequestParameter('username') String username, @RequestParameter('password') String password) {
+    def signUp(@RequestParameter('username') String username, @RequestParameter('password') String password, @RequestParameter('age') String age, @RequestParameter('location') String location) {
         log.debug("Signing up a new user: ${username}:[******]")
-        def user = userService.signUp(username, password)
+        def user = userService.signUp(username, password, age, location)
         def payload = [username: user.username] as Object
         respond payload, status: HttpStatus.CREATED
     }

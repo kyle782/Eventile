@@ -1,5 +1,5 @@
 import React from 'react';
-import UserForm from './user-form';
+import UserForm from './new-signup';
 import 'whatwg-fetch';
 import {withRouter} from 'react-router';
 
@@ -29,7 +29,7 @@ class SignUp extends React.Component {
         let form = this.form.data();
         console.log("Signing in...", form);
 
-        let body = "username=" + form.username + "&password=" + form.password
+        let body = "username=" + form.username + "&password=" + form.password + "&age=" + form.age + "&location=" + form.location
 
         fetch("/api/signup", {
             method: 'POST',
