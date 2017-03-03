@@ -28404,7 +28404,25 @@
 
 	        _this.state = {
 	            pref_music: false,
-	            pref_bus_prof: false
+	            pref_bus_prof: false,
+	            pref_food_drink: false,
+	            pref_comm_culture: false,
+	            pref_perf_vis_art: false,
+	            pref_film_media_ent: false,
+	            pref_sports_fitness: false,
+	            pref_health_well: false,
+	            pref_sci_tech: false,
+	            pref_trav_outd: false,
+	            pref_char_games: false,
+	            pref_religion_spirit: false,
+	            pref_family_edu: false,
+	            pref_season_holi: false,
+	            pref_gov_poli: false,
+	            pref_fash_beaut: false,
+	            pref_home_life: false,
+	            pref_auto_boat_air: false,
+	            pref_hobbies_ints: false,
+	            pref_other: false
 	        };
 
 	        _this.handleInputChange = _this.handleInputChange.bind(_this);
@@ -28547,6 +28565,384 @@
 	                    'div',
 	                    { className: 'form-group' },
 	                    _react2.default.createElement(
+	                        'label',
+	                        { htmlFor: 'pref_food_drink', className: 'col-sm-3 control-label' },
+	                        'Food & Drink'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-sm-9' },
+	                        _react2.default.createElement('input', {
+	                            name: 'pref_food_drink',
+	                            className: 'form-check',
+	                            type: 'checkbox',
+	                            checked: this.state.pref_food_drink,
+	                            onChange: this.handleInputChange,
+	                            ref: 'pref_food_drink'
+	                        })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'form-group' },
+	                    _react2.default.createElement(
+	                        'label',
+	                        { htmlFor: 'pref_comm_culture', className: 'col-sm-3 control-label' },
+	                        'Community & Culture'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-sm-9' },
+	                        _react2.default.createElement('input', {
+	                            name: 'pref_comm_culture',
+	                            className: 'form-check',
+	                            type: 'checkbox',
+	                            checked: this.state.pref_comm_culture,
+	                            onChange: this.handleInputChange,
+	                            ref: 'pref_comm_culture'
+	                        })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'form-group' },
+	                    _react2.default.createElement(
+	                        'label',
+	                        { htmlFor: 'pref_perf_vis_art', className: 'col-sm-3 control-label' },
+	                        'Performing & Visual Arts'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-sm-9' },
+	                        _react2.default.createElement('input', {
+	                            name: 'pref_perf_vis_art',
+	                            className: 'form-check',
+	                            type: 'checkbox',
+	                            checked: this.state.pref_perf_vis_art,
+	                            onChange: this.handleInputChange,
+	                            ref: 'pref_perf_vis_art'
+	                        })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'form-group' },
+	                    _react2.default.createElement(
+	                        'label',
+	                        { htmlFor: 'pref_film_media_ent', className: 'col-sm-3 control-label' },
+	                        'Film, Media & Entertainment'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-sm-9' },
+	                        _react2.default.createElement('input', {
+	                            name: 'pref_film_media_ent',
+	                            className: 'form-check',
+	                            type: 'checkbox',
+	                            checked: this.state.pref_film_media_ent,
+	                            onChange: this.handleInputChange,
+	                            ref: 'pref_film_media_ent'
+	                        })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'form-group' },
+	                    _react2.default.createElement(
+	                        'label',
+	                        { htmlFor: 'pref_sports_fitness', className: 'col-sm-3 control-label' },
+	                        'Sports & Fitness'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-sm-9' },
+	                        _react2.default.createElement('input', {
+	                            name: 'pref_sports_fitness',
+	                            className: 'form-check',
+	                            type: 'checkbox',
+	                            checked: this.state.pref_sports_fitness,
+	                            onChange: this.handleInputChange,
+	                            ref: 'pref_sports_fitness'
+	                        })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'form-group' },
+	                    _react2.default.createElement(
+	                        'label',
+	                        { htmlFor: 'pref_health_well', className: 'col-sm-3 control-label' },
+	                        'Health & Wellness'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-sm-9' },
+	                        _react2.default.createElement('input', {
+	                            name: 'pref_health_well',
+	                            className: 'form-check',
+	                            type: 'checkbox',
+	                            checked: this.state.pref_health_well,
+	                            onChange: this.handleInputChange,
+	                            ref: 'pref_health_well'
+	                        })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'form-group' },
+	                    _react2.default.createElement(
+	                        'label',
+	                        { htmlFor: 'pref_sci_tech', className: 'col-sm-3 control-label' },
+	                        'Science & Technology'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-sm-9' },
+	                        _react2.default.createElement('input', {
+	                            name: 'pref_sci_tech',
+	                            className: 'form-check',
+	                            type: 'checkbox',
+	                            checked: this.state.pref_sci_tech,
+	                            onChange: this.handleInputChange,
+	                            ref: 'pref_sci_tech'
+	                        })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'form-group' },
+	                    _react2.default.createElement(
+	                        'label',
+	                        { htmlFor: 'pref_trav_outd', className: 'col-sm-3 control-label' },
+	                        'Travel & Outdoor'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-sm-9' },
+	                        _react2.default.createElement('input', {
+	                            name: 'pref_trav_outd',
+	                            className: 'form-check',
+	                            type: 'checkbox',
+	                            checked: this.state.pref_trav_outd,
+	                            onChange: this.handleInputChange,
+	                            ref: 'pref_trav_outd'
+	                        })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'form-group' },
+	                    _react2.default.createElement(
+	                        'label',
+	                        { htmlFor: 'pref_char_games', className: 'col-sm-3 control-label' },
+	                        'Charity & Games'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-sm-9' },
+	                        _react2.default.createElement('input', {
+	                            name: 'pref_char_games',
+	                            className: 'form-check',
+	                            type: 'checkbox',
+	                            checked: this.state.pref_char_games,
+	                            onChange: this.handleInputChange,
+	                            ref: 'pref_char_games'
+	                        })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'form-group' },
+	                    _react2.default.createElement(
+	                        'label',
+	                        { htmlFor: 'pref_religion_spirit', className: 'col-sm-3 control-label' },
+	                        'Religion & Spirituality'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-sm-9' },
+	                        _react2.default.createElement('input', {
+	                            name: 'pref_religion_spirit',
+	                            className: 'form-check',
+	                            type: 'checkbox',
+	                            checked: this.state.pref_religion_spirit,
+	                            onChange: this.handleInputChange,
+	                            ref: 'pref_religion_spirit'
+	                        })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'form-group' },
+	                    _react2.default.createElement(
+	                        'label',
+	                        { htmlFor: 'pref_family_edu', className: 'col-sm-3 control-label' },
+	                        'Family & Education'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-sm-9' },
+	                        _react2.default.createElement('input', {
+	                            name: 'pref_family_edu',
+	                            className: 'form-check',
+	                            type: 'checkbox',
+	                            checked: this.state.pref_family_edu,
+	                            onChange: this.handleInputChange,
+	                            ref: 'pref_family_edu'
+	                        })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'form-group' },
+	                    _react2.default.createElement(
+	                        'label',
+	                        { htmlFor: 'pref_season_holi', className: 'col-sm-3 control-label' },
+	                        'Seasonal & Holiday'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-sm-9' },
+	                        _react2.default.createElement('input', {
+	                            name: 'pref_season_holi',
+	                            className: 'form-check',
+	                            type: 'checkbox',
+	                            checked: this.state.pref_season_holi,
+	                            onChange: this.handleInputChange,
+	                            ref: 'pref_season_holi'
+	                        })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'form-group' },
+	                    _react2.default.createElement(
+	                        'label',
+	                        { htmlFor: 'pref_gov_poli', className: 'col-sm-3 control-label' },
+	                        'Government & Politics'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-sm-9' },
+	                        _react2.default.createElement('input', {
+	                            name: 'pref_gov_poli',
+	                            className: 'form-check',
+	                            type: 'checkbox',
+	                            checked: this.state.pref_gov_poli,
+	                            onChange: this.handleInputChange,
+	                            ref: 'pref_gov_poli'
+	                        })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'form-group' },
+	                    _react2.default.createElement(
+	                        'label',
+	                        { htmlFor: 'pref_fash_beaut', className: 'col-sm-3 control-label' },
+	                        'Fashion & Beauty'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-sm-9' },
+	                        _react2.default.createElement('input', {
+	                            name: 'pref_fash_beaut',
+	                            className: 'form-check',
+	                            type: 'checkbox',
+	                            checked: this.state.pref_fash_beaut,
+	                            onChange: this.handleInputChange,
+	                            ref: 'pref_fash_beaut'
+	                        })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'form-group' },
+	                    _react2.default.createElement(
+	                        'label',
+	                        { htmlFor: 'pref_home_life', className: 'col-sm-3 control-label' },
+	                        'Home & Lifestyle'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-sm-9' },
+	                        _react2.default.createElement('input', {
+	                            name: 'pref_home_life',
+	                            className: 'form-check',
+	                            type: 'checkbox',
+	                            checked: this.state.pref_home_life,
+	                            onChange: this.handleInputChange,
+	                            ref: 'pref_home_life'
+	                        })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'form-group' },
+	                    _react2.default.createElement(
+	                        'label',
+	                        { htmlFor: 'pref_auto_boat_air', className: 'col-sm-3 control-label' },
+	                        'Auto, Boat & Air'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-sm-9' },
+	                        _react2.default.createElement('input', {
+	                            name: 'pref_auto_boat_air',
+	                            className: 'form-check',
+	                            type: 'checkbox',
+	                            checked: this.state.pref_auto_boat_air,
+	                            onChange: this.handleInputChange,
+	                            ref: 'pref_auto_boat_air'
+	                        })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'form-group' },
+	                    _react2.default.createElement(
+	                        'label',
+	                        { htmlFor: 'pref_hobbies_ints', className: 'col-sm-3 control-label' },
+	                        'Hobbies & Special Interest'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-sm-9' },
+	                        _react2.default.createElement('input', {
+	                            name: 'pref_hobbies_ints',
+	                            className: 'form-check',
+	                            type: 'checkbox',
+	                            checked: this.state.pref_hobbies_ints,
+	                            onChange: this.handleInputChange,
+	                            ref: 'pref_hobbies_ints'
+	                        })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'form-group' },
+	                    _react2.default.createElement(
+	                        'label',
+	                        { htmlFor: 'pref_other', className: 'col-sm-3 control-label' },
+	                        'Other'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-sm-9' },
+	                        _react2.default.createElement('input', {
+	                            name: 'pref_other',
+	                            className: 'form-check',
+	                            type: 'checkbox',
+	                            checked: this.state.pref_other,
+	                            onChange: this.handleInputChange,
+	                            ref: 'pref_other'
+	                        })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'form-group' },
+	                    _react2.default.createElement(
 	                        'div',
 	                        { className: 'col-sm-offset-3 col-sm-9' },
 	                        _react2.default.createElement(
@@ -28567,7 +28963,7 @@
 	                location = _reactDom2.default.findDOMNode(this.refs.location).value.trim();
 	            console.log(_reactDom2.default.findDOMNode(this.refs.pref_music).checked);
 	            console.log(_reactDom2.default.findDOMNode(this.refs.pref_bus_prof).checked);
-	            //let pref_music = ReactDOM.findDOMNode(this.refs.pref_music.checked).value.trim();
+
 	            return {
 	                username: name,
 	                password: password,
