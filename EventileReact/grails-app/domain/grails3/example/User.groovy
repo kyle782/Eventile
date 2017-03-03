@@ -24,11 +24,12 @@ class User implements Serializable {
 	ArrayList<Category> preferences
 
 	User(String username, String password, String age, String location) {
-	  this()
+	  	this()
 		this.username = username
 		this.password = password
-    this.age = age
-    this.location = location
+    	this.age = age
+    	this.location = location
+		this.preferences = null
 
 	}
 
