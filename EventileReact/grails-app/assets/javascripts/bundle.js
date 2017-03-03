@@ -27453,19 +27453,6 @@
 	                    ) : null,
 	                    this.state.loggedIn ? _react2.default.createElement(
 	                        'ul',
-	                        { className: 'nav navbar-nav' },
-	                        _react2.default.createElement(
-	                            'li',
-	                            null,
-	                            _react2.default.createElement(
-	                                _reactRouter.Link,
-	                                { to: '/search' },
-	                                'Get Categories'
-	                            )
-	                        )
-	                    ) : null,
-	                    this.state.loggedIn ? _react2.default.createElement(
-	                        'ul',
 	                        { className: 'nav navbar-nav navbar-right' },
 	                        _react2.default.createElement(
 	                            'li',
