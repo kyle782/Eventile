@@ -24,9 +24,6 @@ Eventile is the one stop shop for events happening across the major event platfo
   
 **_Event Browsing_** <br>
   Without even searching, the user's event page will use API calls to Eventbrite and load a steady stream of events to browse through. 
-  
-**_Event Advertising_** <br>
-  Users will be able to create their own events through our events creation page. Their created event will then show up in searches dependent on the tags and categories that they provide in the event creation page.
 
 **_Event Rating With Comments_** <br>
   Events will have a rating associated in order to notify users of how previous attendees felt about it. A comments section will also be available for past attendees to write about their experience at the event or previous events by the same host.
@@ -46,9 +43,11 @@ Eventile is the one stop shop for events happening across the major event platfo
 
 **_Social Media Integration_** <br>
   We have been looking into integrating the Facebook API into the application. This will allow for users to connect their Eventile profile to their Facebook accounts so that they can keep track of their friends' events.
- 
-[Go back to Home Page](../README.md)
+  
+**_Event Advertising_** <br>
+  Users will be able to create their own events through our events creation page. Their created event will then show up in searches dependent on the tags and categories that they provide in the event creation page.
 
 ## Looking Forward (ver 1.2) <br>
-  Next features for implementation are the event sorting and event browsing features. In addition, catering events to a user's preferences is expected to be done before Stage 3 completion.
+  Next features for implementation are the event sorting and event browsing features. These features, along with the catering of events to a user's preferences are all features which we expect to complete well before the Stage 3 deadline. After these features, final work can be done on integrating other search API's (Eventful and Ticketmaster) as well as fleshing out the event details with consolidated categories and a list of attendees.
 
+[Go back to Home Page](../README.md)
