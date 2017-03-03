@@ -25,7 +25,9 @@ Each team member has their own branch, where we each implemented our own assigne
 
 #### Dependencies
 
-The project will require [Grails 3](https://grails.org/download.html). Please download and install Grails according to your platform. If you are using Unix/MacOS, we recommend installing Grails via SDKMAN, linked above. 
+The project will require [Grails 3](https://grails.org/download.html). Please download and install Grails according to your platform. Grails requires Java SDK. 
+
+If you are using Unix/MacOS, we recommend installing Grails via SDKMAN, linked above. 
 
 #### Building and Running the Project
 
@@ -49,7 +51,7 @@ The project will require [Grails 3](https://grails.org/download.html). Please do
 
 > grails run-app
 
--- Grails will then resolve all dependencies using Gradle, and then start the application server. 
+-- Grails will then resolve all dependencies using Gradle (enable???), and then start the application server. 
 
 - Navigate to [http://localhost:8080](http://localhost:8080) in your favourite web browser to enjoy.
 
