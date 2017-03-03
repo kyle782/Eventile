@@ -41,9 +41,9 @@ The project will require [Grails 3](https://grails.org/download.html). Please do
 
 ##### 2. Build and run the project
 
-- Navigate to /EventileReact/ in the Terminal/cmd window:
+- Navigate to /Eventile/EventileReact/ in the Terminal/cmd window:
 
-> cd EventileReact
+> cd Eventile/EventileReact
 
 - Build and run the project:
 
