@@ -12,7 +12,7 @@ Eventile is the one stop shop for events happening across the major event platfo
 **_User Profile Stores Information_** <br> 
   Users of Eventile can sign up for a profile where they will be asked to provide their interests in terms of event categories. Such categories are decided depending on the APIs of the various event platforms that Eventile will be pulling from. Examples are concerts, seminars, parties, etc.
   
-  _Implemented in Stage 2 using a grails user domain. A signup form takes in user name, email, password, and preferences     and creates their lasting account
+  _Implemented in Stage 2 using a grails user domain. A signup form takes in user name, email, password, and preferences     and creates their lasting account_
 
 **_Suggested events_** <br>
   Based on themes either manually entered by the user or taken from the events themselves, Eventile notifies the user of events they may prefer. User profile information like this is stored in our database and the themes to categorize events come with the events found by API calls to EventBrite, Ticketmaster, or Eventful.
@@ -20,7 +20,7 @@ Eventile is the one stop shop for events happening across the major event platfo
 **_Event Searching_** <br>
   When searching for a particular event Eventile's, event searching runs through multiple different databases of events in sequence. Eventile will make API call to Eventbrite, then to Ticketmaster, then to Eventful, in sequence to call to find the best match to whatever the user is searching for. 
   
-  _Implemented in Stage 2 using API calls to Eventbrite's event database. Currrently only running calls to search           Eventbrite._
+  >_Implemented in Stage 2 using API calls to Eventbrite's event database. Currrently only running calls to search           Eventbrite._
   
 **_Event Browsing_** <br>
   Without even searching, the user's event page will use API calls to Eventbrite and load a steady stream of events to browse through. 
