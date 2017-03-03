@@ -4,11 +4,11 @@ We are currently developing an **event finder web application** that allows user
 
 ## Software
 
-We will be using Grails for our web application framework. Our back-end database will be using SQLite3 (built-in with Grails), and our front-end uses React.
+We will be using Grails for our web application framework. Our back-end database will be using SQLite3 (built-in with Grails) along with , and our front-end uses the React Javascript library.
 
 Our software stack includes the following:
 
-* Grails 3
+* Grails 
 * Spring Security Rest plugin
 * Webpack
 * React
@@ -25,17 +25,19 @@ Each team member has their own branch, where we each implemented our own assigne
 
 #### Dependencies
 
-The project will require [Grails 3](https://grails.org/download.html). Please download and install Grails according to your platform. Grails requires Java SDK. 
-
-If you are using Unix/MacOS, we recommend installing Grails via SDKMAN, linked above. 
-
-#### Building and Running the Project
-
-##### 0. Prerequisits 
+Ideally, the most recent update of the following pieces of software are suggested.
+- Git (ver 2.10.1)
+- JVM (ver 1.8.0)
 - Grails (ver 3.2.6)
 - Groovy (ver 2.4.7)
-- JVM (ver 1.8.0)
 - Gradle (ver 3.4)
+
+Once the JVM is obtained. Grails can be downloaded and installed through terminal using the following commanmds.
+> $ curl -s get.sdkman.io | bash
+> $ source "$HOME/.sdkman/bin/sdkman-init.sh"
+> $ sdk install grails
+
+#### Building and Running the Project
 
 ##### 1. Clone the repository
 
