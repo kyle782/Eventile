@@ -80,13 +80,15 @@ class EventbriteService {
 
     }
 
-    def get_eventbrite_categories(){
+    /** Retrieves Eventbrite's categories from their /categories/ endpoint using a GET request
+     * No longer needed
+     def get_eventbrite_categories(){
         // perform a GET call to Eventbrite's REST API, returns JSON response
         def categories_response = new RestBuilder().get("https://www.eventbriteapi.com/v3/categories/"){
             header "Authorization", "Bearer 2S34UCIHKW5MXVP4S5M7" // authenticate with header
         }
         return categories_response.json
-    }
+    } **/
 
     JSONObject import_eventbrite_category_dictionary(){
         def inputFile = new File("eventbrite_categories.txt")

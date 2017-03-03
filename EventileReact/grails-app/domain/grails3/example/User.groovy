@@ -63,7 +63,7 @@ class User implements Serializable {
 		preferences.add(new_category)
 	}
 
-	def getPreferences(){
+	ArrayList<Category> getPreferences(){
 		return preferences
 	}
 }
