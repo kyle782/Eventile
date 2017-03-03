@@ -16,18 +16,25 @@ Each team member has their own branch, where we each implemented our own assigne
 
 #### 1. Clone the repository
 
-- Create a new directory for the project. 
+- Create a new directory for the project
 
-- Open a Terminal window inside the new directory.
+- Open a Terminal window inside the new directory
 
 - Execute the following command: 
 
 > git clone https://github.com/jlee2967/Eventile.git 
 
-
-
 #### 2. Build and run the project
 
+- Navigate to /EventileReact/ in the Terminal window:
+
+> cd EventileReact
+
+- Build and run the project:
+
+> grails run-app
+
+#### Enjoy!
 
 ## Branding
 
