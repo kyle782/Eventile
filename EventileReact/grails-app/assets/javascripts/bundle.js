@@ -28005,7 +28005,7 @@
 
 	      if (!this.headers.get('content-type')) {
 	        if (typeof body === 'string') {
-          this.headers.set('content-type', 'text/plain;charset=UTF-8')
+	          this.headers.set('content-type', 'text/plain;charset=UTF-8')
 	        } else if (this._bodyBlob && this._bodyBlob.type) {
 	          this.headers.set('content-type', this._bodyBlob.type)
 	        } else if (support.searchParams && URLSearchParams.prototype.isPrototypeOf(body)) {
@@ -28682,9 +28682,7 @@
 	            var events = this.state.events.map(function (event) {
 	                return _react2.default.createElement(
 	                    'div',
-
 	                    { className: 'col-sm-12 col-md-12 col-lg-12 tweet' },
-
 	                    _react2.default.createElement(
 	                        'a',
 	                        { href: event.eventbrite_url, target: '_blank' },
