@@ -19,7 +19,6 @@ class SearchController {
         // perform a GET requestion to Eventbrite's API using EventbriteService class
         def response_eventbrite = EventbriteService.search(q)
 
-
         respond response_eventbrite
     }
 
