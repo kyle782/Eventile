@@ -23,7 +23,9 @@ Each team member has their own branch, where we each implemented our own assigne
 
 ### Installation/Run Instructions
 
-#### 1. Clone the repository
+#### Mac & Unix
+
+##### 1. Clone the repository
 
 - Create a new directory for the project
 
@@ -33,7 +35,7 @@ Each team member has their own branch, where we each implemented our own assigne
 
 > git clone https://github.com/jlee2967/Eventile.git 
 
-#### 2. Build and run the project
+##### 2. Build and run the project
 
 - Navigate to /EventileReact/ in the Terminal window:
 
@@ -43,7 +45,7 @@ Each team member has their own branch, where we each implemented our own assigne
 
 > grails run-app
 
-#### 3. Enjoy!
+##### 3. Enjoy!
 
 ## Branding
 
