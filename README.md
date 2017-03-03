@@ -6,6 +6,29 @@ We are currently developing an **event finder web application** that allows user
 
 We will be using Grails for our web application framework. Our back-end database will be using MySQL, and our front-end will use the Bootstrap framework, and possibly React. 
 
+## Additional Information
+
+### Repository Organization
+
+Each team member has their own branch, where we each implemented our own assigned features. The implemented features are then merged into the dev branch. After unanimous approval, the features are merged into the master branch. 
+
+### Installation/Run Instructions
+
+#### 1. Clone the repository
+
+- Create a new directory for the project. 
+
+- Open a Terminal window inside the new directory.
+
+- Execute the following command: 
+
+> git clone https://github.com/jlee2967/Eventile.git 
+
+
+
+#### 2. Build and run the project
+
+
 ## Branding
 
 ### Project Logo
