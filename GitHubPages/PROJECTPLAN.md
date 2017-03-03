@@ -4,8 +4,8 @@
 
 Eventile is the one stop shop for events happening across the major event platforms (EventBrite, Ticketmaster, and Eventful) on the internet. Eventile allows for users to search for events across the major platforms and displays the events as tiles in the browser. Eventile also allows users to create their own customized profile where they can pick and choose event categories that they are interested in. The users will then be shown events matching their interest. Below are some of the basic features that will be implemented in Eventile.
 
-## Updates (03/03/2017)
-  Stage 2 has completed classes to handle user account creation and some event searching (more detail below). When a user account is already created but a user attempts to create an account under that name, an error message is thrown and the duplicate account cannot be created. 
+## Updates Summary, ver 1.1 (03/03/2017)
+  Stage 2 has completed classes to handle user account creation and some event searching (more detail below). When a particular account is already created but a then a user attempts to create an account under that name, an error message is thrown and the duplicate account cannot be created. 
 
 ## Basic Features
 
@@ -20,7 +20,7 @@ Eventile is the one stop shop for events happening across the major event platfo
 **_Event Searching_** <br>
   When searching for a particular event Eventile's, event searching runs through multiple different databases of events in sequence. Eventile will make API call to Eventbrite, then to Ticketmaster, then to Eventful, in sequence to call to find the best match to whatever the user is searching for. 
   
-  >_Implemented in Stage 2 using API calls to Eventbrite's event database. Currrently only running calls to search           Eventbrite._
+  >_Implemented in Stage 2 using API calls to Eventbrite's event database. Takes in start date, event description and event categories. Currrently only running calls to search Eventbrite._
   
 **_Event Browsing_** <br>
   Without even searching, the user's event page will use API calls to Eventbrite and load a steady stream of events to browse through. 
@@ -34,7 +34,7 @@ Eventile is the one stop shop for events happening across the major event platfo
 **_Event Categories_** <br>
   Events will be sorted by categories depending on the categorization in the given API. When a user signs up for a profile, they will be asked to pick categories of events that they are interested in. They then will have a homepage dashboard filled with events pulled from various major event websites that will display events related to their interests.
   
-  >_Implemented in Stage 2 using Eventbrite's categories. Categories are represented by a groovy domain and when a user is   created, they are given the opportunity to add interests representing categories._
+  >_Implemented in Stage 2 using Eventbrite's categories. Categories are represented by a groovy domain and when a user is   created, they are given the opportunity to add interests representing categories. There are also subcategories within each given category_
 
 **_Sorting Events (by location, price, ect.)_** <br>
   Users can sort their displayed list of events depending on a specific criteria or filter that they choose. This can be done on any page and allows for users to see events in descending order depending on the filter that they chose. 
@@ -48,3 +48,7 @@ Eventile is the one stop shop for events happening across the major event platfo
   We have been looking into integrating the Facebook API into the application. This will allow for users to connect their Eventile profile to their Facebook accounts so that they can keep track of their friends' events.
  
 [Go back to Home Page](../README.md)
+
+## Looking Forward (ver 1.2) <br>
+  Next features for implementation are the event sorting and event browsing features. In addition, catering events to a user's preferences.
+
