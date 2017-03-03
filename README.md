@@ -33,9 +33,9 @@ Ideally, the most recent update of the following pieces of software are suggeste
 - Gradle (ver 3.4)
 
 Once the JVM is obtained. Grails can be downloaded and installed through terminal using the following commanmds.
-> $ curl -s get.sdkman.io | bash
-> $ source "$HOME/.sdkman/bin/sdkman-init.sh"
-> $ sdk install grails
+> $ curl -s get.sdkman.io | bash <br/>
+> $ source "$HOME/.sdkman/bin/sdkman-init.sh" <br/>
+> $ sdk install grails <br/>
 
 #### Building and Running the Project
 
