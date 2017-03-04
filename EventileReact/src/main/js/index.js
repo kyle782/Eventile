@@ -20,7 +20,7 @@ const Paths = {
 const Greet = () =>
     <div className="jumbotron">
         <h1>Hello, world!</h1>
-        <p>Here you can search tweets from Twitter after signing in</p>
+        <p>Here you can search for events after signing in</p>
         <p><Link to={Paths.SIGNIN} className="btn btn-primary btn-lg">Sign in</Link></p>
     </div>;
 
