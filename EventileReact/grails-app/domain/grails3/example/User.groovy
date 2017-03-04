@@ -13,15 +13,24 @@ class User implements Serializable {
 
 	String username
 	String password
+    String age
+    String location
 	boolean enabled = true
 	boolean accountExpired
 	boolean accountLocked
 	boolean passwordExpired
 
-	User(String username, String password) {
-		this()
+  // create a collection Preferences that contains categories the user is interested in
+	ArrayList<Category> preferences
+
+	User(String username, String password, String age, String location) {
+	  	this()
 		this.username = username
 		this.password = password
+    	this.age = age
+    	this.location = location
+		this.preferences = null
+
 	}
 
 	Set<Role> getAuthorities() {
@@ -51,5 +60,16 @@ class User implements Serializable {
 
 	static mapping = {
 		password column: '`password`'
+	}
+
+	def preferences_addCategory(Category new_category){
+		if (preferences == null){
+			preferences = new ArrayList<>()
+		}
+		preferences.add(new_category)
+	}
+
+	ArrayList<Category> getPreferences(){
+		return preferences
 	}
 }

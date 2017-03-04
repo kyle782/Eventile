@@ -8,7 +8,7 @@ class UserService {
     public static final String ROLE_USER = 'ROLE_USER'
 
     @Transactional(rollbackFor = [UserExistsException, IllegalArgumentException])
-    def signUp(String username, String password) {
+    def signUp(String username, String password, String age, String location) {
         if(!username || !password) throw new IllegalArgumentException("username and password must not be blank")
 
         def lowerCaseUsername = username.toLowerCase()
@@ -22,7 +22,7 @@ class UserService {
             .andThrow { User user ->
                 new UserExistsException("User ${lowerCaseUsername} is already signed up")
             }
-            .orElse(new User(username: lowerCaseUsername, password: password).save())
+            .orElse(new User(username: lowerCaseUsername, password: password, age: age, location: location).save())
         } as User
         log.debug("Created user ${user}")
 

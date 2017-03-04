@@ -68,13 +68,17 @@
 
 	var _signup2 = _interopRequireDefault(_signup);
 
-	var _logout = __webpack_require__(248);
+	var _logout = __webpack_require__(249);
 
 	var _logout2 = _interopRequireDefault(_logout);
 
-	var _search = __webpack_require__(249);
+	var _search = __webpack_require__(250);
 
 	var _search2 = _interopRequireDefault(_search);
+
+	var _userPage = __webpack_require__(251);
+
+	var _userPage2 = _interopRequireDefault(_userPage);
 
 	var _auth = __webpack_require__(243);
 
@@ -86,7 +90,8 @@
 	    SIGNIN: "/signin",
 	    SEARCH: "/search",
 	    LOGOUT: "/logout",
-	    SINGUP: "/signup"
+	    SINGUP: "/signup",
+	    USERPAGE: "/user-page"
 	};
 
 	var Greet = function Greet() {
@@ -185,6 +190,7 @@
 	        _react2.default.createElement(_reactRouter.Route, { path: Paths.SEARCH, component: _search2.default, onEnter: checkAuth }),
 	        _react2.default.createElement(_reactRouter.Route, { path: Paths.LOGOUT, component: _logout2.default }),
 	        _react2.default.createElement(_reactRouter.Route, { path: Paths.SINGUP, component: _signup2.default, onEnter: checkAuth }),
+	        _react2.default.createElement(_reactRouter.Route, { path: Paths.USERPAGE, component: _userPage2.default, onEnter: checkAuth }),
 	        _react2.default.createElement(_reactRouter.Route, { path: '*', component: NotFound })
 	    )
 	), document.getElementById('app'));
@@ -27449,6 +27455,15 @@
 	                                { to: '/search' },
 	                                'Search'
 	                            )
+	                        ),
+	                        _react2.default.createElement(
+	                            'li',
+	                            null,
+	                            _react2.default.createElement(
+	                                _reactRouter.Link,
+	                                { to: '/user-page' },
+	                                'Profile'
+	                            )
 	                        )
 	                    ) : null,
 	                    this.state.loggedIn ? _react2.default.createElement(
@@ -28254,9 +28269,9 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _userForm = __webpack_require__(245);
+	var _newSignup = __webpack_require__(248);
 
-	var _userForm2 = _interopRequireDefault(_userForm);
+	var _newSignup2 = _interopRequireDefault(_newSignup);
 
 	__webpack_require__(246);
 
@@ -28304,7 +28319,7 @@
 	            var form = this.form.data();
 	            console.log("Signing in...", form);
 
-	            var body = "username=" + form.username + "&password=" + form.password;
+	            var body = "username=" + form.username + "&password=" + form.password + "&age=" + form.age + "&location=" + form.location;
 
 	            fetch("/api/signup", {
 	                method: 'POST',
@@ -28347,7 +28362,7 @@
 	                'div',
 	                { className: 'col-sm-4 col-sm-offset-4' },
 	                this.state.error ? _react2.default.createElement(Error, null) : null,
-	                _react2.default.createElement(_userForm2.default, { submitLabel: 'Sign up', onSubmit: this.signUp, ref: function ref(_ref) {
+	                _react2.default.createElement(_newSignup2.default, { submitLabel: 'Sign up', onSubmit: this.signUp, ref: function ref(_ref) {
 	                        return _this2.form = _ref;
 	                    } })
 	            );
@@ -28361,6 +28376,625 @@
 
 /***/ },
 /* 248 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactDom = __webpack_require__(32);
+
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+
+	__webpack_require__(246);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Created by FrankJiao on 2017-03-02.
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
+
+	var UserForm = function (_React$Component) {
+	    _inherits(UserForm, _React$Component);
+
+	    function UserForm(props) {
+	        _classCallCheck(this, UserForm);
+
+	        var _this = _possibleConstructorReturn(this, (UserForm.__proto__ || Object.getPrototypeOf(UserForm)).call(this, props));
+
+	        _this.state = {
+	            pref_music: false,
+	            pref_bus_prof: false,
+	            pref_food_drink: false,
+	            pref_comm_culture: false,
+	            pref_perf_vis_art: false,
+	            pref_film_media_ent: false,
+	            pref_sports_fitness: false,
+	            pref_health_well: false,
+	            pref_sci_tech: false,
+	            pref_trav_outd: false,
+	            pref_char_games: false,
+	            pref_religion_spirit: false,
+	            pref_family_edu: false,
+	            pref_season_holi: false,
+	            pref_gov_poli: false,
+	            pref_fash_beaut: false,
+	            pref_home_life: false,
+	            pref_auto_boat_air: false,
+	            pref_hobbies_ints: false,
+	            pref_other: false
+	        };
+
+	        _this.handleInputChange = _this.handleInputChange.bind(_this);
+	        return _this;
+	    }
+
+	    _createClass(UserForm, [{
+	        key: 'handleInputChange',
+	        value: function handleInputChange(event) {
+	            var target = event.target;
+	            var value = target.type === 'checkbox' ? target.checked : target.value;
+	            var name = target.name;
+
+	            this.setState(_defineProperty({}, name, value));
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'form',
+	                { className: 'form-horizontal', name: 'signInForm', onSubmit: this.props.onSubmit, ref: 'signInForm' },
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'form-group' },
+	                    _react2.default.createElement(
+	                        'label',
+	                        { htmlFor: 'signin-name', className: 'col-sm-3 control-label' },
+	                        'Username'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-sm-9' },
+	                        _react2.default.createElement('input', { type: 'text',
+	                            className: 'form-control', id: 'signin-name',
+	                            placeholder: 'Name',
+	                            ref: 'name'
+	                        })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'form-group' },
+	                    _react2.default.createElement(
+	                        'label',
+	                        { htmlFor: 'inputPassword3', className: 'col-sm-3 control-label' },
+	                        'Password'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-sm-9' },
+	                        _react2.default.createElement('input', { type: 'password',
+	                            className: 'form-control',
+	                            id: 'signin-password',
+	                            placeholder: 'Password',
+	                            ref: 'password'
+	                        })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'form-group' },
+	                    _react2.default.createElement(
+	                        'label',
+	                        { htmlFor: 'signin-age', className: 'col-sm-3 control-label' },
+	                        'Age'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-sm-9' },
+	                        _react2.default.createElement('input', { type: 'age',
+	                            className: 'form-control',
+	                            id: 'signin-age',
+	                            placeholder: 'Age',
+	                            ref: 'age'
+	                        })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'form-group' },
+	                    _react2.default.createElement(
+	                        'label',
+	                        { htmlFor: 'userlocation', className: 'col-sm-3 control-label' },
+	                        'Location'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-sm-9' },
+	                        _react2.default.createElement('input', { type: 'location',
+	                            className: 'form-control',
+	                            id: 'signin-location',
+	                            placeholder: 'Location',
+	                            ref: 'location'
+	                        })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'form-group' },
+	                    _react2.default.createElement(
+	                        'label',
+	                        { htmlFor: 'pref_music', className: 'col-sm-3 control-label' },
+	                        'Music'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-sm-9' },
+	                        _react2.default.createElement('input', {
+	                            name: 'pref_music',
+	                            className: 'form-check' /** might have to change this to align horizontally **/
+	                            , type: 'checkbox',
+	                            checked: this.state.pref_music,
+	                            onChange: this.handleInputChange,
+	                            ref: 'pref_music'
+	                        })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'form-group' },
+	                    _react2.default.createElement(
+	                        'label',
+	                        { htmlFor: 'pref_bus_prof', className: 'col-sm-3 control-label' },
+	                        'Business & Professional'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-sm-9' },
+	                        _react2.default.createElement('input', {
+	                            name: 'pref_bus_prof',
+	                            className: 'form-check',
+	                            type: 'checkbox',
+	                            checked: this.state.pref_bus_prof,
+	                            onChange: this.handleInputChange,
+	                            ref: 'pref_bus_prof'
+	                        })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'form-group' },
+	                    _react2.default.createElement(
+	                        'label',
+	                        { htmlFor: 'pref_food_drink', className: 'col-sm-3 control-label' },
+	                        'Food & Drink'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-sm-9' },
+	                        _react2.default.createElement('input', {
+	                            name: 'pref_food_drink',
+	                            className: 'form-check',
+	                            type: 'checkbox',
+	                            checked: this.state.pref_food_drink,
+	                            onChange: this.handleInputChange,
+	                            ref: 'pref_food_drink'
+	                        })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'form-group' },
+	                    _react2.default.createElement(
+	                        'label',
+	                        { htmlFor: 'pref_comm_culture', className: 'col-sm-3 control-label' },
+	                        'Community & Culture'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-sm-9' },
+	                        _react2.default.createElement('input', {
+	                            name: 'pref_comm_culture',
+	                            className: 'form-check',
+	                            type: 'checkbox',
+	                            checked: this.state.pref_comm_culture,
+	                            onChange: this.handleInputChange,
+	                            ref: 'pref_comm_culture'
+	                        })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'form-group' },
+	                    _react2.default.createElement(
+	                        'label',
+	                        { htmlFor: 'pref_perf_vis_art', className: 'col-sm-3 control-label' },
+	                        'Performing & Visual Arts'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-sm-9' },
+	                        _react2.default.createElement('input', {
+	                            name: 'pref_perf_vis_art',
+	                            className: 'form-check',
+	                            type: 'checkbox',
+	                            checked: this.state.pref_perf_vis_art,
+	                            onChange: this.handleInputChange,
+	                            ref: 'pref_perf_vis_art'
+	                        })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'form-group' },
+	                    _react2.default.createElement(
+	                        'label',
+	                        { htmlFor: 'pref_film_media_ent', className: 'col-sm-3 control-label' },
+	                        'Film, Media & Entertainment'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-sm-9' },
+	                        _react2.default.createElement('input', {
+	                            name: 'pref_film_media_ent',
+	                            className: 'form-check',
+	                            type: 'checkbox',
+	                            checked: this.state.pref_film_media_ent,
+	                            onChange: this.handleInputChange,
+	                            ref: 'pref_film_media_ent'
+	                        })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'form-group' },
+	                    _react2.default.createElement(
+	                        'label',
+	                        { htmlFor: 'pref_sports_fitness', className: 'col-sm-3 control-label' },
+	                        'Sports & Fitness'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-sm-9' },
+	                        _react2.default.createElement('input', {
+	                            name: 'pref_sports_fitness',
+	                            className: 'form-check',
+	                            type: 'checkbox',
+	                            checked: this.state.pref_sports_fitness,
+	                            onChange: this.handleInputChange,
+	                            ref: 'pref_sports_fitness'
+	                        })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'form-group' },
+	                    _react2.default.createElement(
+	                        'label',
+	                        { htmlFor: 'pref_health_well', className: 'col-sm-3 control-label' },
+	                        'Health & Wellness'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-sm-9' },
+	                        _react2.default.createElement('input', {
+	                            name: 'pref_health_well',
+	                            className: 'form-check',
+	                            type: 'checkbox',
+	                            checked: this.state.pref_health_well,
+	                            onChange: this.handleInputChange,
+	                            ref: 'pref_health_well'
+	                        })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'form-group' },
+	                    _react2.default.createElement(
+	                        'label',
+	                        { htmlFor: 'pref_sci_tech', className: 'col-sm-3 control-label' },
+	                        'Science & Technology'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-sm-9' },
+	                        _react2.default.createElement('input', {
+	                            name: 'pref_sci_tech',
+	                            className: 'form-check',
+	                            type: 'checkbox',
+	                            checked: this.state.pref_sci_tech,
+	                            onChange: this.handleInputChange,
+	                            ref: 'pref_sci_tech'
+	                        })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'form-group' },
+	                    _react2.default.createElement(
+	                        'label',
+	                        { htmlFor: 'pref_trav_outd', className: 'col-sm-3 control-label' },
+	                        'Travel & Outdoor'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-sm-9' },
+	                        _react2.default.createElement('input', {
+	                            name: 'pref_trav_outd',
+	                            className: 'form-check',
+	                            type: 'checkbox',
+	                            checked: this.state.pref_trav_outd,
+	                            onChange: this.handleInputChange,
+	                            ref: 'pref_trav_outd'
+	                        })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'form-group' },
+	                    _react2.default.createElement(
+	                        'label',
+	                        { htmlFor: 'pref_char_games', className: 'col-sm-3 control-label' },
+	                        'Charity & Games'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-sm-9' },
+	                        _react2.default.createElement('input', {
+	                            name: 'pref_char_games',
+	                            className: 'form-check',
+	                            type: 'checkbox',
+	                            checked: this.state.pref_char_games,
+	                            onChange: this.handleInputChange,
+	                            ref: 'pref_char_games'
+	                        })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'form-group' },
+	                    _react2.default.createElement(
+	                        'label',
+	                        { htmlFor: 'pref_religion_spirit', className: 'col-sm-3 control-label' },
+	                        'Religion & Spirituality'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-sm-9' },
+	                        _react2.default.createElement('input', {
+	                            name: 'pref_religion_spirit',
+	                            className: 'form-check',
+	                            type: 'checkbox',
+	                            checked: this.state.pref_religion_spirit,
+	                            onChange: this.handleInputChange,
+	                            ref: 'pref_religion_spirit'
+	                        })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'form-group' },
+	                    _react2.default.createElement(
+	                        'label',
+	                        { htmlFor: 'pref_family_edu', className: 'col-sm-3 control-label' },
+	                        'Family & Education'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-sm-9' },
+	                        _react2.default.createElement('input', {
+	                            name: 'pref_family_edu',
+	                            className: 'form-check',
+	                            type: 'checkbox',
+	                            checked: this.state.pref_family_edu,
+	                            onChange: this.handleInputChange,
+	                            ref: 'pref_family_edu'
+	                        })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'form-group' },
+	                    _react2.default.createElement(
+	                        'label',
+	                        { htmlFor: 'pref_season_holi', className: 'col-sm-3 control-label' },
+	                        'Seasonal & Holiday'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-sm-9' },
+	                        _react2.default.createElement('input', {
+	                            name: 'pref_season_holi',
+	                            className: 'form-check',
+	                            type: 'checkbox',
+	                            checked: this.state.pref_season_holi,
+	                            onChange: this.handleInputChange,
+	                            ref: 'pref_season_holi'
+	                        })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'form-group' },
+	                    _react2.default.createElement(
+	                        'label',
+	                        { htmlFor: 'pref_gov_poli', className: 'col-sm-3 control-label' },
+	                        'Government & Politics'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-sm-9' },
+	                        _react2.default.createElement('input', {
+	                            name: 'pref_gov_poli',
+	                            className: 'form-check',
+	                            type: 'checkbox',
+	                            checked: this.state.pref_gov_poli,
+	                            onChange: this.handleInputChange,
+	                            ref: 'pref_gov_poli'
+	                        })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'form-group' },
+	                    _react2.default.createElement(
+	                        'label',
+	                        { htmlFor: 'pref_fash_beaut', className: 'col-sm-3 control-label' },
+	                        'Fashion & Beauty'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-sm-9' },
+	                        _react2.default.createElement('input', {
+	                            name: 'pref_fash_beaut',
+	                            className: 'form-check',
+	                            type: 'checkbox',
+	                            checked: this.state.pref_fash_beaut,
+	                            onChange: this.handleInputChange,
+	                            ref: 'pref_fash_beaut'
+	                        })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'form-group' },
+	                    _react2.default.createElement(
+	                        'label',
+	                        { htmlFor: 'pref_home_life', className: 'col-sm-3 control-label' },
+	                        'Home & Lifestyle'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-sm-9' },
+	                        _react2.default.createElement('input', {
+	                            name: 'pref_home_life',
+	                            className: 'form-check',
+	                            type: 'checkbox',
+	                            checked: this.state.pref_home_life,
+	                            onChange: this.handleInputChange,
+	                            ref: 'pref_home_life'
+	                        })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'form-group' },
+	                    _react2.default.createElement(
+	                        'label',
+	                        { htmlFor: 'pref_auto_boat_air', className: 'col-sm-3 control-label' },
+	                        'Auto, Boat & Air'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-sm-9' },
+	                        _react2.default.createElement('input', {
+	                            name: 'pref_auto_boat_air',
+	                            className: 'form-check',
+	                            type: 'checkbox',
+	                            checked: this.state.pref_auto_boat_air,
+	                            onChange: this.handleInputChange,
+	                            ref: 'pref_auto_boat_air'
+	                        })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'form-group' },
+	                    _react2.default.createElement(
+	                        'label',
+	                        { htmlFor: 'pref_hobbies_ints', className: 'col-sm-3 control-label' },
+	                        'Hobbies & Special Interest'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-sm-9' },
+	                        _react2.default.createElement('input', {
+	                            name: 'pref_hobbies_ints',
+	                            className: 'form-check',
+	                            type: 'checkbox',
+	                            checked: this.state.pref_hobbies_ints,
+	                            onChange: this.handleInputChange,
+	                            ref: 'pref_hobbies_ints'
+	                        })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'form-group' },
+	                    _react2.default.createElement(
+	                        'label',
+	                        { htmlFor: 'pref_other', className: 'col-sm-3 control-label' },
+	                        'Other'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-sm-9' },
+	                        _react2.default.createElement('input', {
+	                            name: 'pref_other',
+	                            className: 'form-check',
+	                            type: 'checkbox',
+	                            checked: this.state.pref_other,
+	                            onChange: this.handleInputChange,
+	                            ref: 'pref_other'
+	                        })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'form-group' },
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-sm-offset-3 col-sm-9' },
+	                        _react2.default.createElement(
+	                            'button',
+	                            { type: 'submit', className: 'btn btn-default' },
+	                            this.props.submitLabel
+	                        )
+	                    )
+	                )
+	            );
+	        }
+	    }, {
+	        key: 'data',
+	        value: function data() {
+	            var name = _reactDom2.default.findDOMNode(this.refs.name).value.trim(),
+	                password = _reactDom2.default.findDOMNode(this.refs.password).value.trim(),
+	                age = _reactDom2.default.findDOMNode(this.refs.age).value.trim(),
+	                location = _reactDom2.default.findDOMNode(this.refs.location).value.trim();
+	            console.log(_reactDom2.default.findDOMNode(this.refs.pref_music).checked);
+	            console.log(_reactDom2.default.findDOMNode(this.refs.pref_bus_prof).checked);
+
+	            return {
+	                username: name,
+	                password: password,
+	                age: age,
+	                location: location
+	            };
+	        }
+	    }]);
+
+	    return UserForm;
+	}(_react2.default.Component);
+
+	exports.default = UserForm;
+
+/***/ },
+/* 249 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -28421,7 +29055,7 @@
 	exports.default = (0, _reactRouter.withRouter)(Logout);
 
 /***/ },
-/* 249 */
+/* 250 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -28538,7 +29172,11 @@
 	                        )
 	                    ),
 	                    ': ',
-	                    event.description
+	                    event.description,
+	                    ' ',
+	                    _react2.default.createElement('br', null),
+	                    ' Category: ',
+	                    event.category_name
 	                );
 	            });
 	            return _react2.default.createElement(
@@ -28586,6 +29224,71 @@
 	}(_react2.default.Component);
 
 	exports.default = (0, _reactRouter.withRouter)(Search);
+
+/***/ },
+/* 251 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactDom = __webpack_require__(32);
+
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+
+	__webpack_require__(246);
+
+	var _reactRouter = __webpack_require__(178);
+
+	var _auth = __webpack_require__(243);
+
+	var _auth2 = _interopRequireDefault(_auth);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var UserPage = function (_React$Component) {
+	    _inherits(UserPage, _React$Component);
+
+	    function UserPage() {
+	        _classCallCheck(this, UserPage);
+
+	        var _this = _possibleConstructorReturn(this, (UserPage.__proto__ || Object.getPrototypeOf(UserPage)).call(this));
+
+	        _this.state = {
+	            name: index.username
+	        };
+
+	        return _this;
+	    }
+
+	    _createClass(UserPage, [{
+	        key: 'render',
+	        value: function render() {
+
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                'Name: ',
+	                this.state.name,
+	                ' ',
+	                _react2.default.createElement('br', null)
+	            );
+	        }
+	    }]);
+
+	    return UserPage;
+	}(_react2.default.Component);
 
 /***/ }
 /******/ ]);

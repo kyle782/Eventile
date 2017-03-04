@@ -9,4 +9,5 @@ class Event {
     int eventbrite_id
     String start_date
     String eventbrite_url
+    String category_name
 }
