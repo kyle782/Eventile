@@ -12,7 +12,8 @@ Eventile is the one stop shop for events happening across the major event platfo
 **_User Profile Stores Information_** <br> 
   Users of Eventile can sign up for a profile where they will be asked to provide their interests in terms of event categories. Such categories are decided depending on the APIs of the various event platforms that Eventile will be pulling from. Examples are concerts, seminars, parties, etc.
   
-  >_Implemented in Stage 2 using a grails user domain. A signup form takes in user name, email, password, and preferences     and creates their lasting account_
+  >_Implemented in Stage 2 using a grails user domain. A signup form takes in user name, email, password, and preferences     and creates their lasting account. Front-end interaction with this user-page from an input/output perspective is not yet functional, but in the development process _
+
 
 **_Suggested events_** <br>
   Based on themes either manually entered by the user or taken from the events themselves, Eventile notifies the user of events they may prefer. User profile information like this is stored in our database and the themes to categorize events come with the events found by API calls to EventBrite, Ticketmaster, or Eventful.
@@ -48,6 +49,8 @@ Eventile is the one stop shop for events happening across the major event platfo
   Users will be able to create their own events through our events creation page. Their created event will then show up in searches dependent on the tags and categories that they provide in the event creation page.
 
 ## Looking Forward (ver 1.2) <br>
+
   Next features for implementation are the event sorting and event browsing features. These features, along with the catering of events to a user's preferences are all features which we expect to complete well before the Stage 3 deadline. After these features, final work can be done on integrating other search API's (Eventful and Ticketmaster) as well as fleshing out the event details with consolidated categories and a list of attendees.
+
 
 [Go back to Home Page](../README.md)
