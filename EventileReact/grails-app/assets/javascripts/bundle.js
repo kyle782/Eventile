@@ -29243,6 +29243,8 @@
 
 	__webpack_require__(246);
 
+	var _reactRouter = __webpack_require__(178);
+
 	var _auth = __webpack_require__(243);
 
 	var _auth2 = _interopRequireDefault(_auth);
@@ -29264,9 +29266,7 @@
 	        var _this = _possibleConstructorReturn(this, (UserPage.__proto__ || Object.getPrototypeOf(UserPage)).call(this));
 
 	        _this.state = {
-	            name: _reactDom2.default.findDOMNode(_this.refs.name).value.trim(),
-	            location: _reactDom2.default.findDOMNode(_this.refs.location).value.trim(),
-	            age: _reactDom2.default.findDOMNode(_this.refs.age).value.trim()
+	            name: index.username
 	        };
 
 	        return _this;
@@ -29281,10 +29281,8 @@
 	                null,
 	                'Name: ',
 	                this.state.name,
-	                'Location: ',
-	                this.state.location,
-	                'Age: ',
-	                this.state.age
+	                ' ',
+	                _react2.default.createElement('br', null)
 	            );
 	        }
 	    }]);
