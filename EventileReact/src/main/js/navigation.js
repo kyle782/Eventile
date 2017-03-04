@@ -34,6 +34,7 @@ class Navigation extends React.Component {
                     { this.state.loggedIn ?
                         <ul className="nav navbar-nav">
                             <li><Link to="/search">Search</Link></li>
+                            <li><Link to="/user-page">Profile</Link></li>
                         </ul> : null
                     }
 
