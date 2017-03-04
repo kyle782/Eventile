@@ -14,8 +14,6 @@ const checkStatus = (response) => {
     }
 };
 
-
-
 class SignIn extends React.Component {
     constructor() {
         super();
@@ -42,6 +40,7 @@ class SignIn extends React.Component {
         .then(checkStatus)
         .then(this.success.bind(this))
         .catch(this.fail.bind(this))
+
     }
 
     success(authObject) {
