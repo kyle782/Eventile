@@ -13,18 +13,24 @@ class User implements Serializable {
 
 	String username
 	String password
+    String age
+    String location
 	boolean enabled = true
 	boolean accountExpired
 	boolean accountLocked
 	boolean passwordExpired
 
-	// create a collection Preferences that contains categories the user is interested in
+  // create a collection Preferences that contains categories the user is interested in
 	ArrayList<Category> preferences
 
-	User(String username, String password) {
-		this()
+	User(String username, String password, String age, String location) {
+	  	this()
 		this.username = username
 		this.password = password
+    	this.age = age
+    	this.location = location
+		this.preferences = null
+
 	}
 
 	Set<Role> getAuthorities() {

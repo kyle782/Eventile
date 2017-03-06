@@ -70,6 +70,7 @@ class EventbriteService {
             Event new_event = new Event(name: event_name, description: event_description_trimmed, start_date: null,
                     eventbrite_url: obj["events"][i].url, eventbrite_id: 0, category_name: eventbrite_category_name)
 
+
             // add to the collection
             event_results.add(new_event)
 
