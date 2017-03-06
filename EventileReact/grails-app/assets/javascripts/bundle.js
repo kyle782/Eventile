@@ -29243,8 +29243,6 @@
 
 	__webpack_require__(246);
 
-	var _reactRouter = __webpack_require__(178);
-
 	var _auth = __webpack_require__(243);
 
 	var _auth2 = _interopRequireDefault(_auth);
@@ -29257,6 +29255,9 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+	// Currently, this page does not functionally work since no value is being read from the
+	// user information. The path was create just for navigation.
+
 	var UserPage = function (_React$Component) {
 	    _inherits(UserPage, _React$Component);
 
@@ -29266,7 +29267,9 @@
 	        var _this = _possibleConstructorReturn(this, (UserPage.__proto__ || Object.getPrototypeOf(UserPage)).call(this));
 
 	        _this.state = {
-	            name: index.username
+	            name: '',
+	            location: '',
+	            age: ''
 	        };
 
 	        return _this;
@@ -29281,6 +29284,14 @@
 	                null,
 	                'Name: ',
 	                this.state.name,
+	                ' ',
+	                _react2.default.createElement('br', null),
+	                'Location: ',
+	                this.state.location,
+	                ' ',
+	                _react2.default.createElement('br', null),
+	                'Age: ',
+	                this.state.age,
 	                ' ',
 	                _react2.default.createElement('br', null)
 	            );
