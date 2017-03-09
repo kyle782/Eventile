@@ -7,26 +7,42 @@ import auth from './auth';
 // user information. The path was create just for navigation.
 
 class UserPage extends React.Component {
+
     constructor() {
         super();
         this.state = {
-            name: '',
-            location: '',
-            age: '',
-        };
-
+            name: "",
+            location: "",
+            age: ""
+        }
     }
 
+    componentDidMount() {
+        fetch('http://localhost:8080/UserController/userPage?username')
+            .then (result => {
+            this.setState({name: result.json()})
+            });
+
+        fetch("http://localhost:8080/UserController/userPage?location")
+            .then (result => {
+            this.setState({location: result.json()})
+            });
+
+        fetch('http://localhost:8080/UserController/userPage?age')
+            .then (result => {
+                this.setState({age: result.json()})
+            });
+        }
+
     render() {
-
-        return (
-
+        return(
             <div>
-                Name: {this.state.name} <br/>
-                Location: {this.state.location} <br/>
+                <h> {this.state.name} </h> <br/>
+                Location:{this.state.location} <br/>
                 Age: {this.state.age} <br/>
             </div>
-
         )
     }
 }
+
+export default UserPage;

@@ -106,7 +106,7 @@
 	        _react2.default.createElement(
 	            'p',
 	            null,
-	            'Here you can search tweets from Twitter after signing in'
+	            'Here you can search for events after signing in'
 	        ),
 	        _react2.default.createElement(
 	            'p',
@@ -29231,6 +29231,10 @@
 
 	'use strict';
 
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	var _react = __webpack_require__(1);
@@ -29242,8 +29246,6 @@
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
 	__webpack_require__(246);
-
-	var _reactRouter = __webpack_require__(178);
 
 	var _auth = __webpack_require__(243);
 
@@ -29257,6 +29259,9 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+	// Currently, this page does not functionally work since no value is being read from the
+	// user information. The path was create just for navigation.
+
 	var UserPage = function (_React$Component) {
 	    _inherits(UserPage, _React$Component);
 
@@ -29266,29 +29271,55 @@
 	        var _this = _possibleConstructorReturn(this, (UserPage.__proto__ || Object.getPrototypeOf(UserPage)).call(this));
 
 	        _this.state = {
-	            name: index.username
+	            name: "",
+	            location: "",
+	            age: ""
 	        };
-
 	        return _this;
 	    }
 
 	    _createClass(UserPage, [{
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            var _this2 = this;
+
+	            fetch('http://localhost:8080/UserController/userPage?username').then(function (result) {
+	                _this2.setState({ name: result.json() });
+	            });
+
+	            fetch("http://localhost:8080/UserController/userPage?location").then(function (result) {
+	                _this2.setState({ location: result.json() });
+	            });
+
+	            fetch('http://localhost:8080/UserController/userPage?age').then(function (result) {
+	                _this2.setState({ age: result.json() });
+	            });
+	        }
+	    }, {
 	        key: 'render',
 	        value: function render() {
-
 	            return _react2.default.createElement(
 	                'div',
 	                null,
-	                'Name: ',
-	                this.state.name,
-	                ' ',
-	                _react2.default.createElement('br', null)
+	                _react2.default.createElement(
+	                    'h',
+	                    null,
+	                    ' ',
+	                    this.state.name,
+	                    ' '
+	                ),
+	                'Location:',
+	                this.state.location,
+	                'Age: ',
+	                this.state.age
 	            );
 	        }
 	    }]);
 
 	    return UserPage;
 	}(_react2.default.Component);
+
+	exports.default = UserPage;
 
 /***/ }
 /******/ ]);
