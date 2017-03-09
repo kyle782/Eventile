@@ -29231,6 +29231,10 @@
 
 	'use strict';
 
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	var _react = __webpack_require__(1);
@@ -29267,39 +29271,55 @@
 	        var _this = _possibleConstructorReturn(this, (UserPage.__proto__ || Object.getPrototypeOf(UserPage)).call(this));
 
 	        _this.state = {
-	            name: '',
-	            location: '',
-	            age: ''
+	            name: "",
+	            location: "",
+	            age: ""
 	        };
-
 	        return _this;
 	    }
 
 	    _createClass(UserPage, [{
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            var _this2 = this;
+
+	            fetch('http://localhost:8080/UserController/userPage?username').then(function (result) {
+	                _this2.setState({ name: result.json() });
+	            });
+
+	            fetch("http://localhost:8080/UserController/userPage?location").then(function (result) {
+	                _this2.setState({ location: result.json() });
+	            });
+
+	            fetch('http://localhost:8080/UserController/userPage?age').then(function (result) {
+	                _this2.setState({ age: result.json() });
+	            });
+	        }
+	    }, {
 	        key: 'render',
 	        value: function render() {
-
 	            return _react2.default.createElement(
 	                'div',
 	                null,
-	                'Name: ',
-	                this.state.name,
-	                ' ',
-	                _react2.default.createElement('br', null),
-	                'Location: ',
+	                _react2.default.createElement(
+	                    'h',
+	                    null,
+	                    ' ',
+	                    this.state.name,
+	                    ' '
+	                ),
+	                'Location:',
 	                this.state.location,
-	                ' ',
-	                _react2.default.createElement('br', null),
 	                'Age: ',
-	                this.state.age,
-	                ' ',
-	                _react2.default.createElement('br', null)
+	                this.state.age
 	            );
 	        }
 	    }]);
 
 	    return UserPage;
 	}(_react2.default.Component);
+
+	exports.default = UserPage;
 
 /***/ }
 /******/ ]);
