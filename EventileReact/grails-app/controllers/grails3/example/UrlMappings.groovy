@@ -9,5 +9,7 @@ class UrlMappings {
 
         "/"(view:"/index")
         "/**"(view:"/index")
+
+
     }
 }
