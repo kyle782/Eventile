@@ -23,6 +23,7 @@ class SignIn extends React.Component {
             error: ''
         };
         this.signIn = this.signIn.bind(this);
+
     }
 
     signIn(e) {

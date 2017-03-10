@@ -27605,6 +27605,7 @@
 	            error: ''
 	        };
 	        _this.signIn = _this.signIn.bind(_this);
+
 	        return _this;
 	    }
 
@@ -29257,6 +29258,8 @@
 
 	var _auth2 = _interopRequireDefault(_auth);
 
+	var _reactRouter = __webpack_require__(178);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -29265,8 +29268,15 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	// Currently, this page does not functionally work since no value is being read from the
-	// user information. The path was create just for navigation.
+	function checkStatus(response) {
+	    if (response.status >= 200 && response.status < 300) {
+	        return response.json();
+	    } else {
+	        var error = new Error(response.statusText);
+	        error.response = response;
+	        throw error;
+	    }
+	};
 
 	var UserPage = function (_React$Component) {
 	    _inherits(UserPage, _React$Component);
@@ -29276,47 +29286,61 @@
 
 	        var _this = _possibleConstructorReturn(this, (UserPage.__proto__ || Object.getPrototypeOf(UserPage)).call(this));
 
+	        _this.getUser = _this.getUser.bind(_this);
+	        _this.success = _this.success.bind(_this);
+	        _this.fail = _this.fail.bind(_this);
+
 	        _this.state = {
-	            name: "",
-	            location: "",
-	            age: ""
+	            name: '',
+	            age: '',
+	            location: '',
+	            auth: JSON.parse(localStorage.auth)
 	        };
 	        return _this;
 	    }
 
 	    _createClass(UserPage, [{
-	        key: 'componentDidMount',
-	        value: function componentDidMount() {
-	            var _this2 = this;
-
-	            fetch("/api/userPage").then(function (result) {
-	                _this2.setState({ name: result.json() });
-	            });
-
-	            fetch("/api/userPage").then(function (result) {
-	                _this2.setState({ location: result.json() });
-	            });
-
-	            fetch("/api/userPage").then(function (result) {
-	                _this2.setState({ age: result.json() });
-	            });
+	        key: 'getUser',
+	        value: function getUser() {
+	            console.log("this is " + this);
+	            var token = this.state.auth.access_token; // authentication token to make sure user is signed in/authorized
+	            fetch("/api/user", { // GET the user from the usercontroller, make REST call
+	                headers: {
+	                    'Authorization': 'Bearer ' + token // pass authentication token as a header to the REST API call
+	                }
+	            }).then(checkStatus).then(this.success).catch(this.fail);
+	        }
+	    }, {
+	        key: 'success',
+	        value: function success(user) {
+	            // update the states with the user JSON object
+	            console.log("success: user = " + user);
+	            this.setState({ name: user.username, age: user.age, location: user.location });
+	        }
+	    }, {
+	        key: 'fail',
+	        value: function fail(error) {
+	            console.error("Search has failed", error);
+	            if (error.response.status == 401) {
+	                _auth2.default.logOut();
+	                this.props.router.replace({
+	                    pathname: "/signin",
+	                    state: { nextPath: "/search" }
+	                });
+	            }
 	        }
 	    }, {
 	        key: 'render',
 	        value: function render() {
+
 	            return _react2.default.createElement(
 	                'div',
-	                null,
-	                _react2.default.createElement(
-	                    'h',
-	                    null,
-	                    ' ',
-	                    this.state.name,
-	                    ' '
-	                ),
+	                { onLoad: this.getUser() },
+	                'Name: ',
+	                this.state.name,
 	                ' ',
 	                _react2.default.createElement('br', null),
-	                'Location:',
+	                'Location: ',
 	                this.state.location,
 	                ' ',
 	                _react2.default.createElement('br', null),
@@ -29331,7 +29355,7 @@
 	    return UserPage;
 	}(_react2.default.Component);
 
-	exports.default = UserPage;
+	exports.default = (0, _reactRouter.withRouter)(UserPage);
 
 /***/ },
 /* 252 */
@@ -29474,7 +29498,7 @@
 	                _react2.default.createElement(
 	                    'h1',
 	                    null,
-	                    'Hello, World'
+	                    'Hello World'
 	                ),
 	                _react2.default.createElement(
 	                    'div',
