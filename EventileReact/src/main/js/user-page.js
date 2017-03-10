@@ -20,9 +20,9 @@ class UserPage extends React.Component {
     constructor() {
         super();
         this.state = {
-            name: 'noname',
-            age: '000',
-            location: 'location',
+            name: '',
+            age: '',
+            location: '',
             auth: JSON.parse(localStorage.auth)
         };
         this.getUser = this.getUser.bind(this);
