@@ -29283,16 +29283,16 @@
 	        value: function componentDidMount() {
 	            var _this2 = this;
 
-	            fetch('http://localhost:8080/UserController/userPage?username').then(function (result) {
-	                _this2.setState({ name: result.json() });
+	            return $.getJSON('http://localhost:8080/UserController/userPage').then(function (data) {
+	                _this2.setState({ name: data.result });
 	            });
 
-	            fetch("http://localhost:8080/UserController/userPage?location").then(function (result) {
-	                _this2.setState({ location: result.json() });
+	            return $.getJSON('http://localhost:8080/UserController/userPage').then(function (result) {
+	                _this2.setState({ location: data.result });
 	            });
 
-	            fetch('http://localhost:8080/UserController/userPage?age').then(function (result) {
-	                _this2.setState({ age: result.json() });
+	            return $.getJSON('http://localhost:8080/UserController/userPage').then(function (result) {
+	                _this2.setState({ age: data.result });
 	            });
 	        }
 	    }, {
@@ -29308,10 +29308,16 @@
 	                    this.state.name,
 	                    ' '
 	                ),
+	                ' ',
+	                _react2.default.createElement('br', null),
 	                'Location:',
 	                this.state.location,
+	                ' ',
+	                _react2.default.createElement('br', null),
 	                'Age: ',
-	                this.state.age
+	                this.state.age,
+	                ' ',
+	                _react2.default.createElement('br', null)
 	            );
 	        }
 	    }]);
