@@ -29237,6 +29237,10 @@
 
 	'use strict';
 
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	var _react = __webpack_require__(1);
@@ -29264,6 +29268,16 @@
 	// Currently, this page does not functionally work since no value is being read from the
 	// user information. The path was create just for navigation.
 
+	function checkStatus(response) {
+	    if (response.status >= 200 && response.status < 300) {
+	        return response.json();
+	    } else {
+	        var error = new Error(response.statusText);
+	        error.response = response;
+	        throw error;
+	    }
+	};
+
 	var UserPage = function (_React$Component) {
 	    _inherits(UserPage, _React$Component);
 
@@ -29273,21 +29287,53 @@
 	        var _this = _possibleConstructorReturn(this, (UserPage.__proto__ || Object.getPrototypeOf(UserPage)).call(this));
 
 	        _this.state = {
-	            name: '',
-	            location: '',
-	            age: ''
+	            name: 'noname',
+	            age: '000',
+	            location: 'location',
+	            auth: JSON.parse(localStorage.auth)
 	        };
-
+	        _this.getUser = _this.getUser.bind(_this);
+	        _this.success = _this.success.bind(_this);
+	        _this.fail = _this.fail.bind(_this);
 	        return _this;
 	    }
 
 	    _createClass(UserPage, [{
+	        key: 'getUser',
+	        value: function getUser() {
+	            var token = this.state.auth.access_token;
+	            console.log("plss");
+	            fetch("/api/user", {
+	                headers: {
+	                    'Authorization': 'Bearer ' + token
+	                }
+	            }).then(checkStatus).then(this.success).catch(this.fail);
+	        }
+	    }, {
+	        key: 'success',
+	        value: function success(user) {
+	            console.log("Search result", user);
+	            this.setState({ name: user.username, age: user.age, location: user.location });
+	        }
+	    }, {
+	        key: 'fail',
+	        value: function fail(error) {
+	            console.error("Search has failed", error);
+	            if (error.response.status == 401) {
+	                _auth2.default.logOut();
+	                this.props.router.replace({
+	                    pathname: "/signin",
+	                    state: { nextPath: "/search" }
+	                });
+	            }
+	        }
+	    }, {
 	        key: 'render',
 	        value: function render() {
 
 	            return _react2.default.createElement(
 	                'div',
-	                null,
+	                { onLoad: this.getUser() },
 	                'Name: ',
 	                this.state.name,
 	                ' ',
@@ -29306,6 +29352,8 @@
 
 	    return UserPage;
 	}(_react2.default.Component);
+
+	exports.default = UserPage;
 
 /***/ },
 /* 252 */
@@ -29448,7 +29496,7 @@
 	                _react2.default.createElement(
 	                    'h1',
 	                    null,
-	                    'Hello, World'
+	                    'Hello World'
 	                ),
 	                _react2.default.createElement(
 	                    'div',

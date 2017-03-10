@@ -1,8 +1,10 @@
 package grails3.example
 
+import grails.plugin.springsecurity.SpringSecurityService
 import grails.plugin.springsecurity.annotation.Secured
 import grails.web.RequestParameter
 import org.springframework.http.HttpStatus
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.RequestParam
 
 
@@ -11,6 +13,7 @@ class UserController {
     static responseFormats = ['json']
 
     def userService
+    def springSecurityService
 
     def signUp(@RequestParameter('username') String username, @RequestParameter('password') String password, @RequestParameter('age') String age, @RequestParameter('location') String location) {
         log.debug("Signing up a new user: ${username}:[******]")
@@ -27,6 +30,12 @@ class UserController {
     def handleIllegalArgument(IllegalArgumentException ex) {
         def payload = [error: ex.message] as Object
         respond payload, status: HttpStatus.BAD_REQUEST
+    }
+
+    @Secured(['ROLE_USER'])
+    def show_user(){
+        User user = User.get(springSecurityService.principal.id)
+        respond user
     }
 
 }

@@ -91,7 +91,7 @@ class EventPage extends React.Component {
         });
         return (
             <div onLoad={this.getEvent()}>
-                <h1>Hello, World</h1>
+                <h1>Hello World</h1>
                 <div className="col-lg-12">
                     {events}
                 </div>
