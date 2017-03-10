@@ -18,17 +18,17 @@ class UserPage extends React.Component {
     }
 
     componentDidMount() {
-        fetch('http://localhost:8080/UserController/userPage?username')
+        fetch("/api/userPage")
             .then (result => {
             this.setState({name: result.json()})
             });
 
-        fetch("http://localhost:8080/UserController/userPage?location")
+        fetch("/api/userPage")
             .then (result => {
             this.setState({location: result.json()})
             });
 
-        fetch('http://localhost:8080/UserController/userPage?age')
+        fetch("/api/userPage")
             .then (result => {
                 this.setState({age: result.json()})
             });

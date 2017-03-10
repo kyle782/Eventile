@@ -9,6 +9,10 @@ import org.springframework.web.bind.annotation.RequestParam
 
 class UserController extends RestfulController {
 
+    UserController() {
+        super(UserController)
+    }
+
     static responseFormats = ['json']
 
     def userService
@@ -16,12 +20,9 @@ class UserController extends RestfulController {
     def userPage() {
         def user = springSecurityService.currentUser
         def payload = [username: user.username, location: user.location, age: user.age] as Object
-        respond payload, status: HttpStatus.ACCEPTED
+        respond user, status: HttpStatus.ACCEPTED
     }
 
-    UserController() {
-        super(UserController)
-    }
 
     def signUp(@RequestParameter('username') String username, @RequestParameter('password') String password, @RequestParameter('age') String age, @RequestParameter('location') String location) {
         log.debug("Signing up a new user: ${username}:[******]")

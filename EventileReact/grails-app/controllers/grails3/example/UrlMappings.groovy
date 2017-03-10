@@ -7,7 +7,7 @@ class UrlMappings {
     static mappings = {
         "/api/search"(controller: "search", action: "search", method: "GET", parseRequest: true)
         "/api/signup"(controller: "user", action: "signUp", method: "POST")
-        "/api/userPage"(controller:"user", action: "display", method: "GET")
+        "/api/userPage"(controller:"user", action: "userPage", method: "GET", parseRequest: true)
 
         "/"(view:"/index")
         "/**"(view:"/index")
