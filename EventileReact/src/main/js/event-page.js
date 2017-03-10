@@ -1,3 +1,6 @@
+/**
+ * Created by gary on 2017-03-09.
+ */
 import React from 'react';
 import ReactDOM from 'react-dom';
 import 'whatwg-fetch';
@@ -15,7 +18,7 @@ function checkStatus(response) {
     }
 };
 
-class Search extends React.Component {
+class EventPage extends React.Component {
 
     constructor() {
         super();
@@ -27,17 +30,19 @@ class Search extends React.Component {
             events: [],
             auth: JSON.parse(localStorage.auth)
         }
+
     }
 
     search(e) {
+
         e.preventDefault();
         console.log("Searching...");
         let token = this.state.auth.access_token;
-        let query = ReactDOM.findDOMNode(this.refs.query).value.trim();
+        let query = ReactDOM.findDOMNode(this.props);
+        console.log("query = " + query);
 
-        this.setState({inProgress: true});
 
-        fetch("/api/search?q=" + query , {
+        fetch("/api/event?q=" + query , {
             headers: {
                 'Authorization': 'Bearer ' + token
             }
@@ -49,12 +54,11 @@ class Search extends React.Component {
 
     success(events) {
         console.log("Search result", events);
-        this.setState({events: events, inProgress: false});
+        this.setState({events: events});
     }
 
     fail(error) {
         console.error("Search has failed", error);
-        this.setState({inProgress: false});
         if(error.response.status == 401) {
             auth.logOut();
             this.props.router.replace({
@@ -64,40 +68,37 @@ class Search extends React.Component {
         }
     }
 
-    render() {
+    getEvent(){
+        let token = this.state.auth.access_token;
+        let query = this.props.location.query.q;
 
+        fetch("/api/event?q=" + query , {
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        })
+            .then(checkStatus)
+            .then(this.success)
+            .catch(this.fail)
+
+    }
+
+    render() {
         let events = this.state.events.map( (event) => {
             return <div className="col-sm-12 col-md-12 col-lg-12 tweet">
-                <a href={"/event?q=" + event.eventbrite_id} target="_blank"><b>{event.name}</b></a>: {event.description} <br/> Category: {event.category_name}
+                <b>{event.name}</b>: {event.description} <br/> Category: {event.category_name}
             </div>
         });
         return (
-
-                <div className="row">
-                    <div className="container">
-                        <form className="form-inline col-lg-12" onSubmit={this.search} >
-                            <div className="form-group">
-                                <label className="sr-only" htmlFor="query">Search:</label>
-                                <input type="text"
-                                       className="form-control"
-                                       id="query"
-                                       placeholder="Query"
-                                       ref="query"
-                                       disabled={this.state.inProgress}
-                                />
-                            </div>
-                            <button type="submit" className="btn btn-default" disabled={this.state.inProgress}>Search</button>
-                        </form>
-
-                        <div className="col-lg-12">
-                            {events}
-                        </div>
-                    </div>
-
+            <div onLoad={this.getEvent()}>
+                <h1>Hello World</h1>
+                <div className="col-lg-12">
+                    {events}
+                </div>
             </div>
+
         )
     }
-
 }
 
-export default withRouter(Search);
+export default withRouter(EventPage);

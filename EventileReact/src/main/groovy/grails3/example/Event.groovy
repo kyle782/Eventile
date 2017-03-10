@@ -6,7 +6,7 @@ package grails3.example
 class Event {
     String name
     String description
-    int eventbrite_id
+    String eventbrite_id
     String start_date
     String eventbrite_url
     String category_name
