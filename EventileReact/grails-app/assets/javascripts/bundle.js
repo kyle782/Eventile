@@ -27605,6 +27605,7 @@
 	            error: ''
 	        };
 	        _this.signIn = _this.signIn.bind(_this);
+
 	        return _this;
 	    }
 
@@ -29257,6 +29258,8 @@
 
 	var _auth2 = _interopRequireDefault(_auth);
 
+	var _reactRouter = __webpack_require__(178);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -29264,9 +29267,6 @@
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	// Currently, this page does not functionally work since no value is being read from the
-	// user information. The path was create just for navigation.
 
 	function checkStatus(response) {
 	    if (response.status >= 200 && response.status < 300) {
@@ -29286,33 +29286,35 @@
 
 	        var _this = _possibleConstructorReturn(this, (UserPage.__proto__ || Object.getPrototypeOf(UserPage)).call(this));
 
-	        _this.state = {
-	            name: 'noname',
-	            age: '000',
-	            location: 'location',
-	            auth: JSON.parse(localStorage.auth)
-	        };
 	        _this.getUser = _this.getUser.bind(_this);
 	        _this.success = _this.success.bind(_this);
 	        _this.fail = _this.fail.bind(_this);
+
+	        _this.state = {
+	            name: '',
+	            age: '',
+	            location: '',
+	            auth: JSON.parse(localStorage.auth)
+	        };
 	        return _this;
 	    }
 
 	    _createClass(UserPage, [{
 	        key: 'getUser',
 	        value: function getUser() {
-	            var token = this.state.auth.access_token;
-	            console.log("plss");
-	            fetch("/api/user", {
+	            console.log("this is " + this);
+	            var token = this.state.auth.access_token; // authentication token to make sure user is signed in/authorized
+	            fetch("/api/user", { // GET the user from the usercontroller, make REST call
 	                headers: {
-	                    'Authorization': 'Bearer ' + token
+	                    'Authorization': 'Bearer ' + token // pass authentication token as a header to the REST API call
 	                }
 	            }).then(checkStatus).then(this.success).catch(this.fail);
 	        }
 	    }, {
 	        key: 'success',
 	        value: function success(user) {
-	            console.log("Search result", user);
+	            // update the states with the user JSON object
+	            console.log("success: user = " + user);
 	            this.setState({ name: user.username, age: user.age, location: user.location });
 	        }
 	    }, {
@@ -29353,7 +29355,7 @@
 	    return UserPage;
 	}(_react2.default.Component);
 
-	exports.default = UserPage;
+	exports.default = (0, _reactRouter.withRouter)(UserPage);
 
 /***/ },
 /* 252 */
