@@ -80,6 +80,10 @@
 
 	var _userPage2 = _interopRequireDefault(_userPage);
 
+	var _eventPage = __webpack_require__(252);
+
+	var _eventPage2 = _interopRequireDefault(_eventPage);
+
 	var _auth = __webpack_require__(243);
 
 	var _auth2 = _interopRequireDefault(_auth);
@@ -91,7 +95,8 @@
 	    SEARCH: "/search",
 	    LOGOUT: "/logout",
 	    SINGUP: "/signup",
-	    USERPAGE: "/user-page"
+	    USERPAGE: "/user-page",
+	    EVENTPAGE: "/event"
 	};
 
 	var Greet = function Greet() {
@@ -106,7 +111,7 @@
 	        _react2.default.createElement(
 	            'p',
 	            null,
-	            'Here you can search tweets from Twitter after signing in'
+	            'Here you can search for events after signing in'
 	        ),
 	        _react2.default.createElement(
 	            'p',
@@ -191,6 +196,7 @@
 	        _react2.default.createElement(_reactRouter.Route, { path: Paths.LOGOUT, component: _logout2.default }),
 	        _react2.default.createElement(_reactRouter.Route, { path: Paths.SINGUP, component: _signup2.default, onEnter: checkAuth }),
 	        _react2.default.createElement(_reactRouter.Route, { path: Paths.USERPAGE, component: _userPage2.default, onEnter: checkAuth }),
+	        _react2.default.createElement(_reactRouter.Route, { path: Paths.EVENTPAGE, component: _eventPage2.default, onEnter: checkAuth }),
 	        _react2.default.createElement(_reactRouter.Route, { path: '*', component: NotFound })
 	    )
 	), document.getElementById('app'));
@@ -29164,7 +29170,7 @@
 	                    { className: 'col-sm-12 col-md-12 col-lg-12 tweet' },
 	                    _react2.default.createElement(
 	                        'a',
-	                        { href: event.eventbrite_url, target: '_blank' },
+	                        { href: "/event?q=" + event.eventbrite_id, target: '_blank' },
 	                        _react2.default.createElement(
 	                            'b',
 	                            null,
@@ -29243,8 +29249,6 @@
 
 	__webpack_require__(246);
 
-	var _reactRouter = __webpack_require__(178);
-
 	var _auth = __webpack_require__(243);
 
 	var _auth2 = _interopRequireDefault(_auth);
@@ -29257,6 +29261,9 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+	// Currently, this page does not functionally work since no value is being read from the
+	// user information. The path was create just for navigation.
+
 	var UserPage = function (_React$Component) {
 	    _inherits(UserPage, _React$Component);
 
@@ -29266,7 +29273,9 @@
 	        var _this = _possibleConstructorReturn(this, (UserPage.__proto__ || Object.getPrototypeOf(UserPage)).call(this));
 
 	        _this.state = {
-	            name: index.username
+	            name: '',
+	            location: '',
+	            age: ''
 	        };
 
 	        return _this;
@@ -29282,6 +29291,14 @@
 	                'Name: ',
 	                this.state.name,
 	                ' ',
+	                _react2.default.createElement('br', null),
+	                'Location: ',
+	                this.state.location,
+	                ' ',
+	                _react2.default.createElement('br', null),
+	                'Age: ',
+	                this.state.age,
+	                ' ',
 	                _react2.default.createElement('br', null)
 	            );
 	        }
@@ -29289,6 +29306,163 @@
 
 	    return UserPage;
 	}(_react2.default.Component);
+
+/***/ },
+/* 252 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactDom = __webpack_require__(32);
+
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+
+	__webpack_require__(246);
+
+	var _auth = __webpack_require__(243);
+
+	var _auth2 = _interopRequireDefault(_auth);
+
+	var _reactRouter = __webpack_require__(178);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Created by gary on 2017-03-09.
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
+
+	function checkStatus(response) {
+	    if (response.status >= 200 && response.status < 300) {
+	        return response.json();
+	    } else {
+	        var error = new Error(response.statusText);
+	        error.response = response;
+	        throw error;
+	    }
+	};
+
+	var EventPage = function (_React$Component) {
+	    _inherits(EventPage, _React$Component);
+
+	    function EventPage() {
+	        _classCallCheck(this, EventPage);
+
+	        var _this = _possibleConstructorReturn(this, (EventPage.__proto__ || Object.getPrototypeOf(EventPage)).call(this));
+
+	        _this.search = _this.search.bind(_this);
+	        _this.fail = _this.fail.bind(_this);
+	        _this.success = _this.success.bind(_this);
+
+	        _this.state = {
+	            events: [],
+	            auth: JSON.parse(localStorage.auth)
+	        };
+
+	        return _this;
+	    }
+
+	    _createClass(EventPage, [{
+	        key: 'search',
+	        value: function search(e) {
+
+	            e.preventDefault();
+	            console.log("Searching...");
+	            var token = this.state.auth.access_token;
+	            var query = _reactDom2.default.findDOMNode(this.props);
+	            console.log("query = " + query);
+
+	            fetch("/api/event?q=" + query, {
+	                headers: {
+	                    'Authorization': 'Bearer ' + token
+	                }
+	            }).then(checkStatus).then(this.success).catch(this.fail);
+	        }
+	    }, {
+	        key: 'success',
+	        value: function success(events) {
+	            console.log("Search result", events);
+	            this.setState({ events: events });
+	        }
+	    }, {
+	        key: 'fail',
+	        value: function fail(error) {
+	            console.error("Search has failed", error);
+	            if (error.response.status == 401) {
+	                _auth2.default.logOut();
+	                this.props.router.replace({
+	                    pathname: "/signin",
+	                    state: { nextPath: "/search" }
+	                });
+	            }
+	        }
+	    }, {
+	        key: 'getEvent',
+	        value: function getEvent() {
+	            var token = this.state.auth.access_token;
+	            var query = this.props.location.query.q;
+
+	            fetch("/api/event?q=" + query, {
+	                headers: {
+	                    'Authorization': 'Bearer ' + token
+	                }
+	            }).then(checkStatus).then(this.success).catch(this.fail);
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            var events = this.state.events.map(function (event) {
+	                return _react2.default.createElement(
+	                    'div',
+	                    { className: 'col-sm-12 col-md-12 col-lg-12 tweet' },
+	                    _react2.default.createElement(
+	                        'b',
+	                        null,
+	                        event.name
+	                    ),
+	                    ': ',
+	                    event.description,
+	                    ' ',
+	                    _react2.default.createElement('br', null),
+	                    ' Category: ',
+	                    event.category_name
+	                );
+	            });
+	            return _react2.default.createElement(
+	                'div',
+	                { onLoad: this.getEvent() },
+	                _react2.default.createElement(
+	                    'h1',
+	                    null,
+	                    'Hello, World'
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'col-lg-12' },
+	                    events
+	                )
+	            );
+	        }
+	    }]);
+
+	    return EventPage;
+	}(_react2.default.Component);
+
+	exports.default = (0, _reactRouter.withRouter)(EventPage);
 
 /***/ }
 /******/ ]);

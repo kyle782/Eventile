@@ -28,4 +28,5 @@ class UserController {
         def payload = [error: ex.message] as Object
         respond payload, status: HttpStatus.BAD_REQUEST
     }
+
 }
