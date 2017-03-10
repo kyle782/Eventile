@@ -7,6 +7,7 @@ import SignUp from './signup';
 import Logout from './logout';
 import Search from './search';
 import UserPage from './user-page';
+import EventPage from './event-page';
 import auth from './auth';
 
 const Paths = {
@@ -14,7 +15,8 @@ const Paths = {
     SEARCH: "/search",
     LOGOUT: "/logout",
     SINGUP: "/signup",
-    USERPAGE: "/user-page"
+    USERPAGE: "/user-page",
+    EVENTPAGE: "/event"
 };
 
 const Greet = () =>
@@ -67,6 +69,8 @@ ReactDOM.render(
             <Route path={Paths.LOGOUT} component={Logout}/>
             <Route path={Paths.SINGUP} component={SignUp} onEnter={checkAuth}/>
             <Route path={Paths.USERPAGE} component={UserPage} onEnter={checkAuth}/>
+            <Route path={Paths.EVENTPAGE} component={EventPage} onEnter={checkAuth}/>
+
             <Route path="*" component={NotFound} />
         </Route>
     </Router>
