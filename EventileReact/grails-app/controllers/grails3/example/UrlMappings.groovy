@@ -13,6 +13,8 @@ class UrlMappings {
 
         "/api/event"(controller: "event", action: "show", method: "GET", parseRequest: true)
 
+        "/api/event/update_rating"(controller: "event", action: "update_rating", method: "PUT")
+
 
     }
 }

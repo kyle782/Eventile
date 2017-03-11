@@ -21,11 +21,13 @@ class UserPage extends React.Component {
         this.getUser = this.getUser.bind(this);
         this.success = this.success.bind(this);
         this.fail = this.fail.bind(this);
+        this.render = this.render.bind(this);
 
         this.state = {
             name: '',
             age: '',
             location: '',
+            gotUser: false,
             auth: JSON.parse(localStorage.auth)
         }
     }
@@ -62,9 +64,15 @@ class UserPage extends React.Component {
 
     render() {
 
+        // needed to stop the infinite looping
+        if (this.state.gotUser == false){
+            this.getUser();
+            this.setState({gotUser: true});
+        }
+
         return (
 
-            <div onLoad={this.getUser()}>
+            <div>
                 Name: {this.state.name} <br/>
                 Location: {this.state.location} <br/>
                 Age: {this.state.age} <br/>

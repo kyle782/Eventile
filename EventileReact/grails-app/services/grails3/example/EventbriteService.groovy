@@ -68,10 +68,15 @@ class EventbriteService {
 
             String eventbrite_id = obj["events"][i].id
 
-            // create new Event object
-            Event new_event = new Event(name: event_name, description: event_description_trimmed, start_date: null,
-                    eventbrite_url: obj["events"][i].url, eventbrite_id: eventbrite_id, category_name: eventbrite_category_name)
+            // create new Event object, save to database after
+            Event new_event = new Event(name: event_name, description: event_description_trimmed, start_date: 'start',
+                    eventbrite_url: obj["events"][i].url, eventbrite_id: eventbrite_id,
+                    category_name: eventbrite_category_name, num_ratings: 0, total_rating: 0, average_rating: 0)
 
+            // save to database, print errors for debugging if unable to save
+            if(!new_event.save(flush:true) ) {
+                System.out.println(new_event.errors)
+            }
 
             // add to the collection
             event_results.add(new_event)
