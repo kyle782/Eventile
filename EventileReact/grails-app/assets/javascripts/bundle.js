@@ -29302,7 +29302,6 @@
 	    _createClass(UserPage, [{
 	        key: 'getUser',
 	        value: function getUser() {
-	            console.log("this is " + this);
 	            var token = this.state.auth.access_token; // authentication token to make sure user is signed in/authorized
 	            fetch("/api/user", { // GET the user from the usercontroller, make REST call
 	                headers: {
