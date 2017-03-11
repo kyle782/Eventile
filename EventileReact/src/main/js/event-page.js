@@ -75,7 +75,8 @@ class EventPage extends React.Component {
     }
 
     /**
-     * Method to update the rating for the event. Called when clicking on the button (TODO: change to form later)
+     * Method to update the rating for the event. Called when clicking on the button
+     * (TODO: disable rating buttons if already rated)
      * @param new_rating, from the form on the page (just the button for now)
      */
     update_rating(new_rating){
