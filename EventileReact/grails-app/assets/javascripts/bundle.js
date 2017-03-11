@@ -29171,7 +29171,7 @@
 	                    { className: 'col-sm-12 col-md-12 col-lg-12 tweet' },
 	                    _react2.default.createElement(
 	                        'a',
-	                        { href: "/event?q=" + event.eventbrite_id, target: '_blank' },
+	                        { href: "/event?q=" + event.eventbrite_id, target: '_self' },
 	                        _react2.default.createElement(
 	                            'b',
 	                            null,
@@ -29289,11 +29289,13 @@
 	        _this.getUser = _this.getUser.bind(_this);
 	        _this.success = _this.success.bind(_this);
 	        _this.fail = _this.fail.bind(_this);
+	        _this.render = _this.render.bind(_this);
 
 	        _this.state = {
 	            name: '',
 	            age: '',
 	            location: '',
+	            gotUser: false,
 	            auth: JSON.parse(localStorage.auth)
 	        };
 	        return _this;
@@ -29302,7 +29304,6 @@
 	    _createClass(UserPage, [{
 	        key: 'getUser',
 	        value: function getUser() {
-	            console.log("this is " + this);
 	            var token = this.state.auth.access_token; // authentication token to make sure user is signed in/authorized
 	            fetch("/api/user", { // GET the user from the usercontroller, make REST call
 	                headers: {
@@ -29333,9 +29334,15 @@
 	        key: 'render',
 	        value: function render() {
 
+	            // needed to stop the infinite looping
+	            if (this.state.gotUser == false) {
+	                this.getUser();
+	                this.setState({ gotUser: true });
+	            }
+
 	            return _react2.default.createElement(
 	                'div',
-	                { onLoad: this.getUser() },
+	                null,
 	                'Name: ',
 	                this.state.name,
 	                ' ',
@@ -29414,12 +29421,23 @@
 
 	        var _this = _possibleConstructorReturn(this, (EventPage.__proto__ || Object.getPrototypeOf(EventPage)).call(this));
 
-	        _this.search = _this.search.bind(_this);
+	        _this.getEvent = _this.getEvent.bind(_this);
 	        _this.fail = _this.fail.bind(_this);
-	        _this.success = _this.success.bind(_this);
+	        _this.success_found_event = _this.success_found_event.bind(_this);
+	        _this.update_rating = _this.update_rating.bind(_this);
+	        _this.success_update_rating = _this.success_update_rating.bind(_this);
+	        _this.render = _this.render.bind(_this);
 
 	        _this.state = {
-	            events: [],
+	            name: 'Loading...',
+	            description: '',
+	            category: '',
+	            rating: '.....',
+	            loaded: false,
+	            rated: false,
+	            error: false,
+	            error_message: '',
+	            user_rating: -1,
 	            auth: JSON.parse(localStorage.auth)
 	        };
 
@@ -29427,31 +29445,17 @@
 	    }
 
 	    _createClass(EventPage, [{
-	        key: 'search',
-	        value: function search(e) {
-
-	            e.preventDefault();
-	            console.log("Searching...");
-	            var token = this.state.auth.access_token;
-	            var query = _reactDom2.default.findDOMNode(this.props);
-	            console.log("query = " + query);
-
-	            fetch("/api/event?q=" + query, {
-	                headers: {
-	                    'Authorization': 'Bearer ' + token
-	                }
-	            }).then(checkStatus).then(this.success).catch(this.fail);
-	        }
-	    }, {
-	        key: 'success',
-	        value: function success(events) {
-	            console.log("Search result", events);
-	            this.setState({ events: events });
+	        key: 'success_found_event',
+	        value: function success_found_event(event_result) {
+	            this.setState({ name: event_result.name, description: event_result.description,
+	                category: event_result.category_name });
+	            if (event_result.num_ratings != 0) {
+	                this.setState({ rating: event_result.average_rating });
+	            }
 	        }
 	    }, {
 	        key: 'fail',
 	        value: function fail(error) {
-	            console.error("Search has failed", error);
 	            if (error.response.status == 401) {
 	                _auth2.default.logOut();
 	                this.props.router.replace({
@@ -29470,31 +29474,82 @@
 	                headers: {
 	                    'Authorization': 'Bearer ' + token
 	                }
-	            }).then(checkStatus).then(this.success).catch(this.fail);
+	            }).then(checkStatus).then(this.success_found_event).catch(this.fail);
+	        }
+
+	        /**
+	         * Method to update the rating for the event. Called when clicking on the button (TODO: change to form later)
+	         * @param new_rating, from the form on the page (just the button for now)
+	         */
+
+	    }, {
+	        key: 'update_rating',
+	        value: function update_rating(new_rating) {
+	            var token = this.state.auth.access_token;
+	            var query = this.props.location.query.q;
+
+	            // make PUT REST call to be handled by EventController (mapped in urlMappings.groovy)
+	            fetch("/api/event/update_rating?q=" + query + "&r=" + new_rating, { // parameters for the method
+	                method: 'PUT',
+	                headers: {
+	                    'Authorization': 'Bearer ' + token
+	                }
+	            }).then(checkStatus).then(this.success_update_rating).catch(this.fail);
+	        }
+
+	        /**
+	         * Method to update the state variable with the new rating
+	         * @param event_result
+	         */
+
+	    }, {
+	        key: 'success_update_rating',
+	        value: function success_update_rating(event_result) {
+	            console.log("success, rating is now ", event_result.average_rating);
+	            this.setState({ rating: event_result.average_rating });
 	        }
 	    }, {
 	        key: 'render',
 	        value: function render() {
-	            var events = this.state.events.map(function (event) {
+	            var _this2 = this;
+
+	            // stops the infinite looping & app crashing
+	            if (this.state.loaded == false) {
+	                this.getEvent();
+	                this.setState({ loaded: true });
+	            }
+
+	            var Error = function Error() {
 	                return _react2.default.createElement(
-	                    'div',
-	                    { className: 'col-sm-12 col-md-12 col-lg-12 tweet' },
-	                    _react2.default.createElement(
-	                        'b',
-	                        null,
-	                        event.name
-	                    ),
-	                    ': ',
-	                    event.description,
-	                    ' ',
-	                    _react2.default.createElement('br', null),
-	                    ' Category: ',
-	                    event.category_name
+	                    'p',
+	                    { className: 'alert alert-danger' },
+	                    _this2.state.error_message
 	                );
-	            });
+	            };
+
+	            var this_event = _react2.default.createElement(
+	                'div',
+	                { className: 'col-sm-12 col-md-12 col-lg-12 tweet' },
+	                _react2.default.createElement(
+	                    'b',
+	                    null,
+	                    this.state.name
+	                ),
+	                ': ',
+	                this.state.description,
+	                ' ',
+	                _react2.default.createElement('br', null),
+	                ' Category: ',
+	                this.state.category,
+	                ' ',
+	                _react2.default.createElement('br', null),
+	                'Rating: ',
+	                this.state.rating
+	            );
 	            return _react2.default.createElement(
 	                'div',
-	                { onLoad: this.getEvent() },
+	                null,
+	                this.state.error ? _react2.default.createElement(Error, null) : null,
 	                _react2.default.createElement(
 	                    'h1',
 	                    null,
@@ -29503,7 +29558,21 @@
 	                _react2.default.createElement(
 	                    'div',
 	                    { className: 'col-lg-12' },
-	                    events
+	                    this_event
+	                ),
+	                _react2.default.createElement(
+	                    'button',
+	                    { type: 'submit', onClick: function onClick() {
+	                            return _this2.update_rating(5);
+	                        } },
+	                    'Rate 5 '
+	                ),
+	                _react2.default.createElement(
+	                    'button',
+	                    { type: 'submit', onClick: function onClick() {
+	                            return _this2.update_rating(1);
+	                        } },
+	                    'Rate 1 '
 	                )
 	            );
 	        }
