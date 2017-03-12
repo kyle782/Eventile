@@ -45,8 +45,8 @@ class SignUp extends React.Component {
     }
 
     success(user) {
-        console.log("Signed up", user);
-        this.props.router.replace("/");
+        console.log("Signed up, please sign in", user);
+        this.props.router.replace("/signin");
     }
 
     readError(error) {

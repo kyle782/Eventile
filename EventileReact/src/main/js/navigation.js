@@ -29,7 +29,10 @@ class Navigation extends React.Component {
             <nav className="navbar navbar-default navbar-static-top">
                 <div className="container-fluid">
                     <div className="navbar-header">
-                        <Link to="/" className="navbar-brand">Eventile</Link>
+                        { this.state.loggedIn ? <Link to="/home" className="navbar-brand">Eventile</Link>
+                            :
+                            <Link to="/welcome" className="navbar-brand">Eventile</Link>
+                        }
                     </div>
                     { this.state.loggedIn ?
                         <ul className="nav navbar-nav">

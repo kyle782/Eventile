@@ -11,9 +11,11 @@ class UrlMappings {
         "/"(view:"/index")
         "/**"(view:"/index")
 
-        "/api/event"(controller: "event", action: "show", method: "GET", parseRequest: true)
+        "/view/event"(controller: "event", action: "show", method: "GET", parseRequest: true)
 
         "/api/event/update_rating"(controller: "event", action: "update_rating", method: "PUT")
+
+        "/welcome_search"(controller: "welcome", action:"search", method: "GET", parseRequest: true)
 
 
     }

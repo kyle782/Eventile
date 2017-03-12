@@ -5,7 +5,7 @@ import auth from './auth';
 class Logout extends React.Component {
     componentDidMount() {
         auth.logOut();
-        this.props.router.replace("/")
+        this.props.router.replace("/welcome")
     }
 
     render() {
