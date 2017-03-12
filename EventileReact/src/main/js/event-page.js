@@ -62,6 +62,7 @@ class EventPage extends React.Component {
     getEvent(){
         let token = this.state.auth.access_token;
         let query = this.props.location.query.q;
+        this.setState({loaded: true});
 
         fetch("/view/event?q=" + query , {
             headers: {
@@ -109,7 +110,6 @@ class EventPage extends React.Component {
         // stops the infinite looping & app crashing
         if (this.state.loaded == false){
             this.getEvent();
-            this.setState({loaded: true});
         }
         let this_event =
             <div className="col-sm-12 col-md-12 col-lg-12 tweet">

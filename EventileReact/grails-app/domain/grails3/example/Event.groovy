@@ -9,6 +9,7 @@ class Event {
         total_rating nullable: true
         num_ratings nullable: true
         average_rating nullable: true
+        img_url nullable: true
     }
 
     String name
@@ -20,5 +21,6 @@ class Event {
     int total_rating
     int num_ratings
     float average_rating
+    String img_url
 
 }

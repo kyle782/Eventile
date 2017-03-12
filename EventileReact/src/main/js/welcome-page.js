@@ -70,26 +70,45 @@ class WelcomePage extends React.Component {
         this.setState({loaded: true});
     }
 
+    getImageURL(event){
+        return event.img_url;
+    }
+
     render() {
         // stops the infinite looping & app crashing
         if (this.state.loaded == false){
             this.getNearbyEvents();
         }
         let events = this.state.events.map( (event) => {
-            return <div className="col-sm-12 col-md-12 col-lg-12 tweet">
-                <a href={"/pub/event?q=" + event.eventbrite_id} target="_self"><b>{event.name}</b></a>: {event.description} <br/> Category: {event.category_name}
-            </div>
+            return <div className="card">
+                        <a href={"/pub/event?q=" + event.eventbrite_id} target="_self">
+                            <img className="card-img-top img-fluid" src={this.getImageURL(event)}/>
+                        </a>
+                        <div className="card-block">
+                            <a href={"/pub/event?q=" + event.eventbrite_id} target="_self">
+                                <h4 className="card-title">{event.name}</h4></a>
+                            <p className="card-text">{event.description}</p><br/>
+                        </div>
+                        <div className="card-footer">
+                            <small className="text-muted"> Category: {event.category_name} </small>
+                        </div>
+                    </div>
         });
         return (
 
-            <div>
-                <h1>Welcome to Eventile! </h1>
-                <p> Log sign up or sign in </p>
-                <h2>Popular Events Nearby: </h2>
-                <div className="col-lg-12">
-                    {events}
+
+            <div className="container">
+                <div>
+                    <h1>Welcome to Eventile! </h1>
+                    <p> Log sign up or sign in </p>
+                    <h2>Popular Events Nearby: </h2>
+                    <div className="card-columns">
+                        {events}
+                    </div>
                 </div>
             </div>
+
+
         )
     }
 
