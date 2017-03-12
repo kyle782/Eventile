@@ -18,7 +18,7 @@ function checkStatus(response) {
     }
 };
 
-class EventPage extends React.Component {
+class PublicEventPage extends React.Component {
 
     constructor() {
         super();
@@ -35,7 +35,6 @@ class EventPage extends React.Component {
             category: '',
             rating: '.....',
             loaded: false,
-            auth: JSON.parse(localStorage.auth)
         }
 
     }
@@ -44,30 +43,21 @@ class EventPage extends React.Component {
         this.setState({name: event_result.name, description: event_result.description,
             category: event_result.category_name});
         if (event_result.num_ratings != 0){
-            this.setState({rating: event_result.average_rating})
+            this.setState({rating: event_result.average_rating, loaded: true})
         }
     }
 
 
     fail(error) {
-        if(error.response.status == 401) {
-            auth.logOut();
-            this.props.router.replace({
-                pathname: "/signin",
-                state: {nextPath: "/search"}
-            })
-        }
+        console.log("failed " + error);
+        this.setState({loaded: true})
+
     }
 
     getEvent(){
-        let token = this.state.auth.access_token;
         let query = this.props.location.query.q;
 
-        fetch("/view/event?q=" + query , {
-            headers: {
-                'Authorization': 'Bearer ' + token
-            }
-        })
+        fetch("/view/event?q=" + query)
             .then(checkStatus)
             .then(this.success_found_event)
             .catch(this.fail)
@@ -109,7 +99,6 @@ class EventPage extends React.Component {
         // stops the infinite looping & app crashing
         if (this.state.loaded == false){
             this.getEvent();
-            this.setState({loaded: true});
         }
         let this_event =
             <div className="col-sm-12 col-md-12 col-lg-12 tweet">
@@ -122,12 +111,10 @@ class EventPage extends React.Component {
                 <div className="col-lg-12">
                     {this_event}
                 </div>
-                <button type="submit" onClick={() => this.update_rating(5)}>Rate 5 </button>
-                <button type="submit" onClick={() => this.update_rating(1)}>Rate 1 </button>
             </div>
 
         )
     }
 }
 
-export default withRouter(EventPage);
+export default withRouter(PublicEventPage);

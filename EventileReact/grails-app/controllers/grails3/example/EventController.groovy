@@ -3,7 +3,7 @@ package grails3.example
 import grails.plugin.springsecurity.annotation.Secured
 import grails.web.RequestParameter
 
-@Secured(['ROLE_USER'])
+
 class EventController {
 
     static responseFormats = ['json']
@@ -19,6 +19,7 @@ class EventController {
 
     }
 
+    @Secured(['ROLE_USER'])
     // obtain parameters from the REST call in update_rating() in event-page.js
     def update_rating(@RequestParameter('q') String q, @RequestParameter('r') int r){
         def target_event = Event.findByEventbrite_id(q)

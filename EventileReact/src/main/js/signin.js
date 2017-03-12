@@ -48,8 +48,8 @@ class SignIn extends React.Component {
         console.log("Signed in", authObject);
         auth.signIn(authObject);
         let locationState = this.props.location.state,
-            nextPath = locationState ? locationState.nextPath : "/";
-        this.props.router.replace(nextPath ? nextPath : "/");
+            nextPath = locationState ? locationState.nextPath : "/home";
+        this.props.router.replace(nextPath ? nextPath : "/home");
         this.props.router.reload();
     }
 
