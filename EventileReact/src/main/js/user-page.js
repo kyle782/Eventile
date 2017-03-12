@@ -34,6 +34,7 @@ class UserPage extends React.Component {
 
     getUser(){
         let token = this.state.auth.access_token; // authentication token to make sure user is signed in/authorized
+
         fetch("/api/user", {        // GET the user from the usercontroller, make REST call
             headers: {
                 'Authorization': 'Bearer ' + token // pass authentication token as a header to the REST API call
@@ -48,11 +49,12 @@ class UserPage extends React.Component {
     success(user) {
         // update the states with the user JSON object
         console.log("success: user = " + user);
-        this.setState({name: user.username, age: user.age, location: user.location});
+        this.setState({name: user.username, age: user.age, location: user.location, gotUser: true});
     }
 
     fail(error) {
         console.error("Search has failed", error);
+        this.setState({gotUser: true});
         if(error.response.status == 401) {
             auth.logOut();
             this.props.router.replace({
@@ -67,7 +69,6 @@ class UserPage extends React.Component {
         // needed to stop the infinite looping
         if (this.state.gotUser == false){
             this.getUser();
-            this.setState({gotUser: true});
         }
 
         return (

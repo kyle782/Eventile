@@ -68,10 +68,18 @@ class EventbriteService {
 
             String eventbrite_id = obj["events"][i].id
 
+            String eventbrite_img_url
+            if (obj["events"][i].logo != null){
+                eventbrite_img_url = obj["events"][i].logo.url
+            } else {
+                eventbrite_img_url = ""
+            }
+
             // create new Event object, save to database after
             Event new_event = new Event(name: event_name, description: event_description_trimmed, start_date: 'start',
                     eventbrite_url: obj["events"][i].url, eventbrite_id: eventbrite_id,
-                    category_name: eventbrite_category_name, num_ratings: 0, total_rating: 0, average_rating: 0)
+                    category_name: eventbrite_category_name, num_ratings: 0, total_rating: 0, average_rating: 0,
+                    img_url: eventbrite_img_url)
 
             // save to database, print errors for debugging if unable to save
             if(!new_event.save(flush:true) ) {

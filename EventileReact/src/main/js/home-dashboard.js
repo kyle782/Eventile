@@ -87,7 +87,7 @@ class HomeDashboard extends React.Component {
         return (
 
             <div>
-                <h1>Welcome to Eventile! </h1>
+                <h1>Home Dashboard</h1>
                 <h2>Popular Events Nearby: </h2>
                 <div className="col-lg-12">
                     {events}

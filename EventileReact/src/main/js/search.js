@@ -64,15 +64,30 @@ class Search extends React.Component {
         }
     }
 
+    getImageURL(event){
+        return event.img_url;
+    }
+
     render() {
 
         let events = this.state.events.map( (event) => {
-            return <div className="col-sm-12 col-md-12 col-lg-12 tweet">
-                <a href={"/event?q=" + event.eventbrite_id} target="_self"><b>{event.name}</b></a>: {event.description} <br/> Category: {event.category_name}
+            return <div className="card">
+                <a href={"/pub/event?q=" + event.eventbrite_id} target="_self">
+                    <img className="card-img-top img-fluid" src={this.getImageURL(event)}/>
+                </a>
+                <div className="card-block">
+                    <a href={"/pub/event?q=" + event.eventbrite_id} target="_self">
+                        <h4 className="card-title">{event.name}</h4></a>
+                    <p className="card-text">{event.description}</p><br/>
+                </div>
+                <div className="card-footer">
+                    <small className="text-muted"> Category: {event.category_name} </small>
+                </div>
             </div>
         });
         return (
 
+            <div className="container">
                 <div className="row">
                     <div className="container">
                         <form className="form-inline col-lg-12" onSubmit={this.search} >
@@ -88,12 +103,12 @@ class Search extends React.Component {
                             </div>
                             <button type="submit" className="btn btn-default" disabled={this.state.inProgress}>Search</button>
                         </form>
-
-                        <div className="col-lg-12">
-                            {events}
-                        </div>
                     </div>
-
+                </div>
+                <br/>
+                <div className="card-columns">
+                    {events}
+                </div>
             </div>
         )
     }
