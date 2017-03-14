@@ -391,14 +391,32 @@ class UserForm extends React.Component {
             password = ReactDOM.findDOMNode(this.refs.password).value.trim(),
             age = ReactDOM.findDOMNode(this.refs.age).value.trim(),
             location = ReactDOM.findDOMNode(this.refs.location).value.trim();
-        console.log(ReactDOM.findDOMNode(this.refs.pref_music).checked);
-        console.log(ReactDOM.findDOMNode(this.refs.pref_bus_prof).checked);
 
         return {
             username: name,
             password: password,
             age: age,
-            location: location
+            location: location,
+            pref_music: this.state.pref_music,
+            pref_bus_prof: this.state.pref_bus_prof,
+            pref_food_drink: this.state.pref_food_drink,
+            pref_comm_culture: this.state.pref_comm_culture,
+            pref_perf_vis_art: this.state.pref_perf_vis_art,
+            pref_film_media_ent: this.state.pref_film_media_ent,
+            pref_sports_fitness: this.state.pref_sports_fitness,
+            pref_health_well: this.state.pref_health_well,
+            pref_sci_tech: this.state.pref_sci_tech,
+            pref_trav_outd: this.state.pref_trav_outd,
+            pref_char_games: this.state.pref_char_games,
+            pref_religion_spirit: this.state.pref_religion_spirit,
+            pref_family_edu: this.state.pref_family_edu,
+            pref_season_holi: this.state.pref_season_holi,
+            pref_gov_poli: this.state.pref_gov_poli,
+            pref_fash_beaut: this.state.pref_fash_beaut,
+            pref_home_life: this.state.pref_home_life,
+            pref_auto_boat_air: this.state.pref_auto_boat_air,
+            pref_hobbies_ints: this.state.pref_hobbies_ints,
+            pref_other: this.state.pref_other,
         }
     }
 

@@ -28,6 +28,7 @@ class UserPage extends React.Component {
             age: '',
             location: '',
             gotUser: false,
+            user_preferences: [],
             auth: JSON.parse(localStorage.auth)
         }
     }
@@ -48,8 +49,9 @@ class UserPage extends React.Component {
 
     success(user) {
         // update the states with the user JSON object
-        console.log("success: user = " + user);
-        this.setState({name: user.username, age: user.age, location: user.location, gotUser: true});
+        console.log("success: user = ", user);
+        this.setState({name: user.username, age: user.age, location: user.location,
+            gotUser: true, user_preferences: user.preferences});
     }
 
     fail(error) {
@@ -71,12 +73,21 @@ class UserPage extends React.Component {
             this.getUser();
         }
 
+        let prefs = this.state.user_preferences.map( (preference) => {
+            return <div>
+                <p>{preference}</p>
+            </div>
+        });
+
         return (
 
             <div>
                 Name: {this.state.name} <br/>
                 Location: {this.state.location} <br/>
                 Age: {this.state.age} <br/>
+
+                <h2> Selected Preferences: </h2> <br/>
+                {prefs}
             </div>
 
         )
