@@ -28329,9 +28329,9 @@
 	        value: function signUp(e) {
 	            e.preventDefault();
 	            var form = this.form.data();
-	            console.log("Signing in...", form);
+	            console.log("Signing up!...", form);
 
-	            var body = "username=" + form.username + "&password=" + form.password + "&age=" + form.age + "&location=" + form.location;
+	            var body = "username=" + form.username + "&password=" + form.password + "&age=" + form.age + "&location=" + form.location + "&pref_music=" + form.pref_music + "&pref_bus_prof=" + form.pref_bus_prof + "&pref_food_drink=" + form.pref_food_drink + "&pref_comm_culture=" + form.pref_comm_culture + "&pref_perf_vis_art=" + form.pref_perf_vis_art + "&pref_film_media_ent=" + form.pref_film_media_ent + "&pref_sports_fitness=" + form.pref_sports_fitness + "&pref_health_well=" + form.pref_health_well + "&pref_sci_tech=" + form.pref_sci_tech + "&pref_trav_outd=" + form.pref_trav_outd + "&pref_char_games=" + form.pref_char_games + "&pref_religion_spirit=" + form.pref_religion_spirit + "&pref_family_edu=" + form.pref_family_edu + "&pref_season_holi=" + form.pref_season_holi + "&pref_gov_poli=" + form.pref_gov_poli + "&pref_fash_beaut=" + form.pref_fash_beaut + "&pref_home_life=" + form.pref_home_life + "&pref_auto_boat_air=" + form.pref_auto_boat_air + "&pref_hobbies_ints=" + form.pref_hobbies_ints + "&pref_other=" + form.pref_other;
 
 	            fetch("/api/signup", {
 	                method: 'POST',
@@ -28988,14 +28988,32 @@
 	                password = _reactDom2.default.findDOMNode(this.refs.password).value.trim(),
 	                age = _reactDom2.default.findDOMNode(this.refs.age).value.trim(),
 	                location = _reactDom2.default.findDOMNode(this.refs.location).value.trim();
-	            console.log(_reactDom2.default.findDOMNode(this.refs.pref_music).checked);
-	            console.log(_reactDom2.default.findDOMNode(this.refs.pref_bus_prof).checked);
 
 	            return {
 	                username: name,
 	                password: password,
 	                age: age,
-	                location: location
+	                location: location,
+	                pref_music: this.state.pref_music,
+	                pref_bus_prof: this.state.pref_bus_prof,
+	                pref_food_drink: this.state.pref_food_drink,
+	                pref_comm_culture: this.state.pref_comm_culture,
+	                pref_perf_vis_art: this.state.pref_perf_vis_art,
+	                pref_film_media_ent: this.state.pref_film_media_ent,
+	                pref_sports_fitness: this.state.pref_sports_fitness,
+	                pref_health_well: this.state.pref_health_well,
+	                pref_sci_tech: this.state.pref_sci_tech,
+	                pref_trav_outd: this.state.pref_trav_outd,
+	                pref_char_games: this.state.pref_char_games,
+	                pref_religion_spirit: this.state.pref_religion_spirit,
+	                pref_family_edu: this.state.pref_family_edu,
+	                pref_season_holi: this.state.pref_season_holi,
+	                pref_gov_poli: this.state.pref_gov_poli,
+	                pref_fash_beaut: this.state.pref_fash_beaut,
+	                pref_home_life: this.state.pref_home_life,
+	                pref_auto_boat_air: this.state.pref_auto_boat_air,
+	                pref_hobbies_ints: this.state.pref_hobbies_ints,
+	                pref_other: this.state.pref_other
 	            };
 	        }
 	    }]);
@@ -29332,6 +29350,7 @@
 	            age: '',
 	            location: '',
 	            gotUser: false,
+	            user_preferences: [],
 	            auth: JSON.parse(localStorage.auth)
 	        };
 	        return _this;
@@ -29352,8 +29371,9 @@
 	        key: 'success',
 	        value: function success(user) {
 	            // update the states with the user JSON object
-	            console.log("success: user = " + user);
-	            this.setState({ name: user.username, age: user.age, location: user.location, gotUser: true });
+	            console.log("success: user = ", user);
+	            this.setState({ name: user.username, age: user.age, location: user.location,
+	                gotUser: true, user_preferences: user.preferences });
 	        }
 	    }, {
 	        key: 'fail',
@@ -29377,6 +29397,18 @@
 	                this.getUser();
 	            }
 
+	            var prefs = this.state.user_preferences.map(function (preference) {
+	                return _react2.default.createElement(
+	                    'div',
+	                    null,
+	                    _react2.default.createElement(
+	                        'p',
+	                        null,
+	                        preference
+	                    )
+	                );
+	            });
+
 	            return _react2.default.createElement(
 	                'div',
 	                null,
@@ -29391,7 +29423,15 @@
 	                'Age: ',
 	                this.state.age,
 	                ' ',
-	                _react2.default.createElement('br', null)
+	                _react2.default.createElement('br', null),
+	                _react2.default.createElement(
+	                    'h2',
+	                    null,
+	                    ' Selected Preferences: '
+	                ),
+	                ' ',
+	                _react2.default.createElement('br', null),
+	                prefs
 	            );
 	        }
 	    }]);

@@ -20,8 +20,8 @@ class User implements Serializable {
 	boolean accountLocked
 	boolean passwordExpired
 
-  // create a collection Preferences that contains categories the user is interested in
-	ArrayList<Category> preferences
+	// collection for preferences that will store the categories and queries that they are interested in
+	static hasMany = [preferences: String]
 
 	User(String username, String password, String age, String location) {
 	  	this()
@@ -29,8 +29,6 @@ class User implements Serializable {
 		this.password = password
     	this.age = age
     	this.location = location
-		this.preferences = null
-
 	}
 
 	Set<Role> getAuthorities() {
@@ -62,14 +60,5 @@ class User implements Serializable {
 		password column: '`password`'
 	}
 
-	def preferences_addCategory(Category new_category){
-		if (preferences == null){
-			preferences = new ArrayList<>()
-		}
-		preferences.add(new_category)
-	}
 
-	ArrayList<Category> getPreferences(){
-		return preferences
-	}
 }
