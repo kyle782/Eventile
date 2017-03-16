@@ -1,15 +1,20 @@
 package grails3.example
 
 import grails.plugin.springsecurity.annotation.Secured
+import grails.rest.RestfulController
 
 @Secured(['ROLE_USER'])
-class SearchController {
+class SearchController extends RestfulController {
 
     static responseFormats = ['json']
 
     def searchService
     def EventbriteService
     def springSecurityService
+
+    SearchController() {
+        super(SearchController)
+    }
 
     def search(String q) {
         // Gets the current user name - can be used to control permissions
