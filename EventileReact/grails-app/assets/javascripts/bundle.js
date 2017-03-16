@@ -84,6 +84,18 @@
 
 	var _eventPage2 = _interopRequireDefault(_eventPage);
 
+	var _welcomePage = __webpack_require__(253);
+
+	var _welcomePage2 = _interopRequireDefault(_welcomePage);
+
+	var _homeDashboard = __webpack_require__(254);
+
+	var _homeDashboard2 = _interopRequireDefault(_homeDashboard);
+
+	var _publicEventPage = __webpack_require__(255);
+
+	var _publicEventPage2 = _interopRequireDefault(_publicEventPage);
+
 	var _auth = __webpack_require__(243);
 
 	var _auth2 = _interopRequireDefault(_auth);
@@ -96,7 +108,10 @@
 	    LOGOUT: "/logout",
 	    SINGUP: "/signup",
 	    USERPAGE: "/user-page",
-	    EVENTPAGE: "/event"
+	    EVENTPAGE: "/event",
+	    WELCOME: "/welcome",
+	    HOME: "/home",
+	    PUBLICEVENTPAGE: "/pub/event"
 	};
 
 	var Greet = function Greet() {
@@ -125,32 +140,6 @@
 	    );
 	};
 
-	var Welcome = function Welcome() {
-	    return _react2.default.createElement(
-	        'div',
-	        { className: 'jumbotron' },
-	        _react2.default.createElement(
-	            'h1',
-	            null,
-	            'Welcome!'
-	        ),
-	        _react2.default.createElement(
-	            'p',
-	            null,
-	            'You can now search for Events!'
-	        ),
-	        _react2.default.createElement(
-	            'p',
-	            null,
-	            _react2.default.createElement(
-	                _reactRouter.Link,
-	                { to: Paths.SEARCH, className: 'btn btn-primary btn-lg' },
-	                'Search'
-	            )
-	        )
-	    );
-	};
-
 	var NotFound = function NotFound() {
 	    return _react2.default.createElement(
 	        'div',
@@ -168,18 +157,27 @@
 	};
 
 	function checkAuth(next, replace) {
-
 	    var nextPath = next.location.pathname;
-	    if (_auth2.default.loggedIn()) {
-	        if (nextPath == Paths.SIGNIN || nextPath == Paths.SINGUP) {
-	            replace({ pathname: "/" });
+	    if (nextPath == "/") {
+	        if (_auth2.default.loggedIn()) {
+	            replace({ pathname: "/home" });
+	        } else {
+	            replace({ pathname: "/welcome" });
 	        }
 	    } else {
-	        if (nextPath != Paths.SIGNIN && nextPath != Paths.SINGUP) {
-	            replace({
-	                pathname: Paths.SIGNIN,
-	                state: { nextPath: nextPath }
-	            });
+	        if (_auth2.default.loggedIn()) {
+	            if (nextPath == Paths.SIGNIN || nextPath == Paths.SINGUP || nextPath == Paths.WELCOME) {
+	                replace({ pathname: "/home" });
+	            }
+	        } else {
+	            if (nextPath != Paths.WELCOME) {
+	                if (nextPath != Paths.SIGNIN && nextPath != Paths.SINGUP && nextPath != Paths.PUBLICEVENTPAGE) {
+	                    replace({
+	                        pathname: Paths.SIGNIN,
+	                        state: { nextPath: nextPath }
+	                    });
+	                }
+	            }
 	        }
 	    }
 	}
@@ -189,7 +187,7 @@
 	    { history: _reactRouter.browserHistory },
 	    _react2.default.createElement(
 	        _reactRouter.Route,
-	        { path: '/', component: _app2.default },
+	        { path: '/', component: _app2.default, onEnter: checkAuth },
 	        _react2.default.createElement(_reactRouter.IndexRoute, { component: Greet }),
 	        _react2.default.createElement(_reactRouter.Route, { path: Paths.SIGNIN, component: _signin2.default, onEnter: checkAuth }),
 	        _react2.default.createElement(_reactRouter.Route, { path: Paths.SEARCH, component: _search2.default, onEnter: checkAuth }),
@@ -197,6 +195,9 @@
 	        _react2.default.createElement(_reactRouter.Route, { path: Paths.SINGUP, component: _signup2.default, onEnter: checkAuth }),
 	        _react2.default.createElement(_reactRouter.Route, { path: Paths.USERPAGE, component: _userPage2.default, onEnter: checkAuth }),
 	        _react2.default.createElement(_reactRouter.Route, { path: Paths.EVENTPAGE, component: _eventPage2.default, onEnter: checkAuth }),
+	        _react2.default.createElement(_reactRouter.Route, { path: Paths.WELCOME, component: _welcomePage2.default }),
+	        _react2.default.createElement(_reactRouter.Route, { path: Paths.HOME, component: _homeDashboard2.default, onEnter: checkAuth }),
+	        _react2.default.createElement(_reactRouter.Route, { path: Paths.PUBLICEVENTPAGE, component: _publicEventPage2.default, onEnter: checkAuth }),
 	        _react2.default.createElement(_reactRouter.Route, { path: '*', component: NotFound })
 	    )
 	), document.getElementById('app'));
@@ -27444,9 +27445,13 @@
 	                    _react2.default.createElement(
 	                        'div',
 	                        { className: 'navbar-header' },
-	                        _react2.default.createElement(
+	                        this.state.loggedIn ? _react2.default.createElement(
 	                            _reactRouter.Link,
-	                            { to: '/', className: 'navbar-brand' },
+	                            { to: '/home', className: 'navbar-brand' },
+	                            'Eventile'
+	                        ) : _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/welcome', className: 'navbar-brand' },
 	                            'Eventile'
 	                        )
 	                    ),
@@ -27630,8 +27635,8 @@
 	            console.log("Signed in", authObject);
 	            _auth2.default.signIn(authObject);
 	            var locationState = this.props.location.state,
-	                nextPath = locationState ? locationState.nextPath : "/";
-	            this.props.router.replace(nextPath ? nextPath : "/");
+	                nextPath = locationState ? locationState.nextPath : "/home";
+	            this.props.router.replace(nextPath ? nextPath : "/home");
 	            this.props.router.reload();
 	        }
 	    }, {
@@ -28324,9 +28329,9 @@
 	        value: function signUp(e) {
 	            e.preventDefault();
 	            var form = this.form.data();
-	            console.log("Signing in...", form);
+	            console.log("Signing up!...", form);
 
-	            var body = "username=" + form.username + "&password=" + form.password + "&age=" + form.age + "&location=" + form.location;
+	            var body = "username=" + form.username + "&password=" + form.password + "&age=" + form.age + "&location=" + form.location + "&pref_music=" + form.pref_music + "&pref_bus_prof=" + form.pref_bus_prof + "&pref_food_drink=" + form.pref_food_drink + "&pref_comm_culture=" + form.pref_comm_culture + "&pref_perf_vis_art=" + form.pref_perf_vis_art + "&pref_film_media_ent=" + form.pref_film_media_ent + "&pref_sports_fitness=" + form.pref_sports_fitness + "&pref_health_well=" + form.pref_health_well + "&pref_sci_tech=" + form.pref_sci_tech + "&pref_trav_outd=" + form.pref_trav_outd + "&pref_char_games=" + form.pref_char_games + "&pref_religion_spirit=" + form.pref_religion_spirit + "&pref_family_edu=" + form.pref_family_edu + "&pref_season_holi=" + form.pref_season_holi + "&pref_gov_poli=" + form.pref_gov_poli + "&pref_fash_beaut=" + form.pref_fash_beaut + "&pref_home_life=" + form.pref_home_life + "&pref_auto_boat_air=" + form.pref_auto_boat_air + "&pref_hobbies_ints=" + form.pref_hobbies_ints + "&pref_other=" + form.pref_other;
 
 	            fetch("/api/signup", {
 	                method: 'POST',
@@ -28339,8 +28344,8 @@
 	    }, {
 	        key: 'success',
 	        value: function success(user) {
-	            console.log("Signed up", user);
-	            this.props.router.replace("/");
+	            console.log("Signed up, please sign in", user);
+	            this.props.router.replace("/signin");
 	        }
 	    }, {
 	        key: 'readError',
@@ -28983,14 +28988,32 @@
 	                password = _reactDom2.default.findDOMNode(this.refs.password).value.trim(),
 	                age = _reactDom2.default.findDOMNode(this.refs.age).value.trim(),
 	                location = _reactDom2.default.findDOMNode(this.refs.location).value.trim();
-	            console.log(_reactDom2.default.findDOMNode(this.refs.pref_music).checked);
-	            console.log(_reactDom2.default.findDOMNode(this.refs.pref_bus_prof).checked);
 
 	            return {
 	                username: name,
 	                password: password,
 	                age: age,
-	                location: location
+	                location: location,
+	                pref_music: this.state.pref_music,
+	                pref_bus_prof: this.state.pref_bus_prof,
+	                pref_food_drink: this.state.pref_food_drink,
+	                pref_comm_culture: this.state.pref_comm_culture,
+	                pref_perf_vis_art: this.state.pref_perf_vis_art,
+	                pref_film_media_ent: this.state.pref_film_media_ent,
+	                pref_sports_fitness: this.state.pref_sports_fitness,
+	                pref_health_well: this.state.pref_health_well,
+	                pref_sci_tech: this.state.pref_sci_tech,
+	                pref_trav_outd: this.state.pref_trav_outd,
+	                pref_char_games: this.state.pref_char_games,
+	                pref_religion_spirit: this.state.pref_religion_spirit,
+	                pref_family_edu: this.state.pref_family_edu,
+	                pref_season_holi: this.state.pref_season_holi,
+	                pref_gov_poli: this.state.pref_gov_poli,
+	                pref_fash_beaut: this.state.pref_fash_beaut,
+	                pref_home_life: this.state.pref_home_life,
+	                pref_auto_boat_air: this.state.pref_auto_boat_air,
+	                pref_hobbies_ints: this.state.pref_hobbies_ints,
+	                pref_other: this.state.pref_other
 	            };
 	        }
 	    }]);
@@ -29043,7 +29066,7 @@
 	        key: 'componentDidMount',
 	        value: function componentDidMount() {
 	            _auth2.default.logOut();
-	            this.props.router.replace("/");
+	            this.props.router.replace("/welcome");
 	        }
 	    }, {
 	        key: 'render',
@@ -29162,66 +29185,97 @@
 	            }
 	        }
 	    }, {
+	        key: 'getImageURL',
+	        value: function getImageURL(event) {
+	            return event.img_url;
+	        }
+	    }, {
 	        key: 'render',
 	        value: function render() {
+	            var _this2 = this;
 
 	            var events = this.state.events.map(function (event) {
 	                return _react2.default.createElement(
 	                    'div',
-	                    { className: 'col-sm-12 col-md-12 col-lg-12 tweet' },
+	                    { className: 'card' },
 	                    _react2.default.createElement(
 	                        'a',
-	                        { href: "/event?q=" + event.eventbrite_id, target: '_blank' },
-	                        _react2.default.createElement(
-	                            'b',
-	                            null,
-	                            event.name
-	                        )
+	                        { href: "/pub/event?q=" + event.eventbrite_id, target: '_self' },
+	                        _react2.default.createElement('img', { className: 'card-img-top img-fluid', src: _this2.getImageURL(event) })
 	                    ),
-	                    ': ',
-	                    event.description,
-	                    ' ',
-	                    _react2.default.createElement('br', null),
-	                    ' Category: ',
-	                    event.category_name
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'card-block' },
+	                        _react2.default.createElement(
+	                            'a',
+	                            { href: "/pub/event?q=" + event.eventbrite_id, target: '_self' },
+	                            _react2.default.createElement(
+	                                'h4',
+	                                { className: 'card-title' },
+	                                event.name
+	                            )
+	                        ),
+	                        _react2.default.createElement(
+	                            'p',
+	                            { className: 'card-text' },
+	                            event.description
+	                        ),
+	                        _react2.default.createElement('br', null)
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'card-footer' },
+	                        _react2.default.createElement(
+	                            'small',
+	                            { className: 'text-muted' },
+	                            ' Category: ',
+	                            event.category_name,
+	                            ' '
+	                        )
+	                    )
 	                );
 	            });
 	            return _react2.default.createElement(
 	                'div',
-	                { className: 'row' },
+	                { className: 'container' },
 	                _react2.default.createElement(
 	                    'div',
-	                    { className: 'container' },
-	                    _react2.default.createElement(
-	                        'form',
-	                        { className: 'form-inline col-lg-12', onSubmit: this.search },
-	                        _react2.default.createElement(
-	                            'div',
-	                            { className: 'form-group' },
-	                            _react2.default.createElement(
-	                                'label',
-	                                { className: 'sr-only', htmlFor: 'query' },
-	                                'Search:'
-	                            ),
-	                            _react2.default.createElement('input', { type: 'text',
-	                                className: 'form-control',
-	                                id: 'query',
-	                                placeholder: 'Query',
-	                                ref: 'query',
-	                                disabled: this.state.inProgress
-	                            })
-	                        ),
-	                        _react2.default.createElement(
-	                            'button',
-	                            { type: 'submit', className: 'btn btn-default', disabled: this.state.inProgress },
-	                            'Search'
-	                        )
-	                    ),
+	                    { className: 'row' },
 	                    _react2.default.createElement(
 	                        'div',
-	                        { className: 'col-lg-12' },
-	                        events
+	                        { className: 'container' },
+	                        _react2.default.createElement(
+	                            'form',
+	                            { className: 'form-inline col-lg-12', onSubmit: this.search },
+	                            _react2.default.createElement(
+	                                'div',
+	                                { className: 'form-group' },
+	                                _react2.default.createElement(
+	                                    'label',
+	                                    { className: 'sr-only', htmlFor: 'query' },
+	                                    'Search:'
+	                                ),
+	                                _react2.default.createElement('input', { type: 'text',
+	                                    className: 'form-control',
+	                                    id: 'query',
+	                                    placeholder: 'Query',
+	                                    ref: 'query',
+	                                    disabled: this.state.inProgress
+	                                })
+	                            ),
+	                            _react2.default.createElement(
+	                                'button',
+	                                { type: 'submit', className: 'btn btn-default', disabled: this.state.inProgress },
+	                                'Search'
+	                            )
+	                        )
 	                    )
+	                ),
+	                _react2.default.createElement('br', null),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'card-columns' },
+	                    events
 	                )
 	            );
 	        }
@@ -29289,11 +29343,14 @@
 	        _this.getUser = _this.getUser.bind(_this);
 	        _this.success = _this.success.bind(_this);
 	        _this.fail = _this.fail.bind(_this);
+	        _this.render = _this.render.bind(_this);
 
 	        _this.state = {
 	            name: '',
 	            age: '',
 	            location: '',
+	            gotUser: false,
+	            user_preferences: [],
 	            auth: JSON.parse(localStorage.auth)
 	        };
 	        return _this;
@@ -29303,6 +29360,7 @@
 	        key: 'getUser',
 	        value: function getUser() {
 	            var token = this.state.auth.access_token; // authentication token to make sure user is signed in/authorized
+
 	            fetch("/api/user", { // GET the user from the usercontroller, make REST call
 	                headers: {
 	                    'Authorization': 'Bearer ' + token // pass authentication token as a header to the REST API call
@@ -29313,13 +29371,15 @@
 	        key: 'success',
 	        value: function success(user) {
 	            // update the states with the user JSON object
-	            console.log("success: user = " + user);
-	            this.setState({ name: user.username, age: user.age, location: user.location });
+	            console.log("success: user = ", user);
+	            this.setState({ name: user.username, age: user.age, location: user.location,
+	                gotUser: true, user_preferences: user.preferences });
 	        }
 	    }, {
 	        key: 'fail',
 	        value: function fail(error) {
 	            console.error("Search has failed", error);
+	            this.setState({ gotUser: true });
 	            if (error.response.status == 401) {
 	                _auth2.default.logOut();
 	                this.props.router.replace({
@@ -29332,9 +29392,26 @@
 	        key: 'render',
 	        value: function render() {
 
+	            // needed to stop the infinite looping
+	            if (this.state.gotUser == false) {
+	                this.getUser();
+	            }
+
+	            var prefs = this.state.user_preferences.map(function (preference) {
+	                return _react2.default.createElement(
+	                    'div',
+	                    null,
+	                    _react2.default.createElement(
+	                        'p',
+	                        null,
+	                        preference
+	                    )
+	                );
+	            });
+
 	            return _react2.default.createElement(
 	                'div',
-	                { onLoad: this.getUser() },
+	                null,
 	                'Name: ',
 	                this.state.name,
 	                ' ',
@@ -29346,7 +29423,15 @@
 	                'Age: ',
 	                this.state.age,
 	                ' ',
-	                _react2.default.createElement('br', null)
+	                _react2.default.createElement('br', null),
+	                _react2.default.createElement(
+	                    'h2',
+	                    null,
+	                    ' Selected Preferences: '
+	                ),
+	                ' ',
+	                _react2.default.createElement('br', null),
+	                prefs
 	            );
 	        }
 	    }]);
@@ -29413,12 +29498,19 @@
 
 	        var _this = _possibleConstructorReturn(this, (EventPage.__proto__ || Object.getPrototypeOf(EventPage)).call(this));
 
-	        _this.search = _this.search.bind(_this);
+	        _this.getEvent = _this.getEvent.bind(_this);
 	        _this.fail = _this.fail.bind(_this);
-	        _this.success = _this.success.bind(_this);
+	        _this.success_found_event = _this.success_found_event.bind(_this);
+	        _this.update_rating = _this.update_rating.bind(_this);
+	        _this.success_update_rating = _this.success_update_rating.bind(_this);
+	        _this.render = _this.render.bind(_this);
 
 	        _this.state = {
-	            events: [],
+	            name: 'Loading...',
+	            description: '',
+	            category: '',
+	            rating: '.....',
+	            loaded: false,
 	            auth: JSON.parse(localStorage.auth)
 	        };
 
@@ -29426,31 +29518,17 @@
 	    }
 
 	    _createClass(EventPage, [{
-	        key: 'search',
-	        value: function search(e) {
-
-	            e.preventDefault();
-	            console.log("Searching...");
-	            var token = this.state.auth.access_token;
-	            var query = _reactDom2.default.findDOMNode(this.props);
-	            console.log("query = " + query);
-
-	            fetch("/api/event?q=" + query, {
-	                headers: {
-	                    'Authorization': 'Bearer ' + token
-	                }
-	            }).then(checkStatus).then(this.success).catch(this.fail);
-	        }
-	    }, {
-	        key: 'success',
-	        value: function success(events) {
-	            console.log("Search result", events);
-	            this.setState({ events: events });
+	        key: 'success_found_event',
+	        value: function success_found_event(event_result) {
+	            this.setState({ name: event_result.name, description: event_result.description,
+	                category: event_result.category_name });
+	            if (event_result.num_ratings != 0) {
+	                this.setState({ rating: event_result.average_rating });
+	            }
 	        }
 	    }, {
 	        key: 'fail',
 	        value: function fail(error) {
-	            console.error("Search has failed", error);
 	            if (error.response.status == 401) {
 	                _auth2.default.logOut();
 	                this.props.router.replace({
@@ -29464,24 +29542,435 @@
 	        value: function getEvent() {
 	            var token = this.state.auth.access_token;
 	            var query = this.props.location.query.q;
+	            this.setState({ loaded: true });
 
-	            fetch("/api/event?q=" + query, {
+	            fetch("/view/event?q=" + query, {
 	                headers: {
 	                    'Authorization': 'Bearer ' + token
 	                }
-	            }).then(checkStatus).then(this.success).catch(this.fail);
+	            }).then(checkStatus).then(this.success_found_event).catch(this.fail);
+	        }
+
+	        /**
+	         * Method to update the rating for the event. Called when clicking on the button
+	         * (TODO: disable rating buttons if already rated)
+	         * @param new_rating, from the form on the page (just the button for now)
+	         */
+
+	    }, {
+	        key: 'update_rating',
+	        value: function update_rating(new_rating) {
+	            var token = this.state.auth.access_token;
+	            var query = this.props.location.query.q;
+
+	            // make PUT REST call to be handled by EventController (mapped in urlMappings.groovy)
+	            fetch("/api/event/update_rating?q=" + query + "&r=" + new_rating, { // parameters for the method
+	                method: 'PUT',
+	                headers: {
+	                    'Authorization': 'Bearer ' + token
+	                }
+	            }).then(checkStatus).then(this.success_update_rating).catch(this.fail);
+	        }
+
+	        /**
+	         * Method to update the state variable with the new rating
+	         * @param event_result
+	         */
+
+	    }, {
+	        key: 'success_update_rating',
+	        value: function success_update_rating(event_result) {
+	            console.log("success, rating is now ", event_result.average_rating);
+	            this.setState({ rating: event_result.average_rating });
 	        }
 	    }, {
 	        key: 'render',
 	        value: function render() {
+	            var _this2 = this;
+
+	            // stops the infinite looping & app crashing
+	            if (this.state.loaded == false) {
+	                this.getEvent();
+	            }
+	            var this_event = _react2.default.createElement(
+	                'div',
+	                { className: 'col-sm-12 col-md-12 col-lg-12 tweet' },
+	                _react2.default.createElement(
+	                    'b',
+	                    null,
+	                    this.state.name
+	                ),
+	                ': ',
+	                this.state.description,
+	                ' ',
+	                _react2.default.createElement('br', null),
+	                ' Category: ',
+	                this.state.category,
+	                ' ',
+	                _react2.default.createElement('br', null),
+	                'Rating: ',
+	                this.state.rating
+	            );
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                _react2.default.createElement(
+	                    'h1',
+	                    null,
+	                    'Hello World'
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'col-lg-12' },
+	                    this_event
+	                ),
+	                _react2.default.createElement(
+	                    'button',
+	                    { type: 'submit', onClick: function onClick() {
+	                            return _this2.update_rating(5);
+	                        } },
+	                    'Rate 5 '
+	                ),
+	                _react2.default.createElement(
+	                    'button',
+	                    { type: 'submit', onClick: function onClick() {
+	                            return _this2.update_rating(1);
+	                        } },
+	                    'Rate 1 '
+	                )
+	            );
+	        }
+	    }]);
+
+	    return EventPage;
+	}(_react2.default.Component);
+
+	exports.default = (0, _reactRouter.withRouter)(EventPage);
+
+/***/ },
+/* 253 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactDom = __webpack_require__(32);
+
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+
+	__webpack_require__(246);
+
+	var _reactRouter = __webpack_require__(178);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Created by gary on 2017-03-11.
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
+
+	function checkStatus(response) {
+	    if (response.status >= 200 && response.status < 300) {
+	        return response.json();
+	    } else {
+	        var error = new Error(response.statusText);
+	        error.response = response;
+	        throw error;
+	    }
+	};
+
+	var WelcomePage = function (_React$Component) {
+	    _inherits(WelcomePage, _React$Component);
+
+	    function WelcomePage() {
+	        _classCallCheck(this, WelcomePage);
+
+	        var _this = _possibleConstructorReturn(this, (WelcomePage.__proto__ || Object.getPrototypeOf(WelcomePage)).call(this));
+
+	        _this.getNearbyEvents = _this.getNearbyEvents.bind(_this);
+	        //this.getLocation = this.getLocation.bind(this);
+	        _this.fail = _this.fail.bind(_this);
+	        _this.success = _this.success.bind(_this);
+	        _this.success_ip = _this.success_ip.bind(_this);
+
+	        _this.state = {
+	            events: [],
+	            loaded: false,
+	            location: 'London, Ontario'
+	        };
+	        return _this;
+	    }
+
+	    _createClass(WelcomePage, [{
+	        key: 'getNearbyEvents',
+	        value: function getNearbyEvents() {
+	            console.log("Searching nearby...");
+
+	            var location = this.state.location;
+	            console.log("this location = " + this.state.location);
+
+	            fetch("/welcome_search?location=" + location).then(checkStatus).then(this.success).catch(this.fail);
+	        }
+
+	        /**getLocation(){
+	            fetch("api.db-ip.com/addrinfo?api_key=bc2ab711d740d7cfa6fcb0ca8822cb327e38844f&addr=129.100.93.162", {
+	                method: "GET"
+	            })
+	                .then(checkStatus)
+	                .then(this.success_ip)
+	                .catch(this.fail)
+	        }**/
+
+	    }, {
+	        key: 'success',
+	        value: function success(events) {
+	            console.log("Search result", events);
+	            this.setState({ events: events, loaded: true });
+	        }
+	    }, {
+	        key: 'success_ip',
+	        value: function success_ip(ip) {
+	            console.log("Search result ip ", ip);
+	            this.setState({ location: ip.city });
+	        }
+	    }, {
+	        key: 'fail',
+	        value: function fail(error) {
+	            console.error("Search has failed", error);
+	            this.setState({ loaded: true });
+	        }
+	    }, {
+	        key: 'getImageURL',
+	        value: function getImageURL(event) {
+	            return event.img_url;
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            var _this2 = this;
+
+	            // stops the infinite looping & app crashing
+	            if (this.state.loaded == false) {
+	                this.getNearbyEvents();
+	            }
+	            var events = this.state.events.map(function (event) {
+	                return _react2.default.createElement(
+	                    'div',
+	                    { className: 'card' },
+	                    _react2.default.createElement(
+	                        'a',
+	                        { href: "/pub/event?q=" + event.eventbrite_id, target: '_self' },
+	                        _react2.default.createElement('img', { className: 'card-img-top img-fluid', src: _this2.getImageURL(event) })
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'card-block' },
+	                        _react2.default.createElement(
+	                            'a',
+	                            { href: "/pub/event?q=" + event.eventbrite_id, target: '_self' },
+	                            _react2.default.createElement(
+	                                'h4',
+	                                { className: 'card-title' },
+	                                event.name
+	                            )
+	                        ),
+	                        _react2.default.createElement(
+	                            'p',
+	                            { className: 'card-text' },
+	                            event.description
+	                        ),
+	                        _react2.default.createElement('br', null)
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'card-footer' },
+	                        _react2.default.createElement(
+	                            'small',
+	                            { className: 'text-muted' },
+	                            ' Category: ',
+	                            event.category_name,
+	                            ' '
+	                        )
+	                    )
+	                );
+	            });
+	            return _react2.default.createElement(
+	                'div',
+	                { className: 'container' },
+	                _react2.default.createElement(
+	                    'div',
+	                    null,
+	                    _react2.default.createElement(
+	                        'h1',
+	                        null,
+	                        'Welcome to Eventile! '
+	                    ),
+	                    _react2.default.createElement(
+	                        'p',
+	                        null,
+	                        ' Log sign up or sign in '
+	                    ),
+	                    _react2.default.createElement(
+	                        'h2',
+	                        null,
+	                        'Popular Events Nearby: '
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'card-columns' },
+	                        events
+	                    )
+	                )
+	            );
+	        }
+	    }]);
+
+	    return WelcomePage;
+	}(_react2.default.Component);
+
+	exports.default = (0, _reactRouter.withRouter)(WelcomePage);
+
+/***/ },
+/* 254 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactDom = __webpack_require__(32);
+
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+
+	__webpack_require__(246);
+
+	var _auth = __webpack_require__(243);
+
+	var _auth2 = _interopRequireDefault(_auth);
+
+	var _reactRouter = __webpack_require__(178);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Created by gary on 2017-03-11.
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
+
+	function checkStatus(response) {
+
+	    if (response.status >= 200 && response.status < 300) {
+	        return response.json();
+	    } else {
+	        var error = new Error(response.statusText);
+	        error.response = response;
+	        throw error;
+	    }
+	};
+
+	var HomeDashboard = function (_React$Component) {
+	    _inherits(HomeDashboard, _React$Component);
+
+	    function HomeDashboard() {
+	        _classCallCheck(this, HomeDashboard);
+
+	        var _this = _possibleConstructorReturn(this, (HomeDashboard.__proto__ || Object.getPrototypeOf(HomeDashboard)).call(this));
+
+	        _this.getNearbyEvents = _this.getNearbyEvents.bind(_this);
+	        _this.getLocation = _this.getLocation.bind(_this);
+	        _this.fail = _this.fail.bind(_this);
+	        _this.success = _this.success.bind(_this);
+	        _this.success_ip = _this.success_ip.bind(_this);
+
+	        _this.state = {
+	            events: [],
+	            loaded: false,
+	            location: 'London, Ontario',
+	            auth: JSON.parse(localStorage.auth)
+	        };
+	        return _this;
+	    }
+
+	    _createClass(HomeDashboard, [{
+	        key: 'getNearbyEvents',
+	        value: function getNearbyEvents() {
+	            console.log("Searching nearby...");
+
+	            //this.getLocation();
+	            var query = this.state.location;
+	            console.log("this location = " + this.state.location);
+
+	            fetch("/welcome_search?location=" + query).then(checkStatus).then(this.success).catch(this.fail);
+	        }
+	    }, {
+	        key: 'getLocation',
+	        value: function getLocation() {
+	            fetch("api.db-ip.com/addrinfo?api_key=bc2ab711d740d7cfa6fcb0ca8822cb327e38844f&addr=129.100.93.162", {
+	                method: "GET"
+	            }).then(checkStatus).then(this.success_ip).catch(this.fail);
+	        }
+	    }, {
+	        key: 'success',
+	        value: function success(events) {
+	            console.log("Search result", events);
+	            this.setState({ events: events, loaded: true });
+	        }
+	    }, {
+	        key: 'success_ip',
+	        value: function success_ip(ip) {
+	            console.log("Search result", ip);
+	            this.setState({ location: ip.city });
+	        }
+	    }, {
+	        key: 'fail',
+	        value: function fail(error) {
+	            console.error("Search has failed", error);
+	            this.setState({ loaded: true });
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            // stops the infinite looping & app crashing
+	            if (this.state.loaded == false) {
+	                this.getNearbyEvents();
+	            }
 	            var events = this.state.events.map(function (event) {
 	                return _react2.default.createElement(
 	                    'div',
 	                    { className: 'col-sm-12 col-md-12 col-lg-12 tweet' },
 	                    _react2.default.createElement(
-	                        'b',
-	                        null,
-	                        event.name
+	                        'a',
+	                        { href: "/event?q=" + event.eventbrite_id, target: '_self' },
+	                        _react2.default.createElement(
+	                            'b',
+	                            null,
+	                            event.name
+	                        )
 	                    ),
 	                    ': ',
 	                    event.description,
@@ -29493,11 +29982,16 @@
 	            });
 	            return _react2.default.createElement(
 	                'div',
-	                { onLoad: this.getEvent() },
+	                null,
 	                _react2.default.createElement(
 	                    'h1',
 	                    null,
-	                    'Hello World'
+	                    'Home Dashboard'
+	                ),
+	                _react2.default.createElement(
+	                    'h2',
+	                    null,
+	                    'Popular Events Nearby: '
 	                ),
 	                _react2.default.createElement(
 	                    'div',
@@ -29508,10 +30002,188 @@
 	        }
 	    }]);
 
-	    return EventPage;
+	    return HomeDashboard;
 	}(_react2.default.Component);
 
-	exports.default = (0, _reactRouter.withRouter)(EventPage);
+	exports.default = (0, _reactRouter.withRouter)(HomeDashboard);
+
+/***/ },
+/* 255 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactDom = __webpack_require__(32);
+
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+
+	__webpack_require__(246);
+
+	var _auth = __webpack_require__(243);
+
+	var _auth2 = _interopRequireDefault(_auth);
+
+	var _reactRouter = __webpack_require__(178);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Created by gary on 2017-03-09.
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
+
+	function checkStatus(response) {
+	    if (response.status >= 200 && response.status < 300) {
+	        return response.json();
+	    } else {
+	        var error = new Error(response.statusText);
+	        error.response = response;
+	        throw error;
+	    }
+	};
+
+	var PublicEventPage = function (_React$Component) {
+	    _inherits(PublicEventPage, _React$Component);
+
+	    function PublicEventPage() {
+	        _classCallCheck(this, PublicEventPage);
+
+	        var _this = _possibleConstructorReturn(this, (PublicEventPage.__proto__ || Object.getPrototypeOf(PublicEventPage)).call(this));
+
+	        _this.getEvent = _this.getEvent.bind(_this);
+	        _this.fail = _this.fail.bind(_this);
+	        _this.success_found_event = _this.success_found_event.bind(_this);
+	        _this.update_rating = _this.update_rating.bind(_this);
+	        _this.success_update_rating = _this.success_update_rating.bind(_this);
+	        _this.render = _this.render.bind(_this);
+
+	        _this.state = {
+	            name: 'Loading...',
+	            description: '',
+	            category: '',
+	            rating: '.....',
+	            loaded: false
+	        };
+
+	        return _this;
+	    }
+
+	    _createClass(PublicEventPage, [{
+	        key: 'success_found_event',
+	        value: function success_found_event(event_result) {
+	            this.setState({ name: event_result.name, description: event_result.description,
+	                category: event_result.category_name });
+	            if (event_result.num_ratings != 0) {
+	                this.setState({ rating: event_result.average_rating, loaded: true });
+	            }
+	        }
+	    }, {
+	        key: 'fail',
+	        value: function fail(error) {
+	            console.log("failed " + error);
+	            this.setState({ loaded: true });
+	        }
+	    }, {
+	        key: 'getEvent',
+	        value: function getEvent() {
+	            var query = this.props.location.query.q;
+
+	            fetch("/view/event?q=" + query).then(checkStatus).then(this.success_found_event).catch(this.fail);
+	        }
+
+	        /**
+	         * Method to update the rating for the event. Called when clicking on the button
+	         * (TODO: disable rating buttons if already rated)
+	         * @param new_rating, from the form on the page (just the button for now)
+	         */
+
+	    }, {
+	        key: 'update_rating',
+	        value: function update_rating(new_rating) {
+	            var token = this.state.auth.access_token;
+	            var query = this.props.location.query.q;
+
+	            // make PUT REST call to be handled by EventController (mapped in urlMappings.groovy)
+	            fetch("/api/event/update_rating?q=" + query + "&r=" + new_rating, { // parameters for the method
+	                method: 'PUT',
+	                headers: {
+	                    'Authorization': 'Bearer ' + token
+	                }
+	            }).then(checkStatus).then(this.success_update_rating).catch(this.fail);
+	        }
+
+	        /**
+	         * Method to update the state variable with the new rating
+	         * @param event_result
+	         */
+
+	    }, {
+	        key: 'success_update_rating',
+	        value: function success_update_rating(event_result) {
+	            console.log("success, rating is now ", event_result.average_rating);
+	            this.setState({ rating: event_result.average_rating });
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            // stops the infinite looping & app crashing
+	            if (this.state.loaded == false) {
+	                this.getEvent();
+	            }
+	            var this_event = _react2.default.createElement(
+	                'div',
+	                { className: 'col-sm-12 col-md-12 col-lg-12 tweet' },
+	                _react2.default.createElement(
+	                    'b',
+	                    null,
+	                    this.state.name
+	                ),
+	                ': ',
+	                this.state.description,
+	                ' ',
+	                _react2.default.createElement('br', null),
+	                ' Category: ',
+	                this.state.category,
+	                ' ',
+	                _react2.default.createElement('br', null),
+	                'Rating: ',
+	                this.state.rating
+	            );
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                _react2.default.createElement(
+	                    'h1',
+	                    null,
+	                    'Hello World'
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'col-lg-12' },
+	                    this_event
+	                )
+	            );
+	        }
+	    }]);
+
+	    return PublicEventPage;
+	}(_react2.default.Component);
+
+	exports.default = (0, _reactRouter.withRouter)(PublicEventPage);
 
 /***/ }
 /******/ ]);

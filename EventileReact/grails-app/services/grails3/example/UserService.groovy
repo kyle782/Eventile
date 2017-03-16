@@ -2,13 +2,35 @@ package grails3.example
 
 import grails.transaction.Transactional
 import grails3.example.util.OptionalCategory
+import java.util.ArrayList
 
 class UserService {
 
     public static final String ROLE_USER = 'ROLE_USER'
 
     @Transactional(rollbackFor = [UserExistsException, IllegalArgumentException])
-    def signUp(String username, String password, String age, String location) {
+    def signUp(String username, String password, String age, String location,
+               boolean pref_music,
+               boolean pref_bus_prof,
+               boolean pref_food_drink,
+               boolean pref_comm_culture,
+               boolean pref_perf_vis_art,
+               boolean pref_film_media_ent,
+               boolean pref_sports_fitness,
+               boolean pref_health_well,
+               boolean pref_sci_tech,
+               boolean pref_trav_outd,
+               boolean pref_char_games,
+               boolean pref_religion_spirit,
+               boolean pref_family_edu,
+               boolean pref_season_holi,
+               boolean pref_gov_poli,
+               boolean pref_fash_beaut,
+               boolean pref_home_life,
+               boolean pref_auto_boat_air,
+               boolean pref_hobbies_ints,
+               boolean pref_other
+    ) {
         if(!username || !password) throw new IllegalArgumentException("username and password must not be blank")
 
         def lowerCaseUsername = username.toLowerCase()
@@ -22,8 +44,72 @@ class UserService {
             .andThrow { User user ->
                 new UserExistsException("User ${lowerCaseUsername} is already signed up")
             }
-            .orElse(new User(username: lowerCaseUsername, password: password, age: age, location: location).save())
+            .orElse(new User(username: lowerCaseUsername, password: password,
+                    age: age, location: location).save())
         } as User
+
+        // process the preferences checkboxes
+        if (pref_music){
+            user.addToPreferences("Music").save()
+        }
+        if (pref_bus_prof){
+            user.addToPreferences("Business & Professional").save()
+        }
+        if (pref_food_drink){
+            user.addToPreferences("Food & Drink").save()
+        }
+        if (pref_comm_culture){
+            user.addToPreferences("Community & Culture").save()
+        }
+        if (pref_perf_vis_art){
+            user.addToPreferences("Performing & Visual Arts").save()
+        }
+        if (pref_film_media_ent){
+            user.addToPreferences("Film, Media & Entertainment").save()
+        }
+        if (pref_sports_fitness){
+            user.addToPreferences("Sports & Fitness").save()
+        }
+        if (pref_health_well){
+            user.addToPreferences("Health & Wellness").save()
+        }
+        if (pref_sci_tech){
+            user.addToPreferences("Science & Technology").save()
+        }
+        if (pref_trav_outd){
+            user.addToPreferences("Travel & Outdoor").save()
+        }
+        if (pref_char_games){
+            user.addToPreferences("Charity & Games").save()
+        }
+        if (pref_religion_spirit){
+            user.addToPreferences("Religion & Spirituality").save()
+        }
+        if (pref_family_edu){
+            user.addToPreferences("Family & Education").save()
+        }
+        if (pref_season_holi){
+            user.addToPreferences("Seasonal & Holiday").save()
+        }
+        if (pref_gov_poli){
+            user.addToPreferences("Government & Politics").save()
+        }
+        if (pref_fash_beaut){
+            user.addToPreferences("Fashion & Beauty").save()
+        }
+        if (pref_home_life){
+            user.addToPreferences("Home & Lifestyle").save()
+        }
+        if (pref_auto_boat_air){
+            user.addToPreferences("Auto, Boat & Air").save()
+        }
+        if (pref_hobbies_ints){
+            user.addToPreferences("Hobbies & Special Interest").save()
+        }
+        if (pref_other){
+            user.addToPreferences("Other").save()
+        }
+
         log.debug("Created user ${user}")
 
         UserRole.create(user, role)
