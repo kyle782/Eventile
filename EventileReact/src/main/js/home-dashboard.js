@@ -34,7 +34,7 @@ class HomeDashboard extends React.Component {
             events: [],
             loaded: false,
             location: 'London, Ontario',
-            user_preferences: [],
+            user_has_prefs: false,
             user_prefs_ids: [],
             auth: JSON.parse(localStorage.auth)
         }
@@ -62,7 +62,12 @@ class HomeDashboard extends React.Component {
     success_got_user(user) {
         // update the states with the user JSON object
         console.log("dashboard success: user = ", user);
-        this.setState({loaded: true, user_preferences: user.preferences, user_prefs_ids: user.category_ids});
+
+        if (user.preferences.length == 0){
+            this.setState({loaded: true, user_has_prefs: false, user_prefs_ids: user.category_ids});
+        } else {
+            this.setState({loaded: true, user_has_prefs: true, user_prefs_ids: user.category_ids});
+        }
         this.getPreferenceEvents()
     }
 
@@ -93,14 +98,30 @@ class HomeDashboard extends React.Component {
         let preference_ids = this.state.user_prefs_ids;
         console.log("user's prefs = " + preference_ids);
 
-        fetch("/api/dashboard?prefs=" + preference_ids , {
-            headers: {
-                'Authorization': 'Bearer ' + token // pass authentication token as a header to the REST API call
-            }
-        })
-            .then(checkStatus)
-            .then(this.success)
-            .catch(this.fail)
+        let has_prefs = this.state.user_has_prefs;
+        console.log("has_prefs " + has_prefs);
+
+        // if the user did not select any preferences, then just search by nearby like the Welcome page
+        if (has_prefs == false){
+            console.log("user did not select any");
+            fetch("/welcome_search?location=" + "London, Ontario")
+                .then(checkStatus)
+                .then(this.success)
+                .catch(this.fail)
+
+        } else {
+            // search based on the preferred categories if they have preferences
+            console.log("user selected prefs");
+
+            fetch("/api/dashboard?prefs=" + preference_ids , {
+                headers: {
+                    'Authorization': 'Bearer ' + token // pass authentication token as a header to the REST API call
+                }
+            })
+                .then(checkStatus)
+                .then(this.success)
+                .catch(this.fail)
+        }
     }
 
     getImageURL(event){
@@ -123,7 +144,12 @@ class HomeDashboard extends React.Component {
                     <p className="card-text">{event.description}</p><br/>
                 </div>
                 <div className="card-footer">
-                    <small className="text-muted"> Because you liked: {event.category_name} </small>
+                    {this.state.user_has_prefs ?
+                        <small className="text-muted">
+                            Because you liked: {event.category_name} </small>
+                    : <small className="text-muted">
+                            Category: {event.category_name}</small>
+                    }
                 </div>
             </div>
         });

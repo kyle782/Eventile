@@ -29826,7 +29826,7 @@
 	                    _react2.default.createElement(
 	                        'h2',
 	                        null,
-	                        'Popular Events Nearby: '
+	                        'Popular Events Nearby (London, Ontario): '
 	                    ),
 	                    _react2.default.createElement(
 	                        'div',
@@ -29912,7 +29912,7 @@
 	            events: [],
 	            loaded: false,
 	            location: 'London, Ontario',
-	            user_preferences: [],
+	            user_has_prefs: false,
 	            user_prefs_ids: [],
 	            auth: JSON.parse(localStorage.auth)
 	        };
@@ -29943,7 +29943,12 @@
 	        value: function success_got_user(user) {
 	            // update the states with the user JSON object
 	            console.log("dashboard success: user = ", user);
-	            this.setState({ loaded: true, user_preferences: user.preferences, user_prefs_ids: user.category_ids });
+
+	            if (user.preferences.length == 0) {
+	                this.setState({ loaded: true, user_has_prefs: false, user_prefs_ids: user.category_ids });
+	            } else {
+	                this.setState({ loaded: true, user_has_prefs: true, user_prefs_ids: user.category_ids });
+	            }
 	            this.getPreferenceEvents();
 	        }
 	    }, {
@@ -29973,11 +29978,23 @@
 	            var preference_ids = this.state.user_prefs_ids;
 	            console.log("user's prefs = " + preference_ids);
 
-	            fetch("/api/dashboard?prefs=" + preference_ids, {
-	                headers: {
-	                    'Authorization': 'Bearer ' + token // pass authentication token as a header to the REST API call
-	                }
-	            }).then(checkStatus).then(this.success).catch(this.fail);
+	            var has_prefs = this.state.user_has_prefs;
+	            console.log("has_prefs " + has_prefs);
+
+	            // if the user did not select any preferences, then just search by nearby like the Welcome page
+	            if (has_prefs == false) {
+	                console.log("user did not select any");
+	                fetch("/welcome_search?location=" + "London, Ontario").then(checkStatus).then(this.success).catch(this.fail);
+	            } else {
+	                // search based on the preferred categories if they have preferences
+	                console.log("user selected prefs");
+
+	                fetch("/api/dashboard?prefs=" + preference_ids, {
+	                    headers: {
+	                        'Authorization': 'Bearer ' + token // pass authentication token as a header to the REST API call
+	                    }
+	                }).then(checkStatus).then(this.success).catch(this.fail);
+	            }
 	        }
 	    }, {
 	        key: 'getImageURL',
@@ -30024,12 +30041,17 @@
 	                    _react2.default.createElement(
 	                        'div',
 	                        { className: 'card-footer' },
-	                        _react2.default.createElement(
+	                        _this2.state.user_has_prefs ? _react2.default.createElement(
 	                            'small',
 	                            { className: 'text-muted' },
-	                            ' Because you liked: ',
+	                            'Because you liked: ',
 	                            event.category_name,
 	                            ' '
+	                        ) : _react2.default.createElement(
+	                            'small',
+	                            { className: 'text-muted' },
+	                            'Category: ',
+	                            event.category_name
 	                        )
 	                    )
 	                );
