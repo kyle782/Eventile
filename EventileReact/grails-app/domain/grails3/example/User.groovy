@@ -19,6 +19,7 @@ class User implements Serializable {
 	boolean accountExpired
 	boolean accountLocked
 	boolean passwordExpired
+	boolean hasPrefs
 
 	// collection for preferences that will store the categories and queries that they are interested in
 	static hasMany = [preferences: String, category_ids: String]
