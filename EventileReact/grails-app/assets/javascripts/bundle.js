@@ -29200,7 +29200,7 @@
 	                    { className: 'card' },
 	                    _react2.default.createElement(
 	                        'a',
-	                        { href: "/pub/event?q=" + event.eventbrite_id, target: '_self' },
+	                        { href: "/event?q=" + event.eventbrite_id, target: '_self' },
 	                        _react2.default.createElement('img', { className: 'card-img-top img-fluid', src: _this2.getImageURL(event) })
 	                    ),
 	                    _react2.default.createElement(
@@ -29208,7 +29208,7 @@
 	                        { className: 'card-block' },
 	                        _react2.default.createElement(
 	                            'a',
-	                            { href: "/pub/event?q=" + event.eventbrite_id, target: '_self' },
+	                            { href: "/event?q=" + event.eventbrite_id, target: '_self' },
 	                            _react2.default.createElement(
 	                                'h4',
 	                                { className: 'card-title' },
@@ -29901,33 +29901,25 @@
 
 	        var _this = _possibleConstructorReturn(this, (HomeDashboard.__proto__ || Object.getPrototypeOf(HomeDashboard)).call(this));
 
-	        _this.getNearbyEvents = _this.getNearbyEvents.bind(_this);
+	        _this.getPreferenceEvents = _this.getPreferenceEvents.bind(_this);
 	        _this.getLocation = _this.getLocation.bind(_this);
 	        _this.fail = _this.fail.bind(_this);
 	        _this.success = _this.success.bind(_this);
 	        _this.success_ip = _this.success_ip.bind(_this);
+	        _this.success_got_user = _this.success_got_user.bind(_this);
 
 	        _this.state = {
 	            events: [],
 	            loaded: false,
 	            location: 'London, Ontario',
+	            user_preferences: [],
+	            user_prefs_ids: [],
 	            auth: JSON.parse(localStorage.auth)
 	        };
 	        return _this;
 	    }
 
 	    _createClass(HomeDashboard, [{
-	        key: 'getNearbyEvents',
-	        value: function getNearbyEvents() {
-	            console.log("Searching nearby...");
-
-	            //this.getLocation();
-	            var query = this.state.location;
-	            console.log("this location = " + this.state.location);
-
-	            fetch("/welcome_search?location=" + query).then(checkStatus).then(this.success).catch(this.fail);
-	        }
-	    }, {
 	        key: 'getLocation',
 	        value: function getLocation() {
 	            fetch("api.db-ip.com/addrinfo?api_key=bc2ab711d740d7cfa6fcb0ca8822cb327e38844f&addr=129.100.93.162", {
@@ -29947,56 +29939,122 @@
 	            this.setState({ location: ip.city });
 	        }
 	    }, {
+	        key: 'success_got_user',
+	        value: function success_got_user(user) {
+	            // update the states with the user JSON object
+	            console.log("dashboard success: user = ", user);
+	            this.setState({ loaded: true, user_preferences: user.preferences, user_prefs_ids: user.category_ids });
+	            this.getPreferenceEvents();
+	        }
+	    }, {
 	        key: 'fail',
 	        value: function fail(error) {
 	            console.error("Search has failed", error);
 	            this.setState({ loaded: true });
 	        }
 	    }, {
+	        key: 'getUser',
+	        value: function getUser() {
+	            var token = this.state.auth.access_token; // authentication token to make sure user is signed in/authorized
+
+	            fetch("/api/user", { // GET the user from the usercontroller, make REST call
+	                headers: {
+	                    'Authorization': 'Bearer ' + token // pass authentication token as a header to the REST API call
+	                }
+	            }).then(checkStatus).then(this.success_got_user).catch(this.fail);
+	        }
+	    }, {
+	        key: 'getPreferenceEvents',
+	        value: function getPreferenceEvents() {
+	            var token = this.state.auth.access_token; // authentication token to make sure user is signed in/authorized
+
+	            console.log("Searching based by preferences...");
+
+	            var preference_ids = this.state.user_prefs_ids;
+	            console.log("user's prefs = " + preference_ids);
+
+	            fetch("/api/dashboard?prefs=" + preference_ids, {
+	                headers: {
+	                    'Authorization': 'Bearer ' + token // pass authentication token as a header to the REST API call
+	                }
+	            }).then(checkStatus).then(this.success).catch(this.fail);
+	        }
+	    }, {
+	        key: 'getImageURL',
+	        value: function getImageURL(event) {
+	            return event.img_url;
+	        }
+	    }, {
 	        key: 'render',
 	        value: function render() {
+	            var _this2 = this;
+
 	            // stops the infinite looping & app crashing
 	            if (this.state.loaded == false) {
-	                this.getNearbyEvents();
+	                this.getUser();
 	            }
 	            var events = this.state.events.map(function (event) {
 	                return _react2.default.createElement(
 	                    'div',
-	                    { className: 'col-sm-12 col-md-12 col-lg-12 tweet' },
+	                    { className: 'card' },
 	                    _react2.default.createElement(
 	                        'a',
 	                        { href: "/event?q=" + event.eventbrite_id, target: '_self' },
-	                        _react2.default.createElement(
-	                            'b',
-	                            null,
-	                            event.name
-	                        )
+	                        _react2.default.createElement('img', { className: 'card-img-top img-fluid', src: _this2.getImageURL(event) })
 	                    ),
-	                    ': ',
-	                    event.description,
-	                    ' ',
-	                    _react2.default.createElement('br', null),
-	                    ' Category: ',
-	                    event.category_name
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'card-block' },
+	                        _react2.default.createElement(
+	                            'a',
+	                            { href: "/event?q=" + event.eventbrite_id, target: '_self' },
+	                            _react2.default.createElement(
+	                                'h4',
+	                                { className: 'card-title' },
+	                                event.name
+	                            )
+	                        ),
+	                        _react2.default.createElement(
+	                            'p',
+	                            { className: 'card-text' },
+	                            event.description
+	                        ),
+	                        _react2.default.createElement('br', null)
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'card-footer' },
+	                        _react2.default.createElement(
+	                            'small',
+	                            { className: 'text-muted' },
+	                            ' Because you liked: ',
+	                            event.category_name,
+	                            ' '
+	                        )
+	                    )
 	                );
 	            });
 	            return _react2.default.createElement(
 	                'div',
-	                null,
-	                _react2.default.createElement(
-	                    'h1',
-	                    null,
-	                    'Home Dashboard'
-	                ),
-	                _react2.default.createElement(
-	                    'h2',
-	                    null,
-	                    'Popular Events Nearby: '
-	                ),
+	                { className: 'container' },
 	                _react2.default.createElement(
 	                    'div',
-	                    { className: 'col-lg-12' },
-	                    events
+	                    null,
+	                    _react2.default.createElement(
+	                        'h1',
+	                        null,
+	                        'Home Dashboard'
+	                    ),
+	                    _react2.default.createElement(
+	                        'h3',
+	                        null,
+	                        'Your Personalized Events:'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'card-columns' },
+	                        events
+	                    )
 	                )
 	            );
 	        }

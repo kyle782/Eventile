@@ -23,31 +23,21 @@ class HomeDashboard extends React.Component {
 
     constructor() {
         super();
-        this.getNearbyEvents = this.getNearbyEvents.bind(this);
+        this.getPreferenceEvents = this.getPreferenceEvents.bind(this);
         this.getLocation = this.getLocation.bind(this);
         this.fail = this.fail.bind(this);
         this.success = this.success.bind(this);
         this.success_ip = this.success_ip.bind(this);
+        this.success_got_user = this.success_got_user.bind(this);
 
         this.state = {
             events: [],
             loaded: false,
             location: 'London, Ontario',
+            user_preferences: [],
+            user_prefs_ids: [],
             auth: JSON.parse(localStorage.auth)
         }
-    }
-
-    getNearbyEvents() {
-        console.log("Searching nearby...");
-
-        //this.getLocation();
-        let query = this.state.location;
-        console.log("this location = " + this.state.location);
-
-        fetch("/welcome_search?location=" + query)
-            .then(checkStatus)
-            .then(this.success)
-            .catch(this.fail)
     }
 
     getLocation(){
@@ -69,30 +59,87 @@ class HomeDashboard extends React.Component {
         this.setState({location: ip.city});
     }
 
+    success_got_user(user) {
+        // update the states with the user JSON object
+        console.log("dashboard success: user = ", user);
+        this.setState({loaded: true, user_preferences: user.preferences, user_prefs_ids: user.category_ids});
+        this.getPreferenceEvents()
+    }
+
     fail(error) {
         console.error("Search has failed", error);
         this.setState({loaded: true});
     }
 
+    getUser(){
+        let token = this.state.auth.access_token; // authentication token to make sure user is signed in/authorized
+
+        fetch("/api/user", {        // GET the user from the usercontroller, make REST call
+            headers: {
+                'Authorization': 'Bearer ' + token // pass authentication token as a header to the REST API call
+            }
+        })
+            .then(checkStatus)
+            .then(this.success_got_user)
+            .catch(this.fail)
+
+    }
+
+    getPreferenceEvents(){
+        let token = this.state.auth.access_token; // authentication token to make sure user is signed in/authorized
+
+        console.log("Searching based by preferences...");
+
+        let preference_ids = this.state.user_prefs_ids;
+        console.log("user's prefs = " + preference_ids);
+
+        fetch("/api/dashboard?prefs=" + preference_ids , {
+            headers: {
+                'Authorization': 'Bearer ' + token // pass authentication token as a header to the REST API call
+            }
+        })
+            .then(checkStatus)
+            .then(this.success)
+            .catch(this.fail)
+    }
+
+    getImageURL(event){
+        return event.img_url;
+    }
+
     render() {
         // stops the infinite looping & app crashing
         if (this.state.loaded == false){
-            this.getNearbyEvents();
+            this.getUser();
         }
         let events = this.state.events.map( (event) => {
-            return <div className="col-sm-12 col-md-12 col-lg-12 tweet">
-                <a href={"/event?q=" + event.eventbrite_id} target="_self"><b>{event.name}</b></a>: {event.description} <br/> Category: {event.category_name}
+            return <div className="card">
+                <a href={"/event?q=" + event.eventbrite_id} target="_self">
+                    <img className="card-img-top img-fluid" src={this.getImageURL(event)}/>
+                </a>
+                <div className="card-block">
+                    <a href={"/event?q=" + event.eventbrite_id} target="_self">
+                        <h4 className="card-title">{event.name}</h4></a>
+                    <p className="card-text">{event.description}</p><br/>
+                </div>
+                <div className="card-footer">
+                    <small className="text-muted"> Because you liked: {event.category_name} </small>
+                </div>
             </div>
         });
         return (
 
-            <div>
-                <h1>Home Dashboard</h1>
-                <h2>Popular Events Nearby: </h2>
-                <div className="col-lg-12">
-                    {events}
+            <div className="container">
+                <div>
+                    <h1>Home Dashboard</h1>
+                    <h3>Your Personalized Events:</h3>
+                    <div className="card-columns">
+                        {events}
+                    </div>
                 </div>
             </div>
+
+
         )
     }
 

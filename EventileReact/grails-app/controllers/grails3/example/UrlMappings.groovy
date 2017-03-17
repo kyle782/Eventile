@@ -17,6 +17,7 @@ class UrlMappings {
 
         "/welcome_search"(controller: "welcome", action:"search", method: "GET", parseRequest: true)
 
+        "/api/dashboard"(controller: "dashboard", action:"search", method: "GET", parseRequest: true)
 
     }
 }
