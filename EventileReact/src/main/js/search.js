@@ -87,11 +87,11 @@ class Search extends React.Component {
 
         let events = this.state.events.map( (event) => {
             return <div className="card">
-                <a href={"/pub/event?q=" + event.eventbrite_id} target="_self">
+                <a href={"/event?q=" + event.eventbrite_id} target="_self">
                     <img className="card-img-top img-fluid" src={this.getImageURL(event)}/>
                 </a>
                 <div className="card-block">
-                    <a href={"/pub/event?q=" + event.eventbrite_id} target="_self">
+                    <a href={"/event?q=" + event.eventbrite_id} target="_self">
                         <h4 className="card-title">{event.name}</h4></a>
                     <p className="card-text">{event.description}</p><br/>
                 </div>

@@ -1,21 +1,22 @@
 package grails3.example
 
+import grails.plugin.springsecurity.annotation.Secured
 
-
-class WelcomeController {
+@Secured(['ROLE_USER'])
+class DashboardController {
 
     static responseFormats = ['json']
 
-    def WelcomeService
-
     def index() { }
 
-    def search(String location){
+    def DashboardService
 
-        log.debug("Searching by location = ${location}...")
+    def search(String prefs){
+
+        System.out.println("passed prefs = " + prefs)
 
         // perform a GET requestion to Eventbrite's API using WelcomeService class
-        def response_eventbrite = WelcomeService.search(location)
+        def response_eventbrite = DashboardService.search(prefs)
 
         respond response_eventbrite
     }
@@ -24,5 +25,6 @@ class WelcomeController {
         log.debug("Handling IllegalArgumentException ${ex}... Returning NO_CONTENT.")
         respond Collections.emptyList()
     }
+
 
 }
