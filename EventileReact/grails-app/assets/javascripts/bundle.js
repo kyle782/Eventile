@@ -29114,6 +29114,8 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -29141,10 +29143,14 @@
 	        _this.search = _this.search.bind(_this);
 	        _this.fail = _this.fail.bind(_this);
 	        _this.success = _this.success.bind(_this);
+	        _this.handleInputChange = _this.handleInputChange.bind(_this);
 
 	        _this.state = {
 	            events: [],
-	            auth: JSON.parse(localStorage.auth)
+	            auth: JSON.parse(localStorage.auth),
+	            sort_date: false,
+	            sort_dist: false
+
 	        };
 	        return _this;
 	    }
@@ -29159,7 +29165,7 @@
 
 	            this.setState({ inProgress: true });
 
-	            fetch("/api/search?q=" + query, {
+	            fetch("/api/search?q=" + query + "&date=" + this.state.sort_date, {
 	                headers: {
 	                    'Authorization': 'Bearer ' + token
 	                }
@@ -29188,6 +29194,16 @@
 	        key: 'getImageURL',
 	        value: function getImageURL(event) {
 	            return event.img_url;
+	        }
+	    }, {
+	        key: 'handleInputChange',
+	        value: function handleInputChange(event) {
+	            var target = event.target;
+	            var value = target.type === 'checkbox' ? target.checked : target.value;
+	            var name = target.name;
+	            console.log(target.type);
+
+	            this.setState(_defineProperty({}, name, value));
 	        }
 	    }, {
 	        key: 'render',
@@ -29276,6 +29292,53 @@
 	                    'div',
 	                    { className: 'card-columns' },
 	                    events
+	                ),
+	                _react2.default.createElement(
+	                    'h',
+	                    null,
+	                    ' Sort By  '
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'form-group' },
+	                    _react2.default.createElement(
+	                        'label',
+	                        { htmlFor: 'sort_date', className: 'col-sm-3 control-label' },
+	                        'Date'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-sm-9' },
+	                        _react2.default.createElement('input', {
+	                            name: 'sort_date',
+	                            className: 'form-check',
+	                            type: 'checkbox',
+	                            checked: this.state.sort_date,
+	                            onChange: this.handleInputChange,
+	                            ref: 'sort_date'
+	                        })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'form-group' },
+	                    _react2.default.createElement(
+	                        'label',
+	                        { htmlFor: 'restrict_date', className: 'col-sm-3 control-label' },
+	                        'Distance'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-sm-9' },
+	                        _react2.default.createElement('input', {
+	                            name: 'sort_dist',
+	                            className: 'form-check',
+	                            type: 'checkbox',
+	                            checked: this.state.sort_dist,
+	                            onChange: this.handleInputChange,
+	                            ref: 'sort_dist'
+	                        })
+	                    )
 	                )
 	            );
 	        }

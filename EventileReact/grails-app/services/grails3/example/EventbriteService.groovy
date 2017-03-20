@@ -14,17 +14,27 @@ class EventbriteService {
 
     }
 
-    ArrayList<Event> search(String q){
+    ArrayList<Event> search(String q, Boolean date){
 
         ArrayList<Event> event_results = new ArrayList<Event>()
         def response_eventbrite
 
         if (q){
 
-            // perform a GET call to Eventbrite's REST API, returns JSON response
-            response_eventbrite = new RestBuilder().get("https://www.eventbriteapi.com/v3/events/search/?q={query}"){
-                header "Authorization", "Bearer 2S34UCIHKW5MXVP4S5M7" // authenticate with header
-                urlVariables query:q
+            System.out.print(date)
+            if (date)
+            {
+                response_eventbrite = new RestBuilder().get("https://www.eventbriteapi.com/v3/events/search/?q={query}&sort_by=date"){
+                    header "Authorization", "Bearer 2S34UCIHKW5MXVP4S5M7" // authenticate with header
+                    urlVariables query:q
+                }
+            }
+            else {
+                // perform a GET call to Eventbrite's REST API, returns JSON response
+                response_eventbrite = new RestBuilder().get("https://www.eventbriteapi.com/v3/events/search/?q={query}") {
+                    header "Authorization", "Bearer 2S34UCIHKW5MXVP4S5M7" // authenticate with header
+                    urlVariables query: q
+                }
             }
 
         } else {
@@ -46,6 +56,9 @@ class EventbriteService {
             // get relevant properties
             String event_name = obj["events"][i].name.text
             String event_description_full = obj["events"][i].description.text
+            String event_date = obj["events"][i].start.local
+
+            System.out.print(event_date+ "\n")
 
             // clean and/or truncate the description (truncate if > 140 characters long)
             String event_description_trimmed = null
@@ -76,7 +89,7 @@ class EventbriteService {
             }
 
             // create new Event object, save to database after
-            Event new_event = new Event(name: event_name, description: event_description_trimmed, start_date: 'start',
+            Event new_event = new Event(name: event_name, description: event_description_trimmed, start_date: event_date ,
                     eventbrite_url: obj["events"][i].url, eventbrite_id: eventbrite_id,
                     category_name: eventbrite_category_name, num_ratings: 0, total_rating: 0, average_rating: 0,
                     img_url: eventbrite_img_url)
