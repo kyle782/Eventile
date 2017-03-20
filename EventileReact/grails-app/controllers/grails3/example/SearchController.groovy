@@ -16,13 +16,13 @@ class SearchController extends RestfulController {
         super(SearchController)
     }
 
-    def search(String q) {
+    def search(String q, Boolean date) {
         // Gets the current user name - can be used to control permissions
         def info = springSecurityService.currentUser.username
         log.debug("Searching by query = ${q}...")
 
         // perform a GET requestion to Eventbrite's API using EventbriteService class
-        def response_eventbrite = EventbriteService.search(q)
+        def response_eventbrite = EventbriteService.search(q, date)
 
         respond response_eventbrite
     }

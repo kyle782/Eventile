@@ -101,7 +101,7 @@ class WelcomePage extends React.Component {
                 <div>
                     <h1>Welcome to Eventile! </h1>
                     <p> Log sign up or sign in </p>
-                    <h2>Popular Events Nearby: </h2>
+                    <h2>Popular Events Nearby (London, Ontario): </h2>
                     <div className="card-columns">
                         {events}
                     </div>

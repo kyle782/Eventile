@@ -22,10 +22,14 @@ class Search extends React.Component {
         this.search = this.search.bind(this);
         this.fail = this.fail.bind(this);
         this.success = this.success.bind(this);
+        this.handleInputChange = this.handleInputChange.bind(this);
 
         this.state = {
             events: [],
-            auth: JSON.parse(localStorage.auth)
+            auth: JSON.parse(localStorage.auth),
+            sort_date: false,
+            sort_dist: false
+
         }
     }
 
@@ -37,7 +41,7 @@ class Search extends React.Component {
 
         this.setState({inProgress: true});
 
-        fetch("/api/search?q=" + query , {
+        fetch("/api/search?q=" + query + "&date=" + this.state.sort_date , {
             headers: {
                 'Authorization': 'Bearer ' + token
             }
@@ -68,15 +72,26 @@ class Search extends React.Component {
         return event.img_url;
     }
 
+    handleInputChange(event) {
+        const target = event.target;
+        const value = target.type === 'checkbox' ? target.checked : target.value;
+        const name = target.name;
+        console.log(target.type);
+
+        this.setState({
+            [name]: value
+        });
+    }
+
     render() {
 
         let events = this.state.events.map( (event) => {
             return <div className="card">
-                <a href={"/pub/event?q=" + event.eventbrite_id} target="_self">
+                <a href={"/event?q=" + event.eventbrite_id} target="_self">
                     <img className="card-img-top img-fluid" src={this.getImageURL(event)}/>
                 </a>
                 <div className="card-block">
-                    <a href={"/pub/event?q=" + event.eventbrite_id} target="_self">
+                    <a href={"/event?q=" + event.eventbrite_id} target="_self">
                         <h4 className="card-title">{event.name}</h4></a>
                     <p className="card-text">{event.description}</p><br/>
                 </div>
@@ -108,6 +123,36 @@ class Search extends React.Component {
                 <br/>
                 <div className="card-columns">
                     {events}
+                </div>
+
+                <h> Sort By  </h>
+
+                <div className="form-group">
+                    <label htmlFor="sort_date" className="col-sm-3 control-label">Date</label>
+                    <div className="col-sm-9">
+                        <input
+                            name="sort_date"
+                            className="form-check"
+                            type="checkbox"
+                            checked={this.state.sort_date}
+                            onChange={this.handleInputChange}
+                            ref="sort_date"
+                        />
+                    </div>
+                </div>
+
+                <div className="form-group">
+                    <label htmlFor="restrict_date" className="col-sm-3 control-label">Distance</label>
+                    <div className="col-sm-9">
+                        <input
+                            name="sort_dist"
+                            className="form-check"
+                            type="checkbox"
+                            checked={this.state.sort_dist}
+                            onChange={this.handleInputChange}
+                            ref="sort_dist"
+                        />
+                    </div>
                 </div>
             </div>
         )
