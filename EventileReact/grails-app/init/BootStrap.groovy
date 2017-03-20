@@ -1,6 +1,10 @@
+import grails3.example.Comment
+import grails3.example.Event
 import grails3.example.Role
 import grails3.example.User
 import grails3.example.UserRole
+
+
 
 class BootStrap {
 
@@ -13,7 +17,10 @@ class BootStrap {
         user1.addToPreferences("Film, Media & Entertainment").save()
         user1.addToCategory_ids("104").save()
 
-
+        def testEvent = new Event(name: "test1", description: "test", eventbrite_id: "0000", start_date: "test", eventbrite_url: "test", category_name: "test", total_rating: 5, num_ratings: 5, average_rating: 5, img_url: "test").save()
+        def testcomment = new Comment(comment: "test comment").save()
+        testEvent.addToComments(testcomment).save()
+        System.out.println(testEvent.getComments())
 
         def user2 = new User(username: 'test2', password: '2212', age: '100', location: 'London').save()
         UserRole.create(user2, role, true)
