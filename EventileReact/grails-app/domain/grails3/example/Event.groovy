@@ -2,11 +2,7 @@ package grails3.example
 
 class Event {
 
-<<<<<<< HEAD
-    static hasMany = [comments: Comment]
-=======
     static hasMany = [comments:Comment]
->>>>>>> 786ff47e010fdb16a5dc76808a8ea5009a86256a
 
     static constraints = {
         // need to make nullable since grails rejects storing the event in the database if they are null
