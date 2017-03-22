@@ -22,15 +22,18 @@ class WelcomePage extends React.Component {
     constructor() {
         super();
         this.getNearbyEvents = this.getNearbyEvents.bind(this);
-        //this.getLocation = this.getLocation.bind(this);
         this.fail = this.fail.bind(this);
         this.success = this.success.bind(this);
         this.success_ip = this.success_ip.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
 
         this.state = {
             events: [],
             loaded: false,
             location: 'London, Ontario',
+            new_location: '',
+            searching: false
         }
     }
 
@@ -46,18 +49,9 @@ class WelcomePage extends React.Component {
             .catch(this.fail)
     }
 
-    /**getLocation(){
-        fetch("api.db-ip.com/addrinfo?api_key=bc2ab711d740d7cfa6fcb0ca8822cb327e38844f&addr=129.100.93.162", {
-            method: "GET"
-        })
-            .then(checkStatus)
-            .then(this.success_ip)
-            .catch(this.fail)
-    }**/
-
     success(events) {
         console.log("Search result", events);
-        this.setState({events: events, loaded: true});
+        this.setState({events: events, loaded: true, searching: false});
     }
 
     success_ip(ip) {
@@ -67,11 +61,22 @@ class WelcomePage extends React.Component {
 
     fail(error) {
         console.error("Search has failed", error);
-        this.setState({loaded: true});
+        this.setState({loaded: true, searching: false});
     }
 
     getImageURL(event){
         return event.img_url;
+    }
+
+    handleChange(event) {
+        this.setState({new_location: event.target.value});
+    }
+
+    handleSubmit(event) {
+        console.log("new location: " + this.state.new_location);
+        this.setState({location: this.state.new_location, searching: true, loaded: false});
+        this.getNearbyEvents();
+        event.preventDefault();
     }
 
     render() {
@@ -81,6 +86,8 @@ class WelcomePage extends React.Component {
         }
         let events = this.state.events.map( (event) => {
             return <div className="card">
+                {this.state.searching ? null :
+                    <div>
                         <a href={"/pub/event?q=" + event.eventbrite_id} target="_self">
                             <img className="card-img-top img-fluid" src={this.getImageURL(event)}/>
                         </a>
@@ -93,22 +100,46 @@ class WelcomePage extends React.Component {
                             <small className="text-muted"> Category: {event.category_name} </small>
                         </div>
                     </div>
+                }
+            </div>
         });
         return (
+           <div className="main">
+               <div className="intro-header">
+                   <div className="container">
+                       <div className="row">
+                           <div className="col-lg-12">
+                               <div className="intro-message">
+                                   <h1>Welcome to Eventile!</h1>
+                                   <h3>Register/Login to find personalized events nearby!</h3>
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+               </div>
 
-
-            <div className="container">
-                <div>
-                    <h1>Welcome to Eventile! </h1>
-                    <p> Log sign up or sign in </p>
-                    <h2>Popular Events Nearby (London, Ontario): </h2>
-                    <div className="card-columns">
-                        {events}
+                <div className="container">
+                    <div>
+                        <br/>
+                        <center><h2>Popular Events Nearby (London, Ontario)</h2></center>
+                        <hr/>
+                        <form onSubmit={this.handleSubmit} className="form-inline">
+                            <label>Not your location? Change it here: &ensp; </label>
+                            <input type="text" value={this.state.new_location} onChange={this.handleChange}
+                                   className="form-control" placeholder="London, Ontario"/>
+                            <input type="submit" value="Submit" className="btn btn-default"/>
+                        </form>
+                        <br/>
+                        { this.state.searching ?
+                            <p>Searching....please wait...</p> :
+                            null
+                        }
+                        <div className="card-columns">
+                            {events}
+                        </div>
                     </div>
                 </div>
-            </div>
-
-
+           </div>
         )
     }
 

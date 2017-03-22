@@ -27498,8 +27498,21 @@
 	                            null,
 	                            _react2.default.createElement(
 	                                _reactRouter.Link,
+	                                { to: '/signup' },
+	                                'Register'
+	                            )
+	                        )
+	                    ),
+	                    this.state.loggedIn ? null : _react2.default.createElement(
+	                        'ul',
+	                        { className: 'nav navbar-nav navbar-right' },
+	                        _react2.default.createElement(
+	                            'li',
+	                            null,
+	                            _react2.default.createElement(
+	                                _reactRouter.Link,
 	                                { to: '/signin' },
-	                                'Sign in'
+	                                'Login'
 	                            )
 	                        )
 	                    )
@@ -27654,22 +27667,37 @@
 	                return _react2.default.createElement(
 	                    'p',
 	                    { className: 'alert alert-danger' },
-	                    _this2.state.error,
-	                    ' ',
-	                    _react2.default.createElement(
-	                        _reactRouter.Link,
-	                        { to: '/signup' },
-	                        'Sign up'
-	                    )
+	                    _this2.state.error
 	                );
 	            };
 	            return _react2.default.createElement(
 	                'div',
 	                { className: 'col-sm-4 col-sm-offset-4' },
 	                this.state.error ? _react2.default.createElement(Error, null) : null,
-	                _react2.default.createElement(_userForm2.default, { submitLabel: 'Sign in', onSubmit: this.signIn, ref: function ref(_ref) {
+	                _react2.default.createElement(
+	                    'center',
+	                    null,
+	                    _react2.default.createElement(
+	                        'h2',
+	                        null,
+	                        ' Login Page '
+	                    )
+	                ),
+	                _react2.default.createElement('hr', null),
+	                _react2.default.createElement(_userForm2.default, { submitLabel: 'Login!', onSubmit: this.signIn, ref: function ref(_ref) {
 	                        return _this2.form = _ref;
-	                    } })
+	                    } }),
+	                _react2.default.createElement('hr', null),
+	                _react2.default.createElement(
+	                    'p',
+	                    null,
+	                    'No account? ',
+	                    _react2.default.createElement(
+	                        _reactRouter.Link,
+	                        { to: '/signup' },
+	                        'Register here'
+	                    )
+	                )
 	            );
 	        }
 	    }]);
@@ -27737,7 +27765,7 @@
 	                        { className: 'col-sm-9' },
 	                        _react2.default.createElement('input', { type: 'text',
 	                            className: 'form-control', id: 'signin-name',
-	                            placeholder: 'Name',
+	                            placeholder: 'Username',
 	                            ref: 'name'
 	                        })
 	                    )
@@ -28374,6 +28402,16 @@
 	                'div',
 	                { className: 'col-sm-4 col-sm-offset-4' },
 	                this.state.error ? _react2.default.createElement(Error, null) : null,
+	                _react2.default.createElement(
+	                    'center',
+	                    null,
+	                    _react2.default.createElement(
+	                        'h2',
+	                        null,
+	                        ' Registration Page '
+	                    )
+	                ),
+	                _react2.default.createElement('hr', null),
 	                _react2.default.createElement(_newSignup2.default, { submitLabel: 'Sign up', onSubmit: this.signUp, ref: function ref(_ref) {
 	                        return _this2.form = _ref;
 	                    } })
@@ -28484,7 +28522,7 @@
 	                        { className: 'col-sm-9' },
 	                        _react2.default.createElement('input', { type: 'text',
 	                            className: 'form-control', id: 'signin-name',
-	                            placeholder: 'Name',
+	                            placeholder: 'Username',
 	                            ref: 'name'
 	                        })
 	                    )
@@ -28518,7 +28556,7 @@
 	                    ),
 	                    _react2.default.createElement(
 	                        'div',
-	                        { className: 'col-sm-9' },
+	                        { className: 'col-sm-2' },
 	                        _react2.default.createElement('input', { type: 'age',
 	                            className: 'form-control',
 	                            id: 'signin-age',
@@ -28546,6 +28584,17 @@
 	                        })
 	                    )
 	                ),
+	                _react2.default.createElement('hr', null),
+	                _react2.default.createElement(
+	                    'center',
+	                    null,
+	                    _react2.default.createElement(
+	                        'h4',
+	                        null,
+	                        ' Tell us what you are interested in: '
+	                    )
+	                ),
+	                _react2.default.createElement('br', null),
 	                _react2.default.createElement(
 	                    'div',
 	                    { className: 'form-group' },
@@ -29114,8 +29163,6 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -29151,6 +29198,8 @@
 	            sort_date: false,
 	            sort_dist: false
 
+	            found_events: true,
+	            auth: JSON.parse(localStorage.auth)
 	        };
 	        return _this;
 	    }
@@ -29175,7 +29224,13 @@
 	        key: 'success',
 	        value: function success(events) {
 	            console.log("Search result", events);
+	            console.log("number of events = " + events.length);
 	            this.setState({ events: events, inProgress: false });
+	            if (events.length > 0) {
+	                this.setState({ found_events: true });
+	            } else {
+	                this.setState({ found_events: false });
+	            }
 	        }
 	    }, {
 	        key: 'fail',
@@ -29251,9 +29306,30 @@
 	                    )
 	                );
 	            });
+	            var Error = function Error() {
+	                return _react2.default.createElement(
+	                    'div',
+	                    { className: 'container' },
+	                    _react2.default.createElement(
+	                        'p',
+	                        { className: 'alert alert-danger' },
+	                        'Sorry, no events found!'
+	                    )
+	                );
+	            };
 	            return _react2.default.createElement(
 	                'div',
 	                { className: 'container' },
+	                _react2.default.createElement(
+	                    'center',
+	                    null,
+	                    _react2.default.createElement(
+	                        'h2',
+	                        null,
+	                        ' Search Page '
+	                    )
+	                ),
+	                _react2.default.createElement('hr', null),
 	                _react2.default.createElement(
 	                    'div',
 	                    { className: 'row' },
@@ -29262,10 +29338,10 @@
 	                        { className: 'container' },
 	                        _react2.default.createElement(
 	                            'form',
-	                            { className: 'form-inline col-lg-12', onSubmit: this.search },
+	                            { className: 'col-lg-7', onSubmit: this.search },
 	                            _react2.default.createElement(
 	                                'div',
-	                                { className: 'form-group' },
+	                                { className: 'form-group col-lg-7' },
 	                                _react2.default.createElement(
 	                                    'label',
 	                                    { className: 'sr-only', htmlFor: 'query' },
@@ -29274,7 +29350,7 @@
 	                                _react2.default.createElement('input', { type: 'text',
 	                                    className: 'form-control',
 	                                    id: 'query',
-	                                    placeholder: 'Query',
+	                                    placeholder: 'Enter your search query here! Example: drake',
 	                                    ref: 'query',
 	                                    disabled: this.state.inProgress
 	                                })
@@ -29282,16 +29358,17 @@
 	                            _react2.default.createElement(
 	                                'button',
 	                                { type: 'submit', className: 'btn btn-default', disabled: this.state.inProgress },
-	                                'Search'
+	                                'Search!'
 	                            )
 	                        )
 	                    )
 	                ),
 	                _react2.default.createElement('br', null),
-	                _react2.default.createElement(
+	                this.state.found_events ? _react2.default.createElement(
 	                    'div',
 	                    { className: 'card-columns' },
 	                    events
+	                ) : _react2.default.createElement(Error, null)
 	                ),
 	                _react2.default.createElement(
 	                    'h',
@@ -29475,26 +29552,42 @@
 	            return _react2.default.createElement(
 	                'div',
 	                null,
-	                'Name: ',
-	                this.state.name,
-	                ' ',
-	                _react2.default.createElement('br', null),
-	                'Location: ',
-	                this.state.location,
-	                ' ',
-	                _react2.default.createElement('br', null),
-	                'Age: ',
-	                this.state.age,
-	                ' ',
-	                _react2.default.createElement('br', null),
 	                _react2.default.createElement(
-	                    'h2',
+	                    'center',
 	                    null,
-	                    ' Selected Preferences: '
+	                    _react2.default.createElement(
+	                        'h2',
+	                        null,
+	                        ' Profile Page for ',
+	                        this.state.name,
+	                        ' '
+	                    )
 	                ),
-	                ' ',
-	                _react2.default.createElement('br', null),
-	                prefs
+	                _react2.default.createElement('hr', null),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'container' },
+	                    'Name: ',
+	                    this.state.name,
+	                    ' ',
+	                    _react2.default.createElement('br', null),
+	                    'Location: ',
+	                    this.state.location,
+	                    ' ',
+	                    _react2.default.createElement('br', null),
+	                    'Age: ',
+	                    this.state.age,
+	                    ' ',
+	                    _react2.default.createElement('br', null),
+	                    _react2.default.createElement(
+	                        'h2',
+	                        null,
+	                        ' Selected Preferences: '
+	                    ),
+	                    ' ',
+	                    _react2.default.createElement('br', null),
+	                    prefs
+	                )
 	            );
 	        }
 	    }]);
@@ -29764,15 +29857,18 @@
 	        var _this = _possibleConstructorReturn(this, (WelcomePage.__proto__ || Object.getPrototypeOf(WelcomePage)).call(this));
 
 	        _this.getNearbyEvents = _this.getNearbyEvents.bind(_this);
-	        //this.getLocation = this.getLocation.bind(this);
 	        _this.fail = _this.fail.bind(_this);
 	        _this.success = _this.success.bind(_this);
 	        _this.success_ip = _this.success_ip.bind(_this);
+	        _this.handleChange = _this.handleChange.bind(_this);
+	        _this.handleSubmit = _this.handleSubmit.bind(_this);
 
 	        _this.state = {
 	            events: [],
 	            loaded: false,
-	            location: 'London, Ontario'
+	            location: 'London, Ontario',
+	            new_location: '',
+	            searching: false
 	        };
 	        return _this;
 	    }
@@ -29787,21 +29883,11 @@
 
 	            fetch("/welcome_search?location=" + location).then(checkStatus).then(this.success).catch(this.fail);
 	        }
-
-	        /**getLocation(){
-	            fetch("api.db-ip.com/addrinfo?api_key=bc2ab711d740d7cfa6fcb0ca8822cb327e38844f&addr=129.100.93.162", {
-	                method: "GET"
-	            })
-	                .then(checkStatus)
-	                .then(this.success_ip)
-	                .catch(this.fail)
-	        }**/
-
 	    }, {
 	        key: 'success',
 	        value: function success(events) {
 	            console.log("Search result", events);
-	            this.setState({ events: events, loaded: true });
+	            this.setState({ events: events, loaded: true, searching: false });
 	        }
 	    }, {
 	        key: 'success_ip',
@@ -29813,12 +29899,25 @@
 	        key: 'fail',
 	        value: function fail(error) {
 	            console.error("Search has failed", error);
-	            this.setState({ loaded: true });
+	            this.setState({ loaded: true, searching: false });
 	        }
 	    }, {
 	        key: 'getImageURL',
 	        value: function getImageURL(event) {
 	            return event.img_url;
+	        }
+	    }, {
+	        key: 'handleChange',
+	        value: function handleChange(event) {
+	            this.setState({ new_location: event.target.value });
+	        }
+	    }, {
+	        key: 'handleSubmit',
+	        value: function handleSubmit(event) {
+	            console.log("new location: " + this.state.new_location);
+	            this.setState({ location: this.state.new_location, searching: true, loaded: false });
+	            this.getNearbyEvents();
+	            event.preventDefault();
 	        }
 	    }, {
 	        key: 'render',
@@ -29833,68 +29932,120 @@
 	                return _react2.default.createElement(
 	                    'div',
 	                    { className: 'card' },
-	                    _react2.default.createElement(
-	                        'a',
-	                        { href: "/pub/event?q=" + event.eventbrite_id, target: '_self' },
-	                        _react2.default.createElement('img', { className: 'card-img-top img-fluid', src: _this2.getImageURL(event) })
-	                    ),
-	                    _react2.default.createElement(
+	                    _this2.state.searching ? null : _react2.default.createElement(
 	                        'div',
-	                        { className: 'card-block' },
+	                        null,
 	                        _react2.default.createElement(
 	                            'a',
 	                            { href: "/pub/event?q=" + event.eventbrite_id, target: '_self' },
+	                            _react2.default.createElement('img', { className: 'card-img-top img-fluid', src: _this2.getImageURL(event) })
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'card-block' },
 	                            _react2.default.createElement(
-	                                'h4',
-	                                { className: 'card-title' },
-	                                event.name
+	                                'a',
+	                                { href: "/pub/event?q=" + event.eventbrite_id, target: '_self' },
+	                                _react2.default.createElement(
+	                                    'h4',
+	                                    { className: 'card-title' },
+	                                    event.name
+	                                )
+	                            ),
+	                            _react2.default.createElement(
+	                                'p',
+	                                { className: 'card-text' },
+	                                event.description
+	                            ),
+	                            _react2.default.createElement('br', null)
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'card-footer' },
+	                            _react2.default.createElement(
+	                                'small',
+	                                { className: 'text-muted' },
+	                                ' Category: ',
+	                                event.category_name,
+	                                ' '
 	                            )
-	                        ),
-	                        _react2.default.createElement(
-	                            'p',
-	                            { className: 'card-text' },
-	                            event.description
-	                        ),
-	                        _react2.default.createElement('br', null)
-	                    ),
-	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'card-footer' },
-	                        _react2.default.createElement(
-	                            'small',
-	                            { className: 'text-muted' },
-	                            ' Category: ',
-	                            event.category_name,
-	                            ' '
 	                        )
 	                    )
 	                );
 	            });
 	            return _react2.default.createElement(
 	                'div',
-	                { className: 'container' },
+	                { className: 'main' },
 	                _react2.default.createElement(
 	                    'div',
-	                    null,
-	                    _react2.default.createElement(
-	                        'h1',
-	                        null,
-	                        'Welcome to Eventile! '
-	                    ),
-	                    _react2.default.createElement(
-	                        'p',
-	                        null,
-	                        ' Log sign up or sign in '
-	                    ),
-	                    _react2.default.createElement(
-	                        'h2',
-	                        null,
-	                        'Popular Events Nearby (London, Ontario): '
-	                    ),
+	                    { className: 'intro-header' },
 	                    _react2.default.createElement(
 	                        'div',
-	                        { className: 'card-columns' },
-	                        events
+	                        { className: 'container' },
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'row' },
+	                            _react2.default.createElement(
+	                                'div',
+	                                { className: 'col-lg-12' },
+	                                _react2.default.createElement(
+	                                    'div',
+	                                    { className: 'intro-message' },
+	                                    _react2.default.createElement(
+	                                        'h1',
+	                                        null,
+	                                        'Welcome to Eventile!'
+	                                    ),
+	                                    _react2.default.createElement(
+	                                        'h3',
+	                                        null,
+	                                        'Register/Login to find personalized events nearby!'
+	                                    )
+	                                )
+	                            )
+	                        )
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'container' },
+	                    _react2.default.createElement(
+	                        'div',
+	                        null,
+	                        _react2.default.createElement('br', null),
+	                        _react2.default.createElement(
+	                            'center',
+	                            null,
+	                            _react2.default.createElement(
+	                                'h2',
+	                                null,
+	                                'Popular Events Nearby (London, Ontario)'
+	                            )
+	                        ),
+	                        _react2.default.createElement('hr', null),
+	                        _react2.default.createElement(
+	                            'form',
+	                            { onSubmit: this.handleSubmit, className: 'form-inline' },
+	                            _react2.default.createElement(
+	                                'label',
+	                                null,
+	                                'Not your location? Change it here: \u2002 '
+	                            ),
+	                            _react2.default.createElement('input', { type: 'text', value: this.state.new_location, onChange: this.handleChange,
+	                                className: 'form-control', placeholder: 'London, Ontario' }),
+	                            _react2.default.createElement('input', { type: 'submit', value: 'Submit', className: 'btn btn-default' })
+	                        ),
+	                        _react2.default.createElement('br', null),
+	                        this.state.searching ? _react2.default.createElement(
+	                            'p',
+	                            null,
+	                            'Searching....please wait...'
+	                        ) : null,
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'card-columns' },
+	                            events
+	                        )
 	                    )
 	                )
 	            );

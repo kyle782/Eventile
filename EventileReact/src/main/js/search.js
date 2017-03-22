@@ -30,6 +30,8 @@ class Search extends React.Component {
             sort_date: false,
             sort_dist: false
 
+            found_events: true,
+            auth: JSON.parse(localStorage.auth)
         }
     }
 
@@ -53,7 +55,13 @@ class Search extends React.Component {
 
     success(events) {
         console.log("Search result", events);
+        console.log("number of events = " + events.length);
         this.setState({events: events, inProgress: false});
+        if (events.length > 0){
+            this.setState({found_events: true});
+        } else {
+            this.setState({found_events: false});
+        }
     }
 
     fail(error) {
@@ -100,31 +108,32 @@ class Search extends React.Component {
                 </div>
             </div>
         });
+        let Error = () => <div className="container">
+            <p className="alert alert-danger">Sorry, no events found!</p>
+        </div>;
         return (
 
             <div className="container">
+                <center><h2> Search Page </h2></center>
+                <hr/>
                 <div className="row">
                     <div className="container">
-                        <form className="form-inline col-lg-12" onSubmit={this.search} >
-                            <div className="form-group">
+                        <form className="col-lg-7" onSubmit={this.search} >
+                            <div className="form-group col-lg-7">
                                 <label className="sr-only" htmlFor="query">Search:</label>
                                 <input type="text"
                                        className="form-control"
                                        id="query"
-                                       placeholder="Query"
+                                       placeholder="Enter your search query here! Example: drake"
                                        ref="query"
                                        disabled={this.state.inProgress}
                                 />
                             </div>
-                            <button type="submit" className="btn btn-default" disabled={this.state.inProgress}>Search</button>
+                            <button type="submit" className="btn btn-default" disabled={this.state.inProgress}>Search!</button>
                         </form>
                     </div>
                 </div>
                 <br/>
-                <div className="card-columns">
-                    {events}
-                </div>
-
                 <h> Sort By  </h>
 
                 <div className="form-group">
@@ -154,6 +163,13 @@ class Search extends React.Component {
                         />
                     </div>
                 </div>
+                {this.state.found_events ?
+                    <div className="card-columns">
+                        {events}
+                    </div>
+                    :
+                    <Error/>
+                }
             </div>
         )
     }
