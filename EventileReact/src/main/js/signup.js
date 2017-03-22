@@ -86,6 +86,8 @@ class SignUp extends React.Component {
 
             <div className="col-sm-4 col-sm-offset-4">
                 { this.state.error ? <Error/> : null }
+                <center><h2> Registration Page </h2></center>
+                <hr/>
                 <UserForm submitLabel="Sign up" onSubmit={this.signUp} ref={ (ref) => this.form = ref }/>
 
             </div>

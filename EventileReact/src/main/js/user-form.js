@@ -17,7 +17,7 @@ class UserForm extends React.Component {
                         <div className="col-sm-9">
                             <input type="text"
                                    className="form-control" id="signin-name"
-                                   placeholder="Name"
+                                   placeholder="Username"
                                    ref="name"
                             />
                         </div>
