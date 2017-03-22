@@ -9,7 +9,6 @@ build/
 .project
 .settings
 .classpath
-EventileReact/node_modules/**
 EventileReact/out/**
 EventileReact/build/**
 EventileReact/.gradle/**
