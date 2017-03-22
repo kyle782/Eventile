@@ -10,3 +10,8 @@ build/
 .settings
 .classpath
 EventileReact/out/**
+<<<<<<< HEAD
+=======
+EventileReact/build/**
+EventileReact/.gradle/**
+>>>>>>> chris

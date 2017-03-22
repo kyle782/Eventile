@@ -29747,6 +29747,7 @@
 	            if (this.state.loaded == false) {
 	                this.getEvent();
 	            }
+
 	            var this_event = _react2.default.createElement(
 	                'div',
 	                { className: 'col-sm-12 col-md-12 col-lg-12 tweet' },
@@ -29780,18 +29781,28 @@
 	                    this_event
 	                ),
 	                _react2.default.createElement(
-	                    'button',
-	                    { type: 'submit', onClick: function onClick() {
+	                    'fieldset',
+	                    { className: 'rating' },
+	                    _react2.default.createElement('input', { type: 'radio', id: 'star5', name: 'rating', value: '5', onClick: function onClick() {
 	                            return _this2.update_rating(5);
-	                        } },
-	                    'Rate 5 '
-	                ),
-	                _react2.default.createElement(
-	                    'button',
-	                    { type: 'submit', onClick: function onClick() {
+	                        } }),
+	                    _react2.default.createElement('label', { className: 'full', htmlFor: 'star5', title: 'Awesome - 5 stars' }),
+	                    _react2.default.createElement('input', { type: 'radio', id: 'star4', name: 'rating', value: '4', onClick: function onClick() {
+	                            return _this2.update_rating(4);
+	                        } }),
+	                    _react2.default.createElement('label', { className: 'full', htmlFor: 'star4', title: 'Pretty good - 4 stars' }),
+	                    _react2.default.createElement('input', { type: 'radio', id: 'star3', name: 'rating', value: '3', onClick: function onClick() {
+	                            return _this2.update_rating(3);
+	                        } }),
+	                    _react2.default.createElement('label', { className: 'full', htmlFor: 'star3', title: 'Meh - 3 stars' }),
+	                    _react2.default.createElement('input', { type: 'radio', id: 'star2', name: 'rating', value: '2', onClick: function onClick() {
+	                            return _this2.update_rating(2);
+	                        } }),
+	                    _react2.default.createElement('label', { className: 'full', htmlFor: 'star2', title: 'Kinda bad - 2 stars' }),
+	                    _react2.default.createElement('input', { type: 'radio', id: 'star1', name: 'rating', value: '1', onClick: function onClick() {
 	                            return _this2.update_rating(1);
-	                        } },
-	                    'Rate 1 '
+	                        } }),
+	                    _react2.default.createElement('label', { className: 'full', htmlFor: 'star1', title: 'Sucks big time - 1 star' })
 	                )
 	            );
 	        }
