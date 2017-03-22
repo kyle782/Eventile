@@ -82,12 +82,16 @@ class UserPage extends React.Component {
         return (
 
             <div>
-                Name: {this.state.name} <br/>
-                Location: {this.state.location} <br/>
-                Age: {this.state.age} <br/>
+                <center><h2> Profile Page for {this.state.name} </h2></center>
+                <hr/>
+                <div className="container">
+                    Name: {this.state.name} <br/>
+                    Location: {this.state.location} <br/>
+                    Age: {this.state.age} <br/>
 
-                <h2> Selected Preferences: </h2> <br/>
-                {prefs}
+                    <h2> Selected Preferences: </h2> <br/>
+                    {prefs}
+                </div>
             </div>
 
         )
