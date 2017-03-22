@@ -375,6 +375,7 @@ class UserForm extends React.Component {
                     </div>
                 </div>
 
+
                 {/** Submit button **/}
 
                 <div className="form-group">
