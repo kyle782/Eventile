@@ -30156,7 +30156,8 @@
 	            description: '',
 	            category: '',
 	            rating: '.....',
-	            loaded: false
+	            loaded: false,
+	            comments: []
 	        };
 
 	        return _this;
@@ -30169,6 +30170,9 @@
 	                category: event_result.category_name });
 	            if (event_result.num_ratings != 0) {
 	                this.setState({ rating: event_result.average_rating, loaded: true });
+	            }
+	            if (event_result.comments.length != 0) {
+	                this.setState({ comments: event_result.comments });
 	            }
 	        }
 	    }, {
@@ -30243,6 +30247,16 @@
 	                'Rating: ',
 	                this.state.rating
 	            );
+	            var this_comment = _react2.default.createElement(
+	                'div',
+	                { className: 'col-sm-12 col-md-12 col-lg-12 tweet' },
+	                _react2.default.createElement(
+	                    'b',
+	                    null,
+	                    this.state.comments
+	                )
+	            );
+
 	            return _react2.default.createElement(
 	                'div',
 	                null,
@@ -30255,6 +30269,11 @@
 	                    'div',
 	                    { className: 'col-lg-12' },
 	                    this_event
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'col-lg-12' },
+	                    this_comment
 	                )
 	            );
 	        }

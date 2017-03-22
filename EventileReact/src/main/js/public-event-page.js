@@ -35,6 +35,7 @@ class PublicEventPage extends React.Component {
             category: '',
             rating: '.....',
             loaded: false,
+            comments: []
         }
 
     }
@@ -45,6 +46,10 @@ class PublicEventPage extends React.Component {
         if (event_result.num_ratings != 0){
             this.setState({rating: event_result.average_rating, loaded: true})
         }
+        if (event_result.comments.length !=0){
+            this.setState({comments: event_result.comments})
+        }
+
     }
 
 
@@ -105,11 +110,19 @@ class PublicEventPage extends React.Component {
                 <b>{this.state.name}</b>: {this.state.description} <br/> Category: {this.state.category} <br/>
                 Rating: {this.state.rating}
             </div>;
+        let this_comment =
+            <div className="col-sm-12 col-md-12 col-lg-12 tweet">
+                <b>{this.state.comments}</b>
+            </div>;
+
         return (
             <div>
                 <h1>Hello World</h1>
                 <div className="col-lg-12">
                     {this_event}
+                </div>
+                <div className="col-lg-12">
+                    {this_comment}
                 </div>
             </div>
 
