@@ -111,6 +111,7 @@ class EventPage extends React.Component {
         if (this.state.loaded == false){
             this.getEvent();
         }
+
         let this_event =
             <div className="col-sm-12 col-md-12 col-lg-12 tweet">
                 <b>{this.state.name}</b>: {this.state.description} <br/> Category: {this.state.category} <br/>
@@ -122,8 +123,13 @@ class EventPage extends React.Component {
                 <div className="col-lg-12">
                     {this_event}
                 </div>
-                <button type="submit" onClick={() => this.update_rating(5)}>Rate 5 </button>
-                <button type="submit" onClick={() => this.update_rating(1)}>Rate 1 </button>
+                <fieldset className="rating">
+                    <input type="radio" id="star5" name="rating" value="5" onClick={() => this.update_rating(5)}/><label className="full" htmlFor="star5" title="Awesome - 5 stars"></label>
+                    <input type="radio" id="star4" name="rating" value="4" onClick={() => this.update_rating(4)}/><label className="full" htmlFor="star4" title="Pretty good - 4 stars"></label>
+                    <input type="radio" id="star3" name="rating" value="3" onClick={() => this.update_rating(3)}/><label className="full" htmlFor="star3" title="Meh - 3 stars"></label>
+                    <input type="radio" id="star2" name="rating" value="2" onClick={() => this.update_rating(2)}/><label className="full" htmlFor="star2" title="Kinda bad - 2 stars"></label>
+                    <input type="radio" id="star1" name="rating" value="1" onClick={() => this.update_rating(1)}/><label className="full" htmlFor="star1" title="Sucks big time - 1 star"></label>
+                </fieldset>
             </div>
 
         )
