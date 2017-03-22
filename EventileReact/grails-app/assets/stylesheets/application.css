@@ -283,7 +283,8 @@
 
 .card-img-top {
     border-top-right-radius: calc(.25rem - 1px);
-    border-top-left-radius: calc(.25rem - 1px)
+    border-top-left-radius: calc(.25rem - 1px);
+    max-width: 100%;
 }
 
 .card-img-bottom {
@@ -397,8 +398,8 @@
     }
 
     .card-columns .card {
-        display: inline-block;
-        width: 100%;
+        display: inline-block !important;
+        width: 100% !important;
         margin-bottom: .75rem
     }
 }

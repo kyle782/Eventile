@@ -72,7 +72,7 @@ class UserForm extends React.Component {
                 </div>
                 <div className="form-group">
                     <label htmlFor="signin-age" className="col-sm-3 control-label">Age</label>
-                    <div className="col-sm-2">
+                    <div className="col-sm-3">
                         <input type="age"
                                className="form-control"
                                id="signin-age"

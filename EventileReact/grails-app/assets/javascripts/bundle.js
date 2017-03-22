@@ -28556,7 +28556,7 @@
 	                    ),
 	                    _react2.default.createElement(
 	                        'div',
-	                        { className: 'col-sm-2' },
+	                        { className: 'col-sm-3' },
 	                        _react2.default.createElement('input', { type: 'age',
 	                            className: 'form-control',
 	                            id: 'signin-age',
@@ -29163,6 +29163,8 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -29196,10 +29198,8 @@
 	            events: [],
 	            auth: JSON.parse(localStorage.auth),
 	            sort_date: false,
-	            sort_dist: false
-
-	            found_events: true,
-	            auth: JSON.parse(localStorage.auth)
+	            sort_dist: false,
+	            found_events: true
 	        };
 	        return _this;
 	    }
@@ -29364,12 +29364,6 @@
 	                    )
 	                ),
 	                _react2.default.createElement('br', null),
-	                this.state.found_events ? _react2.default.createElement(
-	                    'div',
-	                    { className: 'card-columns' },
-	                    events
-	                ) : _react2.default.createElement(Error, null)
-	                ),
 	                _react2.default.createElement(
 	                    'h',
 	                    null,
@@ -29416,7 +29410,12 @@
 	                            ref: 'sort_dist'
 	                        })
 	                    )
-	                )
+	                ),
+	                this.state.found_events ? _react2.default.createElement(
+	                    'div',
+	                    { className: 'card-columns' },
+	                    events
+	                ) : _react2.default.createElement(Error, null)
 	            );
 	        }
 	    }]);
@@ -30277,15 +30276,21 @@
 	                    'div',
 	                    null,
 	                    _react2.default.createElement(
-	                        'h1',
+	                        'center',
 	                        null,
-	                        'Home Dashboard'
+	                        _react2.default.createElement(
+	                            'h2',
+	                            null,
+	                            ' Your Home Dashboard '
+	                        )
 	                    ),
+	                    _react2.default.createElement('hr', null),
 	                    _react2.default.createElement(
 	                        'h3',
 	                        null,
-	                        'Your Personalized Events:'
+	                        'Here are your personalized events:'
 	                    ),
+	                    _react2.default.createElement('br', null),
 	                    _react2.default.createElement(
 	                        'div',
 	                        { className: 'card-columns' },

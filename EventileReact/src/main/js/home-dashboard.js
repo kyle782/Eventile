@@ -157,8 +157,10 @@ class HomeDashboard extends React.Component {
 
             <div className="container">
                 <div>
-                    <h1>Home Dashboard</h1>
-                    <h3>Your Personalized Events:</h3>
+                    <center><h2> Your Home Dashboard </h2></center>
+                    <hr/>
+                    <h3>Here are your personalized events:</h3>
+                    <br/>
                     <div className="card-columns">
                         {events}
                     </div>
