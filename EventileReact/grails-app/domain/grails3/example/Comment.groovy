@@ -8,6 +8,9 @@ class Comment {
     String dateCreated
 
     static constraints = {
+        event nullable: true
+        comment_body nullable: true
+        dateCreated nullable: true
     }
 
 }

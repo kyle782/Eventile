@@ -28,8 +28,7 @@ class EventPage extends React.Component {
         this.update_rating = this.update_rating.bind(this);
         this.success_update_rating = this.success_update_rating.bind(this);
         this.render = this.render.bind(this);
-        this.handleRSVP = this.handleRSVP.bind(this);
-        this.success_rsvp = this.success_rsvp.bind(this);
+        this.saveComment = this.saveComment.bind(this);
 
         this.state = {
             name: 'Loading...',
@@ -40,8 +39,6 @@ class EventPage extends React.Component {
             venue_address: '',
             venue_longitude: '',
             venue_latitude: '',
-            eventbrite_id: '',
-            user_RSVP: false,
             loaded: false,
             auth: JSON.parse(localStorage.auth),
             comments: []
@@ -54,7 +51,7 @@ class EventPage extends React.Component {
         this.setState({
             name: event_result.name, description: event_result.description,
             category: event_result.category_name, venue_address: event_result.venue_address,
-            venue_longitude: event_result.longitude, venue_latitude: event_result.latitude, eventbrite_id: event_result.eventbrite_id
+            venue_longitude: event_result.longitude, venue_latitude: event_result.latitude
         });
         if (event_result.num_ratings != 0) {
             this.setState({rating: event_result.average_rating})
@@ -62,9 +59,9 @@ class EventPage extends React.Component {
         if (event_result.image_url != ""){
             this.setState({image_url: event_result.img_url})
         }
-        console.log(event_result.comments.length)
+        console.log(event_result.comments.length);
         if (event_result.comments.length !=0){
-            this.setState({comments:event_result.comments})
+            this.setState({comments: event_result.comments})
         }
     }
 
@@ -92,6 +89,12 @@ class EventPage extends React.Component {
             .then(checkStatus)
             .then(this.success_found_event)
             .catch(this.fail)
+
+    }
+
+    saveComment(event_result){
+        console.log("event_result is ", event_result);
+        this.setState({comments: event_result.comments});
 
     }
 
@@ -125,47 +128,15 @@ class EventPage extends React.Component {
         this.setState({rating: event_result.average_rating});
     }
 
-    handleRSVP(){
-        console.log("ok rsvping");
-
-        if (this.state.user_RSVP){
-            // user is RSVP'd to the event, remove the event from their rsvp
-            this.setState({user_RSVP: false})
-        } else {
-            // user is not RSVP'd to the event, add it to their rsvp
-            let token = this.state.auth.access_token;
-
-            let eventbrite_id = this.state.eventbrite_id;
-
-            // make PUT REST call to be handled by UserController (mapped in urlMappings.groovy)
-            fetch("/api/user/addRSVP?eventbrite_id=" + eventbrite_id, {
-                method: 'PUT',
-                headers: {
-                    'Authorization': 'Bearer ' + token
-                }
-            })
-                .then(checkStatus)
-                .then(this.success_rsvp)
-                .catch(this.fail);
-
-
-        }
-    }
-
-    success_rsvp(){
-        console.log("rsvp'd!");
-        this.setState({user_RSVP: true});
-    }
-
     render() {
         // stops the infinite looping & app crashing
         if (this.state.loaded == false) {
             this.getEvent();
         }
-        let comments = this.state.comments.map( (thecomments) => {
+        let comments = this.state.comments.map( (comment) => {
             return <div className="main">
-                <p>thecomments.comment_body </p>
-                <p>thecomments.dateCreated</p>
+                <p>{comment.comment_body} </p>
+                <p>{comment.dateCreated}</p>
             </div>
         });
 
@@ -210,13 +181,28 @@ class EventPage extends React.Component {
                                onClick={() => this.update_rating(1)}/><label className="full" htmlFor="star1"
                                                                              title="Sucks big time - 1 star"/>
                     </fieldset>
-
-                    {this.state.user_RSVP ? <button type="RSVP" onClick={() => this.handleRSVP()}>Revoke RSVP</button>
-                        : <button type="RSVP" onClick={() => this.handleRSVP()}>RSVP!</button> }
-
+                    <br/>
                     <h2> Comments: </h2> <br/>
                     {comments}
 
+                    <br/>
+
+                    <div className="row">
+                        <div className="container">
+                            <form className="col-lg-7" onSubmit={this.saveComment}>
+                                <div className="form-group col-lg-7">
+                                    <label className="sr-only" htmlFor="query">Search</label>
+                                    <input type="text"
+                                           className="form-control"
+                                           id="query"
+                                           placeholder="Enter your comments here"
+                                           ref="query"
+                                    />
+                                </div>
+                                <button type="submit" className="btn btn-default">Submit</button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
 

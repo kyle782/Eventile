@@ -6,7 +6,7 @@ class CommentController {
         def comment = new Comment(params)
         comment.event = Event.get(params.postId)
         if(comment.save()) {
-            redirect(controller:'post', action:'view', id:params.postId)
+            redirect(controller:'event', action:'view', id:params.postId)
         } else {
             render(view:'edit', model:[comment:comment, postId:params.postId])
         }
