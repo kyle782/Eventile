@@ -29381,7 +29381,6 @@
 	                        )
 	                    )
 	                ),
-	                _react2.default.createElement('br', null),
 	                _react2.default.createElement('hr', null),
 	                _react2.default.createElement(
 	                    'div',
@@ -30474,7 +30473,8 @@
 	            venue_address: '',
 	            venue_longitude: '',
 	            venue_latitude: '',
-	            loaded: false
+	            loaded: false,
+	            comments: []
 	        };
 
 	        return _this;

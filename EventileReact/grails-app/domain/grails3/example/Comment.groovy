@@ -5,6 +5,7 @@ class Comment {
     static belongsTo = [event: Event]
 
     String comment_body
+    String dateCreated
 
     static constraints = {
     }
