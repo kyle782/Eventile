@@ -11,6 +11,7 @@ import EventPage from './event-page';
 import WelcomePage from './welcome-page';
 import HomeDashboard from './home-dashboard';
 import PublicEventPage from './public-event-page';
+import CreateEvent from './create-event';
 import auth from './auth';
 
 const Paths = {
@@ -22,7 +23,8 @@ const Paths = {
     EVENTPAGE: "/event",
     WELCOME: "/welcome",
     HOME: "/home",
-    PUBLICEVENTPAGE: "/pub/event"
+    PUBLICEVENTPAGE: "/pub/event",
+    CREATEEVENT: "/create-event"
 };
 
 const Greet = () =>
@@ -81,6 +83,7 @@ ReactDOM.render(
             <Route path={Paths.WELCOME} component={WelcomePage}/>
             <Route path={Paths.HOME} component={HomeDashboard} onEnter={checkAuth}/>
             <Route path={Paths.PUBLICEVENTPAGE} component={PublicEventPage} onEnter={checkAuth}/>
+            <Route path={Paths.CREATEEVENT} component={CreateEvent} onEnter={checkAuth}/>
 
             <Route path="*" component={NotFound} />
         </Route>
