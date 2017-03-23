@@ -6,10 +6,10 @@ import ReactDOM from 'react-dom';
 import 'whatwg-fetch';
 import auth from './auth';
 
-import { withRouter } from 'react-router';
+import {withRouter} from 'react-router';
 
 function checkStatus(response) {
-    if(response.status >= 200 && response.status < 300) {
+    if (response.status >= 200 && response.status < 300) {
         return response.json()
     } else {
         var error = new Error(response.statusText);
@@ -34,6 +34,10 @@ class EventPage extends React.Component {
             description: '',
             category: '',
             rating: '.....',
+            image_url: '',
+            venue_address: '',
+            venue_longitude: '',
+            venue_latitude: '',
             loaded: false,
             auth: JSON.parse(localStorage.auth)
         }
@@ -41,16 +45,23 @@ class EventPage extends React.Component {
     }
 
     success_found_event(event_result) {
-        this.setState({name: event_result.name, description: event_result.description,
-            category: event_result.category_name});
-        if (event_result.num_ratings != 0){
+        console.log("got event with address info? ", event_result);
+        this.setState({
+            name: event_result.name, description: event_result.description,
+            category: event_result.category_name, venue_address: event_result.venue_address,
+            venue_longitude: event_result.longitude, venue_latitude: event_result.latitude
+        });
+        if (event_result.num_ratings != 0) {
             this.setState({rating: event_result.average_rating})
+        }
+        if (event_result.image_url != ""){
+            this.setState({image_url: event_result.img_url})
         }
     }
 
 
     fail(error) {
-        if(error.response.status == 401) {
+        if (error.response.status == 401) {
             auth.logOut();
             this.props.router.replace({
                 pathname: "/signin",
@@ -59,12 +70,12 @@ class EventPage extends React.Component {
         }
     }
 
-    getEvent(){
+    getEvent() {
         let token = this.state.auth.access_token;
         let query = this.props.location.query.q;
         this.setState({loaded: true});
 
-        fetch("/view/event?q=" + query , {
+        fetch("/view/event?q=" + query, {
             headers: {
                 'Authorization': 'Bearer ' + token
             }
@@ -80,12 +91,12 @@ class EventPage extends React.Component {
      * (TODO: disable rating buttons if already rated)
      * @param new_rating, from the form on the page (just the button for now)
      */
-    update_rating(new_rating){
+    update_rating(new_rating) {
         let token = this.state.auth.access_token;
         let query = this.props.location.query.q;
 
         // make PUT REST call to be handled by EventController (mapped in urlMappings.groovy)
-        fetch("/api/event/update_rating?q=" + query + "&r=" + new_rating , { // parameters for the method
+        fetch("/api/event/update_rating?q=" + query + "&r=" + new_rating, { // parameters for the method
             method: 'PUT',
             headers: {
                 'Authorization': 'Bearer ' + token
@@ -105,31 +116,54 @@ class EventPage extends React.Component {
         this.setState({rating: event_result.average_rating});
     }
 
-
     render() {
         // stops the infinite looping & app crashing
-        if (this.state.loaded == false){
+        if (this.state.loaded == false) {
             this.getEvent();
         }
-
-        let this_event =
-            <div className="col-sm-12 col-md-12 col-lg-12 tweet">
-                <b>{this.state.name}</b>: {this.state.description} <br/> Category: {this.state.category} <br/>
-                Rating: {this.state.rating}
-            </div>;
         return (
-            <div>
-                <h1>Hello World</h1>
-                <div className="col-lg-12">
-                    {this_event}
+
+            <div className="main">
+                <br/>
+                <center><h2>Event: {this.state.name}</h2></center>
+                <hr/>
+
+                <div className="row">
+
+                    <div className="col-md-8">
+                        <img className="img-responsive" src={this.state.image_url} alt=""/>
+                    </div>
+
+                    <div className="col-md-4">
+                        <h3>Event Description</h3>
+                        <p>{this.state.description}</p>
+                        <h4>Event Category</h4>
+                        <p>{this.state.category}</p>
+                        <h4>Location</h4>
+                        <p>{this.state.venue_address}</p>
+                        <p>Longitude: {this.state.venue_longitude}</p>
+                        <p>Latitude: {this.state.venue_latitude}</p>
+                    </div>
+
+                    <fieldset className="rating">
+                        <input type="radio" id="star5" name="rating" value="5"
+                               onClick={() => this.update_rating(5)}/><label className="full" htmlFor="star5"
+                                                                             title="Awesome - 5 stars"/>
+                        <input type="radio" id="star4" name="rating" value="4"
+                               onClick={() => this.update_rating(4)}/><label className="full" htmlFor="star4"
+                                                                             title="Pretty good - 4 stars"/>
+                        <input type="radio" id="star3" name="rating" value="3"
+                               onClick={() => this.update_rating(3)}/><label className="full" htmlFor="star3"
+                                                                             title="Meh - 3 stars"/>
+                        <input type="radio" id="star2" name="rating" value="2"
+                               onClick={() => this.update_rating(2)}/><label className="full" htmlFor="star2"
+                                                                             title="Kinda bad - 2 stars"/>
+                        <input type="radio" id="star1" name="rating" value="1"
+                               onClick={() => this.update_rating(1)}/><label className="full" htmlFor="star1"
+                                                                             title="Sucks big time - 1 star"/>
+                    </fieldset>
+
                 </div>
-                <fieldset className="rating">
-                    <input type="radio" id="star5" name="rating" value="5" onClick={() => this.update_rating(5)}/><label className="full" htmlFor="star5" title="Awesome - 5 stars"></label>
-                    <input type="radio" id="star4" name="rating" value="4" onClick={() => this.update_rating(4)}/><label className="full" htmlFor="star4" title="Pretty good - 4 stars"></label>
-                    <input type="radio" id="star3" name="rating" value="3" onClick={() => this.update_rating(3)}/><label className="full" htmlFor="star3" title="Meh - 3 stars"></label>
-                    <input type="radio" id="star2" name="rating" value="2" onClick={() => this.update_rating(2)}/><label className="full" htmlFor="star2" title="Kinda bad - 2 stars"></label>
-                    <input type="radio" id="star1" name="rating" value="1" onClick={() => this.update_rating(1)}/><label className="full" htmlFor="star1" title="Sucks big time - 1 star"></label>
-                </fieldset>
             </div>
 
         )

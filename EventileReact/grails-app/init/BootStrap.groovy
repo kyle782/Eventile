@@ -4,8 +4,6 @@ import grails3.example.Role
 import grails3.example.User
 import grails3.example.UserRole
 
-
-
 class BootStrap {
 
     def init = { servletContext ->
@@ -21,10 +19,6 @@ class BootStrap {
                 start_date: "test", eventbrite_url: "test", category_name: "test", total_rating: 5,
                 num_ratings: 5, average_rating: 5.0, img_url: "test").save()
         testEvent.addToComments(new Comment(comment_body: "test comment")).save()
-
-        System.out.println("test event's name: " + testEvent.name)
-        System.out.println("test event's comments = " + testEvent.comments.comment_body)
-
 
         def user2 = new User(username: 'test2', password: '2212', age: '100', location: 'London').save()
         UserRole.create(user2, role, true)

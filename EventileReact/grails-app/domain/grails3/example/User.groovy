@@ -22,7 +22,12 @@ class User implements Serializable {
 	boolean hasPrefs
 
 	// collection for preferences that will store the categories and queries that they are interested in
-	static hasMany = [preferences: String, category_ids: String]
+	static hasMany = [preferences: String, category_ids: String, created_events: Event]
+
+
+	static mapping = {
+		password column: '`password`'
+	}
 
 	User(String username, String password, String age, String location) {
 	  	this()
@@ -55,10 +60,6 @@ class User implements Serializable {
 	static constraints = {
 		username blank: false, unique: true
 		password blank: false
-	}
-
-	static mapping = {
-		password column: '`password`'
 	}
 
 
