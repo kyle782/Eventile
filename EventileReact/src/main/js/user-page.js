@@ -22,6 +22,8 @@ class UserPage extends React.Component {
         this.success = this.success.bind(this);
         this.fail = this.fail.bind(this);
         this.render = this.render.bind(this);
+        this.getUserCreatedEvents = this.getUserCreatedEvents.bind(this);
+        this.success_got_created_events = this.success_got_created_events.bind(this);
 
         this.state = {
             name: '',
@@ -29,6 +31,7 @@ class UserPage extends React.Component {
             location: '',
             gotUser: false,
             user_preferences: [],
+            user_created_events: [],
             auth: JSON.parse(localStorage.auth)
         }
     }
@@ -43,8 +46,28 @@ class UserPage extends React.Component {
         })
             .then(checkStatus)
             .then(this.success)
+            .then(this.getUserCreatedEvents)
             .catch(this.fail)
 
+    }
+
+    getUserCreatedEvents(){
+        let token = this.state.auth.access_token;
+
+        fetch("/api/event/get_user_created_events", {
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        })
+            .then(checkStatus)
+            .then(this.success_got_created_events)
+            .catch(this.fail)
+    }
+
+    success_got_created_events(created_events){
+        console.log("!!got user's created events = ", created_events);
+        console.log("num of created events = ", created_events.length);
+        this.setState({user_created_events: created_events});
     }
 
     success(user) {
@@ -73,6 +96,12 @@ class UserPage extends React.Component {
             this.getUser();
         }
 
+        let created_events = this.state.user_created_events.map( (created_event) => {
+            return <div>
+                <p>Name: {created_event.name}</p>
+            </div>
+        });
+
         let prefs = this.state.user_preferences.map( (preference) => {
             return <div>
                 <p>{preference}</p>
@@ -89,8 +118,11 @@ class UserPage extends React.Component {
                     Location: {this.state.location} <br/>
                     Age: {this.state.age} <br/>
 
-                    <h2> Selected Preferences: </h2> <br/>
+                    <h2> Selected Preferences: </h2>
                     {prefs}
+                    <br/>
+                    <h2> Your Created Events: </h2>
+                    {created_events}
                 </div>
             </div>
 

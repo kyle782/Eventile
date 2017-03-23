@@ -65,22 +65,22 @@ class EventController {
             throw new IllegalArgumentException("You must enter a name, description, location, and start date for the event!")
         }
 
-        System.out.println("name = " + event_name + ", date = " + event_date + ", location = " +
-                event_location + ", description = " + event_description)
+        User user = User.get(springSecurityService.principal.id)
 
         Event new_event = new Event(name: event_name, description: event_description,
-                location: event_location, start_date: event_date).save(flush:true)
+                location: event_location, start_date: event_date, category_name: "test cat", eventbrite_id: "123123",
+                eventbrite_url: "blahblah", creator: user)
 
-        System.out.println("created event in controller!")
 
-        User user = User.get(springSecurityService.principal.id)
-        System.out.println("got the user ")
+        if (!new_event.save()){
+            System.out.println(new_event.errors)
+        } else {
+            System.out.println("saved event")
+        }
 
-        user.addToCreated_events(new_event)
-        System.out.println("added")
+        user.save()
 
-        user.save(flush:true)
-        System.out.println("saved")
+        System.out.println("event saved to user? " + user.getCreatedEvents())
 
         respond new_event, status: HttpStatus.CREATED
 
@@ -109,6 +109,13 @@ class EventController {
         }
 
         respond target_event
+    }
+
+    @Secured(['ROLE_USER'])
+    def get_user_created_events(){
+        User user = User.get(springSecurityService.principal.id)
+        def created_events = user.createdEvents
+        respond created_events
     }
 
     def handleIllegalArgument(IllegalArgumentException ex) {

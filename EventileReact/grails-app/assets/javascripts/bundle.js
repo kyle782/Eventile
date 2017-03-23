@@ -29381,7 +29381,6 @@
 	                        )
 	                    )
 	                ),
-	                _react2.default.createElement('br', null),
 	                _react2.default.createElement('hr', null),
 	                _react2.default.createElement(
 	                    'div',
@@ -29511,6 +29510,8 @@
 	        _this.success = _this.success.bind(_this);
 	        _this.fail = _this.fail.bind(_this);
 	        _this.render = _this.render.bind(_this);
+	        _this.getUserCreatedEvents = _this.getUserCreatedEvents.bind(_this);
+	        _this.success_got_created_events = _this.success_got_created_events.bind(_this);
 
 	        _this.state = {
 	            name: '',
@@ -29518,6 +29519,7 @@
 	            location: '',
 	            gotUser: false,
 	            user_preferences: [],
+	            user_created_events: [],
 	            auth: JSON.parse(localStorage.auth)
 	        };
 	        return _this;
@@ -29532,7 +29534,25 @@
 	                headers: {
 	                    'Authorization': 'Bearer ' + token // pass authentication token as a header to the REST API call
 	                }
-	            }).then(checkStatus).then(this.success).catch(this.fail);
+	            }).then(checkStatus).then(this.success).then(this.getUserCreatedEvents).catch(this.fail);
+	        }
+	    }, {
+	        key: 'getUserCreatedEvents',
+	        value: function getUserCreatedEvents() {
+	            var token = this.state.auth.access_token;
+
+	            fetch("/api/event/get_user_created_events", {
+	                headers: {
+	                    'Authorization': 'Bearer ' + token
+	                }
+	            }).then(checkStatus).then(this.success_got_created_events).catch(this.fail);
+	        }
+	    }, {
+	        key: 'success_got_created_events',
+	        value: function success_got_created_events(created_events) {
+	            console.log("!!got user's created events = ", created_events);
+	            console.log("num of created events = ", created_events.length);
+	            this.setState({ user_created_events: created_events });
 	        }
 	    }, {
 	        key: 'success',
@@ -29563,6 +29583,19 @@
 	            if (this.state.gotUser == false) {
 	                this.getUser();
 	            }
+
+	            var created_events = this.state.user_created_events.map(function (created_event) {
+	                return _react2.default.createElement(
+	                    'div',
+	                    null,
+	                    _react2.default.createElement(
+	                        'p',
+	                        null,
+	                        'Name: ',
+	                        created_event.name
+	                    )
+	                );
+	            });
 
 	            var prefs = this.state.user_preferences.map(function (preference) {
 	                return _react2.default.createElement(
@@ -29611,9 +29644,14 @@
 	                        null,
 	                        ' Selected Preferences: '
 	                    ),
-	                    ' ',
+	                    prefs,
 	                    _react2.default.createElement('br', null),
-	                    prefs
+	                    _react2.default.createElement(
+	                        'h2',
+	                        null,
+	                        ' Your Created Events: '
+	                    ),
+	                    created_events
 	                )
 	            );
 	        }

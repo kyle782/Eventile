@@ -22,7 +22,9 @@ class User implements Serializable {
 	boolean hasPrefs
 
 	// collection for preferences that will store the categories and queries that they are interested in
-	static hasMany = [preferences: String, category_ids: String, created_events: Event]
+	static hasMany = [preferences: String, category_ids: String, createdEvents: Event]
+
+	static mappedBy = [createdEvents: 'creator']
 
 
 	static mapping = {

@@ -17,6 +17,8 @@ class UrlMappings {
 
         "/api/event/create_event"(controller: "event", action: "create_event", method: "POST", parseRequest: true)
 
+        "/api/event/get_user_created_events"(controller: "event", action: "get_user_created_events", method: "GET", parseRequest: true)
+
         "/welcome_search"(controller: "welcome", action:"search", method: "GET", parseRequest: true)
 
         "/api/dashboard"(controller: "dashboard", action:"search", method: "GET", parseRequest: true)
