@@ -37,6 +37,7 @@ class PublicEventPage extends React.Component {
             venue_longitude: '',
             venue_latitude: '',
             loaded: false,
+            comments: [],
         }
 
     }
