@@ -88,16 +88,12 @@ class UserController {
         User user = User.get(springSecurityService.principal.id)
         Event event = Event.findByEventbrite_id(eventbrite_id)
 
-
-
         if (!(event.attendees = user)){
             System.out.println(event.errors)
         } else {
-            System.out.println("was able to set")
+            System.out.println("was able to set the event to the user")
         }
         event.save()
-
-        System.out.println("saved? " + user.getRsvp_events())
 
         respond status: HttpStatus.ACCEPTED
 
@@ -107,9 +103,6 @@ class UserController {
     def get_rsvp_events(){
         User user = User.get(springSecurityService.principal.id)
         def rsvp_events = user.getRsvp_events()
-
-        System.out.println("user's rsvp events = " + rsvp_events)
-
         respond rsvp_events
     }
 
