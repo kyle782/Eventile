@@ -39,7 +39,8 @@ class EventPage extends React.Component {
             venue_longitude: '',
             venue_latitude: '',
             loaded: false,
-            auth: JSON.parse(localStorage.auth)
+            auth: JSON.parse(localStorage.auth),
+            comments: []
         }
 
     }
@@ -56,6 +57,10 @@ class EventPage extends React.Component {
         }
         if (event_result.image_url != ""){
             this.setState({image_url: event_result.img_url})
+        }
+        console.log(event_result.comments.length)
+        if (event_result.comments.length !=0){
+            this.setState({comments:event_result.comments})
         }
     }
 
@@ -121,6 +126,13 @@ class EventPage extends React.Component {
         if (this.state.loaded == false) {
             this.getEvent();
         }
+        let comments = this.state.comments.map( (thecomments) => {
+            return <div className="main">
+                <p>thecomments.comment_body </p>
+                <p>thecomments.dateCreated</p>
+            </div>
+        });
+
         return (
 
             <div className="main">
@@ -162,6 +174,9 @@ class EventPage extends React.Component {
                                onClick={() => this.update_rating(1)}/><label className="full" htmlFor="star1"
                                                                              title="Sucks big time - 1 star"/>
                     </fieldset>
+
+                    <h2> Comments: </h2> <br/>
+                    {comments}
 
                 </div>
             </div>

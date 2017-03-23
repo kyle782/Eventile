@@ -29697,7 +29697,8 @@
 	            venue_longitude: '',
 	            venue_latitude: '',
 	            loaded: false,
-	            auth: JSON.parse(localStorage.auth)
+	            auth: JSON.parse(localStorage.auth),
+	            comments: []
 	        };
 
 	        return _this;
@@ -29717,6 +29718,10 @@
 	            }
 	            if (event_result.image_url != "") {
 	                this.setState({ image_url: event_result.img_url });
+	            }
+	            console.log(event_result.comments.length);
+	            if (event_result.comments.length != 0) {
+	                this.setState({ comments: event_result.comments });
 	            }
 	        }
 	    }, {
@@ -29785,6 +29790,23 @@
 	            if (this.state.loaded == false) {
 	                this.getEvent();
 	            }
+	            var comments = this.state.comments.map(function (thecomments) {
+	                return _react2.default.createElement(
+	                    'div',
+	                    { className: 'main' },
+	                    _react2.default.createElement(
+	                        'p',
+	                        null,
+	                        'thecomments.comment_body '
+	                    ),
+	                    _react2.default.createElement(
+	                        'p',
+	                        null,
+	                        'thecomments.dateCreated'
+	                    )
+	                );
+	            });
+
 	            return _react2.default.createElement(
 	                'div',
 	                { className: 'main' },
@@ -29887,7 +29909,15 @@
 	                            } }),
 	                        _react2.default.createElement('label', { className: 'full', htmlFor: 'star1',
 	                            title: 'Sucks big time - 1 star' })
-	                    )
+	                    ),
+	                    _react2.default.createElement(
+	                        'h2',
+	                        null,
+	                        ' Comments: '
+	                    ),
+	                    ' ',
+	                    _react2.default.createElement('br', null),
+	                    comments
 	                )
 	            );
 	        }

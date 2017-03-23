@@ -22,6 +22,8 @@ class EventController {
         // since events from the search result were saved to database, we find the event
         def target_event = Event.findByEventbrite_id(q)
 
+        System.out.println(target_event.name)
+
         // perform a GET to eventbrite to retrieve the complete event information since the event's description is trimmed in database
         def response_eventbrite = new RestBuilder().get("https://www.eventbriteapi.com/v3/events/{id}"){
             header "Authorization", "Bearer 2S34UCIHKW5MXVP4S5M7" // authenticate with header
