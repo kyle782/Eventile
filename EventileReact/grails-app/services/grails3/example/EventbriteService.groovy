@@ -100,6 +100,13 @@ class EventbriteService {
                     category_name: eventbrite_category_name, num_ratings: 0, total_rating: 0, average_rating: 0,
                     img_url: eventbrite_img_url, eventbrite_venue_id: eventbrite_venue_id)
 
+            //creating new comment object
+            def testEvent = new Event(name: "test1", description: "test", eventbrite_id: "0000",
+                    start_date: "test", eventbrite_url: "test", category_name: "test", total_rating: 5,
+                    num_ratings: 5, average_rating: 5.0, img_url: "test").save()
+            testEvent.addToComments(new Comment(comment_body: "test comment")).save()
+            testEvent.addToComments(new Comment(comment_body: "test comment2")).save()
+
             // save to database, print errors for debugging if unable to save
             if(!new_event.save(flush:true) ) {
                 System.out.println(new_event.errors)

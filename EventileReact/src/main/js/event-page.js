@@ -43,7 +43,8 @@ class EventPage extends React.Component {
             eventbrite_id: '',
             user_RSVP: false,
             loaded: false,
-            auth: JSON.parse(localStorage.auth)
+            auth: JSON.parse(localStorage.auth),
+            comments: []
         }
 
     }
@@ -60,6 +61,10 @@ class EventPage extends React.Component {
         }
         if (event_result.image_url != ""){
             this.setState({image_url: event_result.img_url})
+        }
+        console.log(event_result.comments.length)
+        if (event_result.comments.length !=0){
+            this.setState({comments:event_result.comments})
         }
     }
 
@@ -157,6 +162,13 @@ class EventPage extends React.Component {
         if (this.state.loaded == false) {
             this.getEvent();
         }
+        let comments = this.state.comments.map( (thecomments) => {
+            return <div className="main">
+                <p>thecomments.comment_body </p>
+                <p>thecomments.dateCreated</p>
+            </div>
+        });
+
         return (
 
             <div className="main">
@@ -201,6 +213,9 @@ class EventPage extends React.Component {
 
                     {this.state.user_RSVP ? <button type="RSVP" onClick={() => this.handleRSVP()}>Revoke RSVP</button>
                         : <button type="RSVP" onClick={() => this.handleRSVP()}>RSVP!</button> }
+
+                    <h2> Comments: </h2> <br/>
+                    {comments}
 
                 </div>
             </div>
