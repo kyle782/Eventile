@@ -37,7 +37,7 @@ class Navigation extends React.Component {
                     { this.state.loggedIn ?
                         <ul className="nav navbar-nav">
                             <li><Link to="/search">Search</Link></li>
-                            <li><Link to="/user-page">Profile</Link></li>
+                            <li><Link to="/create-event">Create Event</Link></li>
                         </ul> : null
                     }
 
@@ -49,7 +49,15 @@ class Navigation extends React.Component {
 
                     { this.state.loggedIn ? null :
                         <ul className="nav navbar-nav navbar-right">
-                            <li><Link to="/signin">Sign in</Link></li>
+                            <li><Link to="/signup">Register</Link></li>
+                        </ul>
+                    }
+
+                    { this.state.loggedIn ? <ul className="nav navbar-nav navbar-right">
+                            <li><Link to="/user-page">Profile</Link></li>
+                        </ul>:
+                        <ul className="nav navbar-nav navbar-right">
+                            <li><Link to="/signin">Login</Link></li>
                         </ul>
                     }
                 </div>

@@ -13,8 +13,6 @@ class DashboardController {
 
     def search(String prefs){
 
-        System.out.println("passed prefs = " + prefs)
-
         // perform a GET requestion to Eventbrite's API using WelcomeService class
         def response_eventbrite = DashboardService.search(prefs)
 

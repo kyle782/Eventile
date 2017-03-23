@@ -2,6 +2,8 @@ package grails3.example
 
 class Event {
 
+    static hasMany = [comments: Comment]
+
     static constraints = {
         // need to make nullable since grails rejects storing the event in the database if they are null
         description nullable: true
@@ -10,6 +12,11 @@ class Event {
         num_ratings nullable: true
         average_rating nullable: true
         img_url nullable: true
+        location nullable: true
+        venue_address nullable: true
+        longitude nullable: true
+        latitude nullable: true
+        eventbrite_venue_id nullable: true
     }
 
     String name
@@ -22,5 +29,10 @@ class Event {
     int num_ratings
     float average_rating
     String img_url
+    String location
+    String eventbrite_venue_id
+    String venue_address
+    String longitude
+    String latitude
 
 }

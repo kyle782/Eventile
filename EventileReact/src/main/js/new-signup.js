@@ -54,7 +54,7 @@ class UserForm extends React.Component {
                     <div className="col-sm-9">
                         <input type="text"
                                className="form-control" id="signin-name"
-                               placeholder="Name"
+                               placeholder="Username"
                                ref="name"
                         />
                     </div>
@@ -72,7 +72,7 @@ class UserForm extends React.Component {
                 </div>
                 <div className="form-group">
                     <label htmlFor="signin-age" className="col-sm-3 control-label">Age</label>
-                    <div className="col-sm-9">
+                    <div className="col-sm-3">
                         <input type="age"
                                className="form-control"
                                id="signin-age"
@@ -94,6 +94,11 @@ class UserForm extends React.Component {
                 </div>
 
                 {/** Checkboxes for preferences **/}
+
+                <hr/>
+
+                <center><h4> Tell us what you are interested in: </h4></center>
+                <br/>
 
                 <div className="form-group">
                     <label htmlFor="pref_music" className="col-sm-3 control-label">Music</label>
