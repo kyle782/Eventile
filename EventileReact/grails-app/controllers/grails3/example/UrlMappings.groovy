@@ -23,5 +23,9 @@ class UrlMappings {
 
         "/api/dashboard"(controller: "dashboard", action:"search", method: "GET", parseRequest: true)
 
+        "/api/user/addRSVP"(controller: "user", action: "add_user_RSVP", method: "PUT")
+
+        "/api/user/get_user_rsvp_events"(controller: "user", action: "get_rsvp_events", method: "GET", parseRequest: true)
+
     }
 }

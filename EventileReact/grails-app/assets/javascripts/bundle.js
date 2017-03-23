@@ -29512,6 +29512,8 @@
 	        _this.render = _this.render.bind(_this);
 	        _this.getUserCreatedEvents = _this.getUserCreatedEvents.bind(_this);
 	        _this.success_got_created_events = _this.success_got_created_events.bind(_this);
+	        _this.getUserRSVPEvents = _this.getUserRSVPEvents.bind(_this);
+	        _this.success_got_rsvp_events = _this.success_got_rsvp_events.bind(_this);
 
 	        _this.state = {
 	            name: '',
@@ -29520,6 +29522,7 @@
 	            gotUser: false,
 	            user_preferences: [],
 	            user_created_events: [],
+	            user_rsvp_events: [],
 	            auth: JSON.parse(localStorage.auth)
 	        };
 	        return _this;
@@ -29545,7 +29548,24 @@
 	                headers: {
 	                    'Authorization': 'Bearer ' + token
 	                }
-	            }).then(checkStatus).then(this.success_got_created_events).catch(this.fail);
+	            }).then(checkStatus).then(this.success_got_created_events).then(this.getUserRSVPEvents).catch(this.fail);
+	        }
+	    }, {
+	        key: 'getUserRSVPEvents',
+	        value: function getUserRSVPEvents() {
+	            var token = this.state.auth.access_token;
+
+	            fetch("/api/user/get_user_rsvp_events", {
+	                headers: {
+	                    'Authorization': 'Bearer ' + token
+	                }
+	            }).then(checkStatus).then(this.success_got_rsvp_events).catch(this.fail);
+	        }
+	    }, {
+	        key: 'success_got_rsvp_events',
+	        value: function success_got_rsvp_events(rsvp_events) {
+	            console.log("!!got user's rsvp events = ", rsvp_events);
+	            this.setState({ user_rsvp_events: rsvp_events });
 	        }
 	    }, {
 	        key: 'success_got_created_events',
@@ -29609,6 +29629,19 @@
 	                );
 	            });
 
+	            var rsvp_events = this.state.user_rsvp_events.map(function (rsvp_event) {
+	                return _react2.default.createElement(
+	                    'div',
+	                    null,
+	                    _react2.default.createElement(
+	                        'p',
+	                        null,
+	                        'Name: ',
+	                        rsvp_event.name
+	                    )
+	                );
+	            });
+
 	            return _react2.default.createElement(
 	                'div',
 	                null,
@@ -29651,7 +29684,13 @@
 	                        null,
 	                        ' Your Created Events: '
 	                    ),
-	                    created_events
+	                    created_events,
+	                    _react2.default.createElement(
+	                        'h2',
+	                        null,
+	                        ' Your RSVPs: '
+	                    ),
+	                    rsvp_events
 	                )
 	            );
 	        }
@@ -29725,6 +29764,8 @@
 	        _this.update_rating = _this.update_rating.bind(_this);
 	        _this.success_update_rating = _this.success_update_rating.bind(_this);
 	        _this.render = _this.render.bind(_this);
+	        _this.handleRSVP = _this.handleRSVP.bind(_this);
+	        _this.success_rsvp = _this.success_rsvp.bind(_this);
 
 	        _this.state = {
 	            name: 'Loading...',
@@ -29735,6 +29776,8 @@
 	            venue_address: '',
 	            venue_longitude: '',
 	            venue_latitude: '',
+	            eventbrite_id: '',
+	            user_RSVP: false,
 	            loaded: false,
 	            auth: JSON.parse(localStorage.auth)
 	        };
@@ -29749,7 +29792,7 @@
 	            this.setState({
 	                name: event_result.name, description: event_result.description,
 	                category: event_result.category_name, venue_address: event_result.venue_address,
-	                venue_longitude: event_result.longitude, venue_latitude: event_result.latitude
+	                venue_longitude: event_result.longitude, venue_latitude: event_result.latitude, eventbrite_id: event_result.eventbrite_id
 	            });
 	            if (event_result.num_ratings != 0) {
 	                this.setState({ rating: event_result.average_rating });
@@ -29814,6 +29857,35 @@
 	        value: function success_update_rating(event_result) {
 	            console.log("success, rating is now ", event_result.average_rating);
 	            this.setState({ rating: event_result.average_rating });
+	        }
+	    }, {
+	        key: 'handleRSVP',
+	        value: function handleRSVP() {
+	            console.log("ok rsvping");
+
+	            if (this.state.user_RSVP) {
+	                // user is RSVP'd to the event, remove the event from their rsvp
+	                this.setState({ user_RSVP: false });
+	            } else {
+	                // user is not RSVP'd to the event, add it to their rsvp
+	                var token = this.state.auth.access_token;
+
+	                var eventbrite_id = this.state.eventbrite_id;
+
+	                // make PUT REST call to be handled by UserController (mapped in urlMappings.groovy)
+	                fetch("/api/user/addRSVP?eventbrite_id=" + eventbrite_id, {
+	                    method: 'PUT',
+	                    headers: {
+	                        'Authorization': 'Bearer ' + token
+	                    }
+	                }).then(checkStatus).then(this.success_rsvp).catch(this.fail);
+	            }
+	        }
+	    }, {
+	        key: 'success_rsvp',
+	        value: function success_rsvp() {
+	            console.log("rsvp'd!");
+	            this.setState({ user_RSVP: true });
 	        }
 	    }, {
 	        key: 'render',
@@ -29926,6 +29998,19 @@
 	                            } }),
 	                        _react2.default.createElement('label', { className: 'full', htmlFor: 'star1',
 	                            title: 'Sucks big time - 1 star' })
+	                    ),
+	                    this.state.user_RSVP ? _react2.default.createElement(
+	                        'button',
+	                        { type: 'RSVP', onClick: function onClick() {
+	                                return _this2.handleRSVP();
+	                            } },
+	                        'Revoke RSVP'
+	                    ) : _react2.default.createElement(
+	                        'button',
+	                        { type: 'RSVP', onClick: function onClick() {
+	                                return _this2.handleRSVP();
+	                            } },
+	                        'RSVP!'
 	                    )
 	                )
 	            );

@@ -4,7 +4,7 @@ class Event {
 
     static hasMany = [comments: Comment]
 
-    static belongsTo = [creator: User]
+    static belongsTo = [creator: User, attendees: User]
 
     static constraints = {
         // need to make nullable since grails rejects storing the event in the database if they are null
@@ -20,6 +20,7 @@ class Event {
         latitude nullable: true
         eventbrite_venue_id nullable: true
         creator nullable: true
+        attendees nullable: true
     }
 
     String name

@@ -24,6 +24,8 @@ class UserPage extends React.Component {
         this.render = this.render.bind(this);
         this.getUserCreatedEvents = this.getUserCreatedEvents.bind(this);
         this.success_got_created_events = this.success_got_created_events.bind(this);
+        this.getUserRSVPEvents = this.getUserRSVPEvents.bind(this);
+        this.success_got_rsvp_events = this.success_got_rsvp_events.bind(this);
 
         this.state = {
             name: '',
@@ -32,6 +34,7 @@ class UserPage extends React.Component {
             gotUser: false,
             user_preferences: [],
             user_created_events: [],
+            user_rsvp_events: [],
             auth: JSON.parse(localStorage.auth)
         }
     }
@@ -61,7 +64,27 @@ class UserPage extends React.Component {
         })
             .then(checkStatus)
             .then(this.success_got_created_events)
+            .then(this.getUserRSVPEvents)
             .catch(this.fail)
+    }
+
+    getUserRSVPEvents(){
+        let token = this.state.auth.access_token;
+
+        fetch("/api/user/get_user_rsvp_events", {
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        })
+            .then(checkStatus)
+            .then(this.success_got_rsvp_events)
+            .catch(this.fail)
+    }
+
+    success_got_rsvp_events(rsvp_events){
+        console.log("!!got user's rsvp events = ", rsvp_events);
+        this.setState({user_rsvp_events: rsvp_events});
+
     }
 
     success_got_created_events(created_events){
@@ -108,6 +131,12 @@ class UserPage extends React.Component {
             </div>
         });
 
+        let rsvp_events = this.state.user_rsvp_events.map( (rsvp_event) => {
+            return <div>
+                <p>Name: {rsvp_event.name}</p>
+            </div>
+        });
+
         return (
 
             <div>
@@ -123,6 +152,8 @@ class UserPage extends React.Component {
                     <br/>
                     <h2> Your Created Events: </h2>
                     {created_events}
+                    <h2> Your RSVPs: </h2>
+                    {rsvp_events}
                 </div>
             </div>
 
