@@ -13,6 +13,10 @@ class Event {
         average_rating nullable: true
         img_url nullable: true
         location nullable: true
+        venue_address nullable: true
+        longitude nullable: true
+        latitude nullable: true
+        eventbrite_venue_id nullable: true
     }
 
     String name
@@ -26,5 +30,9 @@ class Event {
     float average_rating
     String img_url
     String location
+    String eventbrite_venue_id
+    String venue_address
+    String longitude
+    String latitude
 
 }

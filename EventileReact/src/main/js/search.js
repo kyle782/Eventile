@@ -131,36 +131,39 @@ class Search extends React.Component {
                         </form>
                     </div>
                 </div>
-                <br/>
-                <h> Sort By  </h>
+                <hr/>
+                <div className="row">
+                    <center><h4> Sort By </h4></center>
+                    <div className="form-group">
+                        <label htmlFor="sort_date" className="col-sm-2 control-label">Date</label>
+                        <div className="col-sm-2">
+                            <input
+                                name="sort_date"
+                                className="form-check"
+                                type="checkbox"
+                                checked={this.state.sort_date}
+                                onChange={this.handleInputChange}
+                                ref="sort_date"
+                            />
+                        </div>
+                    </div>
 
-                <div className="form-group">
-                    <label htmlFor="sort_date" className="col-sm-3 control-label">Date</label>
-                    <div className="col-sm-9">
-                        <input
-                            name="sort_date"
-                            className="form-check"
-                            type="checkbox"
-                            checked={this.state.sort_date}
-                            onChange={this.handleInputChange}
-                            ref="sort_date"
-                        />
+                    <div className="form-group">
+                        <label htmlFor="restrict_date" className="col-sm-2 control-label">Distance</label>
+                        <div className="col-sm-2">
+                            <input
+                                name="sort_dist"
+                                className="form-check"
+                                type="checkbox"
+                                checked={this.state.sort_dist}
+                                onChange={this.handleInputChange}
+                                ref="sort_dist"
+                            />
+                        </div>
                     </div>
                 </div>
+                <hr/>
 
-                <div className="form-group">
-                    <label htmlFor="restrict_date" className="col-sm-3 control-label">Distance</label>
-                    <div className="col-sm-9">
-                        <input
-                            name="sort_dist"
-                            className="form-check"
-                            type="checkbox"
-                            checked={this.state.sort_dist}
-                            onChange={this.handleInputChange}
-                            ref="sort_dist"
-                        />
-                    </div>
-                </div>
                 {this.state.found_events ?
                     <div className="card-columns">
                         {events}
@@ -168,6 +171,7 @@ class Search extends React.Component {
                     :
                     <Error/>
                 }
+
             </div>
         )
     }

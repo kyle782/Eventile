@@ -1,7 +1,9 @@
 package grails3.example
 
 import grails.plugin.springsecurity.annotation.Secured
+import grails.plugins.rest.client.RestBuilder
 import grails.web.RequestParameter
+import org.grails.web.json.JSONObject
 import org.springframework.http.HttpStatus
 import grails.plugin.springsecurity.SpringSecurityService
 import org.springframework.security.core.context.SecurityContextHolder
@@ -17,8 +19,36 @@ class EventController {
 
     def show(String q) {
 
-        // since events from the search result were saved to database, we simply find the event and return it
+        // since events from the search result were saved to database, we find the event
         def target_event = Event.findByEventbrite_id(q)
+
+        // perform a GET to eventbrite to retrieve the complete event information since the event's description is trimmed in database
+        def response_eventbrite = new RestBuilder().get("https://www.eventbriteapi.com/v3/events/{id}"){
+            header "Authorization", "Bearer 2S34UCIHKW5MXVP4S5M7" // authenticate with header
+            urlVariables id:q
+        }
+
+        // cast response to JSON object
+        JSONObject obj = (JSONObject) response_eventbrite.json
+
+        target_event.description = obj["description"]["text"]
+        target_event.save()
+
+        /** get the venue's information (address, long, lat) **/
+        String venue_id = target_event.eventbrite_venue_id
+        def venue_information = new RestBuilder().get("https://www.eventbriteapi.com/v3/venues/{id}") {
+            header "Authorization", "Bearer 2S34UCIHKW5MXVP4S5M7" // authenticate with header
+            urlVariables id:venue_id
+        }
+
+        // cast response to JSON object
+        JSONObject venue_obj = (JSONObject) venue_information.json
+
+        target_event.venue_address = venue_obj["address"]["localized_address_display"]
+        target_event.longitude = venue_obj["address"]["longitude"]
+        target_event.latitude = venue_obj["address"]["latitude"]
+        target_event.save()
+
 
         respond target_event
 
@@ -46,7 +76,7 @@ class EventController {
         User user = User.get(springSecurityService.principal.id)
         System.out.println("got the user ")
 
-        //user.addToCreated_events(new_event)
+        user.addToCreated_events(new_event)
         System.out.println("added")
 
         user.save(flush:true)

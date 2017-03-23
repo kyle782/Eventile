@@ -58,8 +58,6 @@ class EventbriteService {
             String event_description_full = obj["events"][i].description.text
             String event_date = obj["events"][i].start.local
 
-            System.out.print(event_date+ "\n")
-
             // clean and/or truncate the description (truncate if > 140 characters long)
             String event_description_trimmed = null
             if (event_description_full != "" && event_description_full != null){
@@ -88,11 +86,19 @@ class EventbriteService {
                 eventbrite_img_url = ""
             }
 
+            /** get the venue id **/
+            String eventbrite_venue_id
+            if (obj["events"][i].venue_id != null){
+                eventbrite_venue_id = obj["events"][i].venue_id
+            } else {
+                eventbrite_venue_id = ""
+            }
+
             // create new Event object, save to database after
             Event new_event = new Event(name: event_name, description: event_description_trimmed, start_date: event_date ,
                     eventbrite_url: obj["events"][i].url, eventbrite_id: eventbrite_id,
                     category_name: eventbrite_category_name, num_ratings: 0, total_rating: 0, average_rating: 0,
-                    img_url: eventbrite_img_url)
+                    img_url: eventbrite_img_url, eventbrite_venue_id: eventbrite_venue_id)
 
             // save to database, print errors for debugging if unable to save
             if(!new_event.save(flush:true) ) {
@@ -124,5 +130,6 @@ class EventbriteService {
         JSONObject inputJSON = (JSONObject) new JsonSlurper().parseText(inputFile.text)
         return inputJSON
     }
+
 
 }

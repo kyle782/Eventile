@@ -29382,53 +29382,63 @@
 	                    )
 	                ),
 	                _react2.default.createElement('br', null),
-	                _react2.default.createElement(
-	                    'h',
-	                    null,
-	                    ' Sort By  '
-	                ),
+	                _react2.default.createElement('hr', null),
 	                _react2.default.createElement(
 	                    'div',
-	                    { className: 'form-group' },
+	                    { className: 'row' },
 	                    _react2.default.createElement(
-	                        'label',
-	                        { htmlFor: 'sort_date', className: 'col-sm-3 control-label' },
-	                        'Date'
+	                        'center',
+	                        null,
+	                        _react2.default.createElement(
+	                            'h4',
+	                            null,
+	                            ' Sort By '
+	                        )
 	                    ),
 	                    _react2.default.createElement(
 	                        'div',
-	                        { className: 'col-sm-9' },
-	                        _react2.default.createElement('input', {
-	                            name: 'sort_date',
-	                            className: 'form-check',
-	                            type: 'checkbox',
-	                            checked: this.state.sort_date,
-	                            onChange: this.handleInputChange,
-	                            ref: 'sort_date'
-	                        })
-	                    )
-	                ),
-	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'form-group' },
-	                    _react2.default.createElement(
-	                        'label',
-	                        { htmlFor: 'restrict_date', className: 'col-sm-3 control-label' },
-	                        'Distance'
+	                        { className: 'form-group' },
+	                        _react2.default.createElement(
+	                            'label',
+	                            { htmlFor: 'sort_date', className: 'col-sm-2 control-label' },
+	                            'Date'
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'col-sm-2' },
+	                            _react2.default.createElement('input', {
+	                                name: 'sort_date',
+	                                className: 'form-check',
+	                                type: 'checkbox',
+	                                checked: this.state.sort_date,
+	                                onChange: this.handleInputChange,
+	                                ref: 'sort_date'
+	                            })
+	                        )
 	                    ),
 	                    _react2.default.createElement(
 	                        'div',
-	                        { className: 'col-sm-9' },
-	                        _react2.default.createElement('input', {
-	                            name: 'sort_dist',
-	                            className: 'form-check',
-	                            type: 'checkbox',
-	                            checked: this.state.sort_dist,
-	                            onChange: this.handleInputChange,
-	                            ref: 'sort_dist'
-	                        })
+	                        { className: 'form-group' },
+	                        _react2.default.createElement(
+	                            'label',
+	                            { htmlFor: 'restrict_date', className: 'col-sm-2 control-label' },
+	                            'Distance'
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'col-sm-2' },
+	                            _react2.default.createElement('input', {
+	                                name: 'sort_dist',
+	                                className: 'form-check',
+	                                type: 'checkbox',
+	                                checked: this.state.sort_dist,
+	                                onChange: this.handleInputChange,
+	                                ref: 'sort_dist'
+	                            })
+	                        )
 	                    )
 	                ),
+	                _react2.default.createElement('hr', null),
 	                this.state.found_events ? _react2.default.createElement(
 	                    'div',
 	                    { className: 'card-columns' },
@@ -29683,6 +29693,10 @@
 	            description: '',
 	            category: '',
 	            rating: '.....',
+	            image_url: '',
+	            venue_address: '',
+	            venue_longitude: '',
+	            venue_latitude: '',
 	            loaded: false,
 	            auth: JSON.parse(localStorage.auth)
 	        };
@@ -29693,10 +29707,17 @@
 	    _createClass(EventPage, [{
 	        key: 'success_found_event',
 	        value: function success_found_event(event_result) {
-	            this.setState({ name: event_result.name, description: event_result.description,
-	                category: event_result.category_name });
+	            console.log("got event with address info? ", event_result);
+	            this.setState({
+	                name: event_result.name, description: event_result.description,
+	                category: event_result.category_name, venue_address: event_result.venue_address,
+	                venue_longitude: event_result.longitude, venue_latitude: event_result.latitude
+	            });
 	            if (event_result.num_ratings != 0) {
 	                this.setState({ rating: event_result.average_rating });
+	            }
+	            if (event_result.image_url != "") {
+	                this.setState({ image_url: event_result.img_url });
 	            }
 	        }
 	    }, {
@@ -29765,62 +29786,109 @@
 	            if (this.state.loaded == false) {
 	                this.getEvent();
 	            }
-
-	            var this_event = _react2.default.createElement(
-	                'div',
-	                { className: 'col-sm-12 col-md-12 col-lg-12 tweet' },
-	                _react2.default.createElement(
-	                    'b',
-	                    null,
-	                    this.state.name
-	                ),
-	                ': ',
-	                this.state.description,
-	                ' ',
-	                _react2.default.createElement('br', null),
-	                ' Category: ',
-	                this.state.category,
-	                ' ',
-	                _react2.default.createElement('br', null),
-	                'Rating: ',
-	                this.state.rating
-	            );
 	            return _react2.default.createElement(
 	                'div',
-	                null,
+	                { className: 'main' },
+	                _react2.default.createElement('br', null),
 	                _react2.default.createElement(
-	                    'h1',
+	                    'center',
 	                    null,
-	                    'Hello World'
+	                    _react2.default.createElement(
+	                        'h2',
+	                        null,
+	                        'Event: ',
+	                        this.state.name
+	                    )
 	                ),
+	                _react2.default.createElement('hr', null),
 	                _react2.default.createElement(
 	                    'div',
-	                    { className: 'col-lg-12' },
-	                    this_event
-	                ),
-	                _react2.default.createElement(
-	                    'fieldset',
-	                    { className: 'rating' },
-	                    _react2.default.createElement('input', { type: 'radio', id: 'star5', name: 'rating', value: '5', onClick: function onClick() {
-	                            return _this2.update_rating(5);
-	                        } }),
-	                    _react2.default.createElement('label', { className: 'full', htmlFor: 'star5', title: 'Awesome - 5 stars' }),
-	                    _react2.default.createElement('input', { type: 'radio', id: 'star4', name: 'rating', value: '4', onClick: function onClick() {
-	                            return _this2.update_rating(4);
-	                        } }),
-	                    _react2.default.createElement('label', { className: 'full', htmlFor: 'star4', title: 'Pretty good - 4 stars' }),
-	                    _react2.default.createElement('input', { type: 'radio', id: 'star3', name: 'rating', value: '3', onClick: function onClick() {
-	                            return _this2.update_rating(3);
-	                        } }),
-	                    _react2.default.createElement('label', { className: 'full', htmlFor: 'star3', title: 'Meh - 3 stars' }),
-	                    _react2.default.createElement('input', { type: 'radio', id: 'star2', name: 'rating', value: '2', onClick: function onClick() {
-	                            return _this2.update_rating(2);
-	                        } }),
-	                    _react2.default.createElement('label', { className: 'full', htmlFor: 'star2', title: 'Kinda bad - 2 stars' }),
-	                    _react2.default.createElement('input', { type: 'radio', id: 'star1', name: 'rating', value: '1', onClick: function onClick() {
-	                            return _this2.update_rating(1);
-	                        } }),
-	                    _react2.default.createElement('label', { className: 'full', htmlFor: 'star1', title: 'Sucks big time - 1 star' })
+	                    { className: 'row' },
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-md-8' },
+	                        _react2.default.createElement('img', { className: 'img-responsive', src: this.state.image_url, alt: '' })
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-md-4' },
+	                        _react2.default.createElement(
+	                            'h3',
+	                            null,
+	                            'Event Description'
+	                        ),
+	                        _react2.default.createElement(
+	                            'p',
+	                            null,
+	                            this.state.description
+	                        ),
+	                        _react2.default.createElement(
+	                            'h4',
+	                            null,
+	                            'Event Category'
+	                        ),
+	                        _react2.default.createElement(
+	                            'p',
+	                            null,
+	                            this.state.category
+	                        ),
+	                        _react2.default.createElement(
+	                            'h4',
+	                            null,
+	                            'Location'
+	                        ),
+	                        _react2.default.createElement(
+	                            'p',
+	                            null,
+	                            this.state.venue_address
+	                        ),
+	                        _react2.default.createElement(
+	                            'p',
+	                            null,
+	                            'Longitude: ',
+	                            this.state.venue_longitude
+	                        ),
+	                        _react2.default.createElement(
+	                            'p',
+	                            null,
+	                            'Latitude: ',
+	                            this.state.venue_latitude
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        'fieldset',
+	                        { className: 'rating' },
+	                        _react2.default.createElement('input', { type: 'radio', id: 'star5', name: 'rating', value: '5',
+	                            onClick: function onClick() {
+	                                return _this2.update_rating(5);
+	                            } }),
+	                        _react2.default.createElement('label', { className: 'full', htmlFor: 'star5',
+	                            title: 'Awesome - 5 stars' }),
+	                        _react2.default.createElement('input', { type: 'radio', id: 'star4', name: 'rating', value: '4',
+	                            onClick: function onClick() {
+	                                return _this2.update_rating(4);
+	                            } }),
+	                        _react2.default.createElement('label', { className: 'full', htmlFor: 'star4',
+	                            title: 'Pretty good - 4 stars' }),
+	                        _react2.default.createElement('input', { type: 'radio', id: 'star3', name: 'rating', value: '3',
+	                            onClick: function onClick() {
+	                                return _this2.update_rating(3);
+	                            } }),
+	                        _react2.default.createElement('label', { className: 'full', htmlFor: 'star3',
+	                            title: 'Meh - 3 stars' }),
+	                        _react2.default.createElement('input', { type: 'radio', id: 'star2', name: 'rating', value: '2',
+	                            onClick: function onClick() {
+	                                return _this2.update_rating(2);
+	                            } }),
+	                        _react2.default.createElement('label', { className: 'full', htmlFor: 'star2',
+	                            title: 'Kinda bad - 2 stars' }),
+	                        _react2.default.createElement('input', { type: 'radio', id: 'star1', name: 'rating', value: '1',
+	                            onClick: function onClick() {
+	                                return _this2.update_rating(1);
+	                            } }),
+	                        _react2.default.createElement('label', { className: 'full', htmlFor: 'star1',
+	                            title: 'Sucks big time - 1 star' })
+	                    )
 	                )
 	            );
 	        }
@@ -30395,8 +30463,6 @@
 	        _this.getEvent = _this.getEvent.bind(_this);
 	        _this.fail = _this.fail.bind(_this);
 	        _this.success_found_event = _this.success_found_event.bind(_this);
-	        _this.update_rating = _this.update_rating.bind(_this);
-	        _this.success_update_rating = _this.success_update_rating.bind(_this);
 	        _this.render = _this.render.bind(_this);
 
 	        _this.state = {
@@ -30404,6 +30470,10 @@
 	            description: '',
 	            category: '',
 	            rating: '.....',
+	            image_url: '',
+	            venue_address: '',
+	            venue_longitude: '',
+	            venue_latitude: '',
 	            loaded: false
 	        };
 
@@ -30413,10 +30483,16 @@
 	    _createClass(PublicEventPage, [{
 	        key: 'success_found_event',
 	        value: function success_found_event(event_result) {
-	            this.setState({ name: event_result.name, description: event_result.description,
-	                category: event_result.category_name });
+	            this.setState({
+	                name: event_result.name, description: event_result.description,
+	                category: event_result.category_name, venue_address: event_result.venue_address,
+	                venue_longitude: event_result.longitude, venue_latitude: event_result.latitude
+	            });
 	            if (event_result.num_ratings != 0) {
-	                this.setState({ rating: event_result.average_rating, loaded: true });
+	                this.setState({ rating: event_result.average_rating });
+	            }
+	            if (event_result.image_url != "") {
+	                this.setState({ image_url: event_result.img_url });
 	            }
 	        }
 	    }, {
@@ -30432,39 +30508,6 @@
 
 	            fetch("/view/event?q=" + query).then(checkStatus).then(this.success_found_event).catch(this.fail);
 	        }
-
-	        /**
-	         * Method to update the rating for the event. Called when clicking on the button
-	         * (TODO: disable rating buttons if already rated)
-	         * @param new_rating, from the form on the page (just the button for now)
-	         */
-
-	    }, {
-	        key: 'update_rating',
-	        value: function update_rating(new_rating) {
-	            var token = this.state.auth.access_token;
-	            var query = this.props.location.query.q;
-
-	            // make PUT REST call to be handled by EventController (mapped in urlMappings.groovy)
-	            fetch("/api/event/update_rating?q=" + query + "&r=" + new_rating, { // parameters for the method
-	                method: 'PUT',
-	                headers: {
-	                    'Authorization': 'Bearer ' + token
-	                }
-	            }).then(checkStatus).then(this.success_update_rating).catch(this.fail);
-	        }
-
-	        /**
-	         * Method to update the state variable with the new rating
-	         * @param event_result
-	         */
-
-	    }, {
-	        key: 'success_update_rating',
-	        value: function success_update_rating(event_result) {
-	            console.log("success, rating is now ", event_result.average_rating);
-	            this.setState({ rating: event_result.average_rating });
-	        }
 	    }, {
 	        key: 'render',
 	        value: function render() {
@@ -30472,37 +30515,76 @@
 	            if (this.state.loaded == false) {
 	                this.getEvent();
 	            }
-	            var this_event = _react2.default.createElement(
-	                'div',
-	                { className: 'col-sm-12 col-md-12 col-lg-12 tweet' },
-	                _react2.default.createElement(
-	                    'b',
-	                    null,
-	                    this.state.name
-	                ),
-	                ': ',
-	                this.state.description,
-	                ' ',
-	                _react2.default.createElement('br', null),
-	                ' Category: ',
-	                this.state.category,
-	                ' ',
-	                _react2.default.createElement('br', null),
-	                'Rating: ',
-	                this.state.rating
-	            );
+
 	            return _react2.default.createElement(
 	                'div',
-	                null,
+	                { className: 'main' },
+	                _react2.default.createElement('br', null),
 	                _react2.default.createElement(
-	                    'h1',
+	                    'center',
 	                    null,
-	                    'Hello World'
+	                    _react2.default.createElement(
+	                        'h2',
+	                        null,
+	                        'Event: ',
+	                        this.state.name
+	                    )
 	                ),
+	                _react2.default.createElement('hr', null),
 	                _react2.default.createElement(
 	                    'div',
-	                    { className: 'col-lg-12' },
-	                    this_event
+	                    { className: 'row' },
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-md-8' },
+	                        _react2.default.createElement('img', { className: 'img-responsive', src: this.state.image_url, alt: '' })
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-md-4' },
+	                        _react2.default.createElement(
+	                            'h3',
+	                            null,
+	                            'Event Description'
+	                        ),
+	                        _react2.default.createElement(
+	                            'p',
+	                            null,
+	                            this.state.description
+	                        ),
+	                        _react2.default.createElement(
+	                            'h4',
+	                            null,
+	                            'Event Category'
+	                        ),
+	                        _react2.default.createElement(
+	                            'p',
+	                            null,
+	                            this.state.category
+	                        ),
+	                        _react2.default.createElement(
+	                            'h4',
+	                            null,
+	                            'Location'
+	                        ),
+	                        _react2.default.createElement(
+	                            'p',
+	                            null,
+	                            this.state.venue_address
+	                        ),
+	                        _react2.default.createElement(
+	                            'p',
+	                            null,
+	                            'Longitude: ',
+	                            this.state.venue_longitude
+	                        ),
+	                        _react2.default.createElement(
+	                            'p',
+	                            null,
+	                            'Latitude: ',
+	                            this.state.venue_latitude
+	                        )
+	                    )
 	                )
 	            );
 	        }
