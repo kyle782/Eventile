@@ -24,8 +24,6 @@ class EventController {
     def update_rating(@RequestParameter('q') String q, @RequestParameter('r') int r){
         def target_event = Event.findByEventbrite_id(q)
 
-        Event.findAllBy
-
         int current_num_ratings = target_event.num_ratings
 
         if (current_num_ratings == 0){
