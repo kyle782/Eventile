@@ -191,7 +191,7 @@ class EventPage extends React.Component {
      * @param new_rating, from the form on the page (just the button for now)
      */
     update_rating(new_rating) {
-        let token = this.state.auth.access_token;
+        let token = this.state.auth.access_tokgen;
         let query = this.props.location.query.q;
 
         this.setState({users_rating: new_rating});
