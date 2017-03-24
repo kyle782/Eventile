@@ -201,7 +201,7 @@ class EventPage extends React.Component {
                                onClick={() => this.update_rating(4)}/><label className="full" htmlFor="star4"
                                                                              title="Pretty good - 4 stars"/>
                         <input type="radio" id="star3" name="rating" value="3"
-                               onClick={() => this.update_rating(3)}/><label className="full" htmlFor="star3"
+                               onClick={() => thgitis.update_rating(3)}/><label className="full" htmlFor="star3"
                                                                              title="Meh - 3 stars"/>
                         <input type="radio" id="star2" name="rating" value="2"
                                onClick={() => this.update_rating(2)}/><label className="full" htmlFor="star2"

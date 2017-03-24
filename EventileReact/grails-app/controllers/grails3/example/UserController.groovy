@@ -105,5 +105,4 @@ class UserController {
         def rsvp_events = user.getRsvp_events()
         respond rsvp_events
     }
-
 }
