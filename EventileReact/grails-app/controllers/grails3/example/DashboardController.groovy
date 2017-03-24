@@ -15,7 +15,6 @@ class DashboardController {
 
         // perform a GET requestion to Eventbrite's API using WelcomeService class
         def response_eventbrite = DashboardService.search(prefs)
-
         respond response_eventbrite
     }
 

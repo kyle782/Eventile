@@ -133,6 +133,22 @@ class EventController {
 
     @Secured(['ROLE_USER'])
     // obtain parameters from the REST call in update_rating() in event-page.js
+    def update_comments(@RequestParameter('q') String q, @RequestParameter('c') String c){
+        def target_event = Event.findByEventbrite_id(q)
+        def newComment = new Comment()
+        newComment.comment_body = c
+        target_event.addToComments(newComment)
+
+        // save to database, print errors for debugging if unable to save
+        if(!target_event.save(flush:true) ) {
+            System.out.println(target_event.errors)
+        }
+
+        respond target_event
+    }
+
+    @Secured(['ROLE_USER'])
+    // obtain parameters from the REST call in update_rating() in event-page.js
     def update_rating(@RequestParameter('q') String q, @RequestParameter('r') int r){
         def target_event = Event.findByEventbrite_id(q)
 

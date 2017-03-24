@@ -5,6 +5,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import 'whatwg-fetch';
 import auth from './auth';
+import CommentForm from './comment-form';
+
 
 import {withRouter} from 'react-router';
 
@@ -34,6 +36,8 @@ class EventPage extends React.Component {
         this.checkUserRSVPd = this.checkUserRSVPd.bind(this);
         this.success_check_user_rsvp = this.success_check_user_rsvp.bind(this);
         this.success_remove_rsvp = this.success_remove_rsvp.bind(this);
+        this.update_comments = this.update_comments.bind(this);
+        this.success_update_comment = this.success_update_comment(this);
 
         this.state = {
             name: 'Loading...',
@@ -51,7 +55,7 @@ class EventPage extends React.Component {
             loaded: false,
             users_rating: '',
             auth: JSON.parse(localStorage.auth),
-            comments: []
+            event_comments: []
         }
 
     }
@@ -63,6 +67,7 @@ class EventPage extends React.Component {
             category: event_result.category_name, venue_address: event_result.venue_address,
             venue_longitude: event_result.longitude, venue_latitude: event_result.latitude,
             eventbrite_id: event_result.eventbrite_id
+            venue_longitude: event_result.longitude, venue_latitude: event_result.latitude
         });
         if (event_result.num_ratings != 0) {
             this.setState({rating: event_result.average_rating})
@@ -71,8 +76,9 @@ class EventPage extends React.Component {
             this.setState({image_url: event_result.img_url})
         }
         console.log(event_result.comments.length);
+        console.log(event_result.comments);
         if (event_result.comments.length !=0){
-            this.setState({comments:event_result.comments})
+            this.setState({event_comments: event_result.comments})
         }
     }
 
@@ -140,6 +146,39 @@ class EventPage extends React.Component {
         } else {
             this.setState({user_entered_RSVP: false, user_RSVP: false})
         }
+    }
+
+    /**
+     * Method to update the comments for the event. Called when clicking on the button
+     * @param new_comment, from the form on the page (just the button for now)
+     */
+    update_comments(e) {
+        e.preventDefault();
+        let form = this.form.data();
+
+        let body = "comment=" + form.comment + "&date=" + form.date;
+
+        let token = this.state.auth.access_token;
+        let query = this.props.location.query.q;
+
+        console.log("token="+token);
+
+        // make PUT REST call to be handled by EventController (mapped in urlMappings.groovy)
+        fetch("/api/event/update_comments?q=" + query + "&c=" + form.comment, { // parameters for the method
+            method: 'PUT',
+            headers: {
+                'Authorization': 'Bearer ' + token
+            },
+            body:body
+        })
+            .then(checkStatus)
+            .then(this.success_update_comment)
+            .catch(this.fail);
+    }
+
+    success_update_comment(event_result){
+        console.log("event_result is ", event_result);
+        this.setState({event_comments: event_result.comments});
     }
 
     /**
@@ -234,10 +273,9 @@ class EventPage extends React.Component {
         if (this.state.loaded == false) {
             this.getEvent();
         }
-        let comments = this.state.comments.map( (thecomments) => {
+        let comments = this.state.event_comments.map( (comment) => {
             return <div className="main">
-                <p>thecomments.comment_body </p>
-                <p>thecomments.dateCreated</p>
+                <p>{comment} </p>
             </div>
         });
         let RSVPCreated = () => <p className="alert alert-success">You are now RSVP'd to this event! Check it out in your profile page.</p>;
@@ -294,8 +332,10 @@ class EventPage extends React.Component {
                         <div className="col-md-10">
                             <h2> Comments: </h2> <hr/>
                             {comments}
+                            <CommentForm submitLabel="Post Comment" onSubmit={this.update_comments} ref={ (ref) => this.form = ref }/>
                         </div>
-                    </div>
+
+                    <br/>
 
                     <div className="col-md-5">
                         <h3>Event Description</h3>
@@ -310,7 +350,6 @@ class EventPage extends React.Component {
                 </div>
 
             </div>
-
         )
     }
 }
