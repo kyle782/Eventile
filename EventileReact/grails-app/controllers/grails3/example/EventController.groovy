@@ -199,13 +199,7 @@ class EventController {
     @Secured(['ROLE_USER'])
     def get_related_events(String current_event_category, String q){
 
-        def related_events_all
-        /** current event would not show up under related events **/
-        if (!(related_events_all = Event.findAllByEventbrite_idNotEqual(q))){
-            System.out.println(related_events_all.errors)
-        }
-
-        System.out.println("related events found = ")
+        def related_events_all = Event.findAllByCategory_name(current_event_category)
 
         def related_events = related_events_all.subList(0, 4)
 

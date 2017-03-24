@@ -37,6 +37,9 @@ class CommentForm extends React.Component {
 
     data() {
         let comment = ReactDOM.findDOMNode(this.refs.comment).value.trim();
+        let comment_box = ReactDOM.findDOMNode(this.refs.comment);
+        comment_box.value = "";
+
         return {
             comment: comment
         }
