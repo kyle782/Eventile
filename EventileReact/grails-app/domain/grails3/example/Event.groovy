@@ -2,9 +2,9 @@ package grails3.example
 
 class Event {
 
-    static hasMany = [comments: Comment, ratings: Rating, first_time: User, have_gone: User]
+    static hasMany = [comments: Comment, ratings: Rating]
 
-    static belongsTo = [creator: User, attendees: User]
+    static belongsTo = [creator: User, attendees: User, new_attendees: User, previous_attendees: User]
 
     static constraints = {
         // need to make nullable since grails rejects storing the event in the database if they are null
@@ -24,8 +24,8 @@ class Event {
         creator nullable: true
         attendees nullable: true
         ratings nullable: true
-        first_time nullable: true
-        have_gone nullable: true
+        new_attendees nullable: true
+        previous_attendees nullable: true
     }
 
     String name
