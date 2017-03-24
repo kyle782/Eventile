@@ -7,6 +7,9 @@ import org.grails.datastore.mapping.query.Query
 import org.grails.web.json.JSONObject
 import groovy.json.JsonSlurper
 
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+
 @Transactional
 class EventbriteService {
 
@@ -94,11 +97,21 @@ class EventbriteService {
                 eventbrite_venue_id = ""
             }
 
+            String start_date_local
+            String start_date_timezone
+            if (obj["events"][i].start != null){
+                start_date_local = obj["events"][i].start.local
+                start_date_timezone = obj["events"][i].start.local
+            } else {
+                start_date_local = ""
+                start_date_timezone = ""
+            }
+
             // create new Event object, save to database after
-            Event new_event = new Event(name: event_name, description: event_description_trimmed, start_date: event_date ,
+            Event new_event = new Event(name: event_name, description: event_description_trimmed, start_date_local: start_date_local,
                     eventbrite_url: obj["events"][i].url, eventbrite_id: eventbrite_id,
                     category_name: eventbrite_category_name, num_ratings: 0, total_rating: 0, average_rating: 0,
-                    img_url: eventbrite_img_url, eventbrite_venue_id: eventbrite_venue_id)
+                    img_url: eventbrite_img_url, eventbrite_venue_id: eventbrite_venue_id, start_date_timezone: start_date_timezone)
 
             //creating new comment object
             def testEvent = new Event(name: "test1", description: "test", eventbrite_id: "0000",

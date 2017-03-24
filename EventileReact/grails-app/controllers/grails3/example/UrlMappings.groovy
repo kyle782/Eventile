@@ -15,7 +15,7 @@ class UrlMappings {
 
         "/api/event/update_rating"(controller: "event", action: "update_rating", method: "PUT")
 
-        "/api/event/update_comments"(controller: "event", action: "update_comments", method: "PUT")
+        "/api/event/update_comments"(controller: "comment", action: "update_comment", method: "PUT")
 
         "/api/event/create_event"(controller: "event", action: "create_event", method: "POST", parseRequest: true)
 

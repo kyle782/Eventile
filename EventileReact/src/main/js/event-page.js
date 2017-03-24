@@ -37,7 +37,7 @@ class EventPage extends React.Component {
         this.success_check_user_rsvp = this.success_check_user_rsvp.bind(this);
         this.success_remove_rsvp = this.success_remove_rsvp.bind(this);
         this.update_comments = this.update_comments.bind(this);
-        this.success_update_comment = this.success_update_comment(this);
+        this.success_update_comment = this.success_update_comment.bind(this);
 
         this.state = {
             name: 'Loading...',
@@ -54,7 +54,10 @@ class EventPage extends React.Component {
             user_entered_RSVP: false,
             loaded: false,
             users_rating: '',
+            start_date_local: '',
+            start_date_timezone: '',
             auth: JSON.parse(localStorage.auth),
+            event_comments_ids: [],
             event_comments: []
         }
 
@@ -66,8 +69,8 @@ class EventPage extends React.Component {
             name: event_result.name, description: event_result.description,
             category: event_result.category_name, venue_address: event_result.venue_address,
             venue_longitude: event_result.longitude, venue_latitude: event_result.latitude,
-            eventbrite_id: event_result.eventbrite_id
-            venue_longitude: event_result.longitude, venue_latitude: event_result.latitude
+            eventbrite_id: event_result.eventbrite_id, start_date_local: event_result.start_date_local,
+            start_date_timezone: event_result.start_date_timezone
         });
         if (event_result.num_ratings != 0) {
             this.setState({rating: event_result.average_rating})
@@ -105,6 +108,10 @@ class EventPage extends React.Component {
 
     }
 
+    fail_comment(error) {
+        console.log("FAILED UPDATING COMMENT = ", error);
+    }
+
     getEvent() {
         let token = this.state.auth.access_token;
         let query = this.props.location.query.q;
@@ -124,7 +131,6 @@ class EventPage extends React.Component {
 
     checkUserRSVPd(){
         let token = this.state.auth.access_token;
-        console.log("token = " + token);
         let query = this.props.location.query.q;
         this.setState({loaded: true});
 
@@ -138,9 +144,6 @@ class EventPage extends React.Component {
     }
 
     success_check_user_rsvp(response){
-        console.log("success, did user rsvp = ", response);
-        console.log("response length = ", response.length);
-
         if (response.length != 0){
             this.setState({user_entered_RSVP: true, user_RSVP: true})
         } else {
@@ -155,30 +158,27 @@ class EventPage extends React.Component {
     update_comments(e) {
         e.preventDefault();
         let form = this.form.data();
-
-        let body = "comment=" + form.comment + "&date=" + form.date;
+        console.log("COMMENT FORM = ", form);
 
         let token = this.state.auth.access_token;
         let query = this.props.location.query.q;
-
-        console.log("token="+token);
 
         // make PUT REST call to be handled by EventController (mapped in urlMappings.groovy)
         fetch("/api/event/update_comments?q=" + query + "&c=" + form.comment, { // parameters for the method
             method: 'PUT',
             headers: {
                 'Authorization': 'Bearer ' + token
-            },
-            body:body
+            }
         })
             .then(checkStatus)
             .then(this.success_update_comment)
-            .catch(this.fail);
+            .catch(this.fail_comment);
     }
 
-    success_update_comment(event_result){
-        console.log("event_result is ", event_result);
-        this.setState({event_comments: event_result.comments});
+    success_update_comment(comment_response){
+        console.log("SUCCESS UPDATED COMMENT");
+        console.log("event results after updating comments =  ", comment_response);
+        this.setState({event_comments: this.state.event_comments.concat(comment_response.comment_body)});
     }
 
     /**
@@ -214,8 +214,6 @@ class EventPage extends React.Component {
     }
 
     handleRSVP(){
-        console.log("ok rsvping");
-
         if (this.state.user_RSVP){
             // user is RSVP'd to the event, remove the event from their rsvp
             this.setState({user_RSVP: false});
@@ -234,8 +232,6 @@ class EventPage extends React.Component {
                 .then(checkStatus)
                 .then(this.success_remove_rsvp)
                 .catch(this.fail);
-
-
 
         } else {
             // user is not RSVP'd to the event, add it to their rsvp
@@ -274,7 +270,7 @@ class EventPage extends React.Component {
             this.getEvent();
         }
         let comments = this.state.event_comments.map( (comment) => {
-            return <div className="main">
+            return <div className="row">
                 <p>{comment} </p>
             </div>
         });
@@ -329,11 +325,7 @@ class EventPage extends React.Component {
                             </fieldset>
                         </div>
 
-                        <div className="col-md-10">
-                            <h2> Comments: </h2> <hr/>
-                            {comments}
-                            <CommentForm submitLabel="Post Comment" onSubmit={this.update_comments} ref={ (ref) => this.form = ref }/>
-                        </div>
+                    </div>
 
                     <br/>
 
@@ -346,7 +338,15 @@ class EventPage extends React.Component {
                         <p>{this.state.venue_address}</p>
                         <p>Longitude: {this.state.venue_longitude}</p>
                         <p>Latitude: {this.state.venue_latitude}</p>
+                        <p>Start Date: {this.state.start_date_local}</p>
+                        <p>Time Zone: {this.state.start_date_timezone}</p>
                     </div>
+                </div>
+
+                <div className="col-md-10">
+                    <h2> Comments: </h2> <hr/>
+                    {comments}
+                    <CommentForm submitLabel="Post Comment" onSubmit={this.update_comments} ref={ (ref) => this.form = ref }/>
                 </div>
 
             </div>
