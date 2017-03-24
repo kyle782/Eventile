@@ -38,6 +38,9 @@ class EventPage extends React.Component {
         this.success_remove_rsvp = this.success_remove_rsvp.bind(this);
         this.update_comments = this.update_comments.bind(this);
         this.success_update_comment = this.success_update_comment.bind(this);
+        this.getRelatedEvents = this.getRelatedEvents.bind(this);
+        this.success_got_related_events = this.success_got_related_events.bind(this);
+
 
         this.state = {
             name: 'Loading...',
@@ -58,7 +61,8 @@ class EventPage extends React.Component {
             start_date_timezone: '',
             auth: JSON.parse(localStorage.auth),
             event_comments_ids: [],
-            event_comments: []
+            event_comments: [],
+            related_events: []
         }
 
     }
@@ -79,8 +83,6 @@ class EventPage extends React.Component {
         if (event_result.image_url != ""){
             this.setState({image_url: event_result.img_url})
         }
-        console.log(event_result.comments.length);
-        console.log(event_result.comments);
         if (event_result.comments.length !=0){
             this.setState({event_comments: event_result.comments})
         }
@@ -125,9 +127,11 @@ class EventPage extends React.Component {
             .then(checkStatus)
             .then(this.success_found_event)
             .then(this.checkUserRSVPd)
+            .then(this.getRelatedEvents)
             .catch(this.fail)
 
     }
+
 
     checkUserRSVPd(){
         let token = this.state.auth.access_token;
@@ -264,6 +268,41 @@ class EventPage extends React.Component {
         this.setState({user_RSVP: false, user_entered_RSVP: true});
     }
 
+    getRelatedEvents(){
+        let token = this.state.auth.access_token;
+        let query = this.props.location.query.q;
+        console.log("token = ", token);
+
+        fetch("/api/event/get_related_events?current_event_category=" + this.state.category + "&q=" + query, {
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        })
+            .then(checkStatus)
+            .then(this.success_got_related_events)
+            .catch(this.failed_related)
+    }
+
+    success_got_related_events(related_events){
+        console.log("got related events = ", related_events);
+        this.setState({related_events: related_events});
+        console.log("related_events state is now " + this.state.related_events)
+    }
+
+    getImageURL(event){
+        return event.img_url;
+    }
+
+    failed_related(error) {
+        if (error.response.status == 401) {
+            auth.logOut();
+            this.props.router.replace({
+                pathname: "/signin",
+                state: {nextPath: "/search"}
+            })
+        }
+    }
+
     render() {
         // stops the infinite looping & app crashing
         if (this.state.loaded == false) {
@@ -276,6 +315,23 @@ class EventPage extends React.Component {
         });
         let RSVPCreated = () => <p className="alert alert-success">You are now RSVP'd to this event! Check it out in your profile page.</p>;
         let RSVPRemoved = () => <p className="alert alert-info">You are no longer RSVP'd to this event.</p>;
+
+        let related_events = this.state.related_events.map( (related_event) => {
+            return <div className="card">
+                <a href={"/event?q=" + related_event.eventbrite_id} target="_self">
+                    <img className="card-img-top img-fluid" src={this.getImageURL(related_event)}/>
+                </a>
+                <div className="card-block">
+                    <a href={"/event?q=" + related_event.eventbrite_id} target="_self">
+                        <h4 className="card-title">{related_event.name}</h4></a>
+                    <p className="card-text">{related_event.description}</p><br/>
+                </div>
+                <div className="card-footer">
+                    <small className="text-muted">
+                        Because you liked: {related_event.category_name} </small>
+                </div>
+            </div>
+        });
 
         return (
 
@@ -361,6 +417,18 @@ class EventPage extends React.Component {
                     {comments}
                     <CommentForm submitLabel="Post Comment" onSubmit={this.update_comments} ref={ (ref) => this.form = ref }/>
                 </div>
+
+                <hr/>
+
+                <div className="row">
+                {this.state.loaded ?
+                    <div className="card-deck">
+                        {related_events}
+                    </div>
+                    : null
+                }
+                </div>
+
 
             </div>
         )

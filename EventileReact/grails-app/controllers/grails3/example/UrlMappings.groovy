@@ -41,5 +41,7 @@ class UrlMappings {
 
         "/api/event/check_user_rsvp"(controller: "event", action: "check_if_user_rsvpd", method: "GET", parseRequest: true)
 
+        "/api/event/get_related_events"(controller: "event", action: "get_related_events", method: "GET", parseRequest: true)
+
     }
 }

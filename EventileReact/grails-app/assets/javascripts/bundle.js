@@ -29820,6 +29820,8 @@
 	        _this.success_remove_rsvp = _this.success_remove_rsvp.bind(_this);
 	        _this.update_comments = _this.update_comments.bind(_this);
 	        _this.success_update_comment = _this.success_update_comment.bind(_this);
+	        _this.getRelatedEvents = _this.getRelatedEvents.bind(_this);
+	        _this.success_got_related_events = _this.success_got_related_events.bind(_this);
 
 	        _this.state = {
 	            name: 'Loading...',
@@ -29840,7 +29842,8 @@
 	            start_date_timezone: '',
 	            auth: JSON.parse(localStorage.auth),
 	            event_comments_ids: [],
-	            event_comments: []
+	            event_comments: [],
+	            related_events: []
 	        };
 
 	        return _this;
@@ -29864,8 +29867,6 @@
 	            if (event_result.image_url != "") {
 	                this.setState({ image_url: event_result.img_url });
 	            }
-	            console.log(event_result.comments.length);
-	            console.log(event_result.comments);
 	            if (event_result.comments.length != 0) {
 	                this.setState({ event_comments: event_result.comments });
 	            }
@@ -29903,7 +29904,7 @@
 	                headers: {
 	                    'Authorization': 'Bearer ' + token
 	                }
-	            }).then(checkStatus).then(this.success_found_event).then(this.checkUserRSVPd).catch(this.fail);
+	            }).then(checkStatus).then(this.success_found_event).then(this.checkUserRSVPd).then(this.getRelatedEvents).catch(this.fail);
 	        }
 	    }, {
 	        key: 'checkUserRSVPd',
@@ -30039,6 +30040,42 @@
 	            this.setState({ user_RSVP: false, user_entered_RSVP: true });
 	        }
 	    }, {
+	        key: 'getRelatedEvents',
+	        value: function getRelatedEvents() {
+	            var token = this.state.auth.access_token;
+	            var query = this.props.location.query.q;
+	            console.log("token = ", token);
+
+	            fetch("/api/event/get_related_events?current_event_category=" + this.state.category + "&q=" + query, {
+	                headers: {
+	                    'Authorization': 'Bearer ' + token
+	                }
+	            }).then(checkStatus).then(this.success_got_related_events).catch(this.failed_related);
+	        }
+	    }, {
+	        key: 'success_got_related_events',
+	        value: function success_got_related_events(related_events) {
+	            console.log("got related events = ", related_events);
+	            this.setState({ related_events: related_events });
+	            console.log("related_events state is now " + this.state.related_events);
+	        }
+	    }, {
+	        key: 'getImageURL',
+	        value: function getImageURL(event) {
+	            return event.img_url;
+	        }
+	    }, {
+	        key: 'failed_related',
+	        value: function failed_related(error) {
+	            if (error.response.status == 401) {
+	                _auth2.default.logOut();
+	                this.props.router.replace({
+	                    pathname: "/signin",
+	                    state: { nextPath: "/search" }
+	                });
+	            }
+	        }
+	    }, {
 	        key: 'render',
 	        value: function render() {
 	            var _this2 = this;
@@ -30073,6 +30110,48 @@
 	                    'You are no longer RSVP\'d to this event.'
 	                );
 	            };
+
+	            var related_events = this.state.related_events.map(function (related_event) {
+	                return _react2.default.createElement(
+	                    'div',
+	                    { className: 'card' },
+	                    _react2.default.createElement(
+	                        'a',
+	                        { href: "/event?q=" + related_event.eventbrite_id, target: '_self' },
+	                        _react2.default.createElement('img', { className: 'card-img-top img-fluid', src: _this2.getImageURL(related_event) })
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'card-block' },
+	                        _react2.default.createElement(
+	                            'a',
+	                            { href: "/event?q=" + related_event.eventbrite_id, target: '_self' },
+	                            _react2.default.createElement(
+	                                'h4',
+	                                { className: 'card-title' },
+	                                related_event.name
+	                            )
+	                        ),
+	                        _react2.default.createElement(
+	                            'p',
+	                            { className: 'card-text' },
+	                            related_event.description
+	                        ),
+	                        _react2.default.createElement('br', null)
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'card-footer' },
+	                        _react2.default.createElement(
+	                            'small',
+	                            { className: 'text-muted' },
+	                            'Because you liked: ',
+	                            related_event.category_name,
+	                            ' '
+	                        )
+	                    )
+	                );
+	            });
 
 	            return _react2.default.createElement(
 	                'div',
@@ -30270,6 +30349,16 @@
 	                    _react2.default.createElement(_commentForm2.default, { submitLabel: 'Post Comment', onSubmit: this.update_comments, ref: function ref(_ref) {
 	                            return _this2.form = _ref;
 	                        } })
+	                ),
+	                _react2.default.createElement('hr', null),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'row' },
+	                    this.state.loaded ? _react2.default.createElement(
+	                        'div',
+	                        { className: 'card-deck' },
+	                        related_events
+	                    ) : null
 	                )
 	            );
 	        }
