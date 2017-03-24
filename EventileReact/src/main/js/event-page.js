@@ -40,6 +40,9 @@ class EventPage extends React.Component {
         this.handle_have_gone = this.handle_have_gone.bind(this);
         this.update_comments = this.update_comments.bind(this);
         this.success_update_comment = this.success_update_comment.bind(this);
+        this.getRelatedEvents = this.getRelatedEvents.bind(this);
+        this.success_got_related_events = this.success_got_related_events.bind(this);
+
 
         this.state = {
             name: 'Loading...',
@@ -62,13 +65,15 @@ class EventPage extends React.Component {
             start_date_timezone: '',
             auth: JSON.parse(localStorage.auth),
             event_comments_ids: [],
-            event_comments: []
+            event_comments: [],
+            related_events: []
         }
 
     }
 
     success_found_event(event_result) {
         console.log("got event with address info? ", event_result);
+        this.setState({loaded: true});
         this.setState({
             name: event_result.name, description: event_result.description,
             category: event_result.category_name, venue_address: event_result.venue_address,
@@ -82,8 +87,6 @@ class EventPage extends React.Component {
         if (event_result.image_url != ""){
             this.setState({image_url: event_result.img_url})
         }
-        console.log(event_result.comments.length);
-        console.log(event_result.comments);
         if (event_result.comments.length !=0){
             this.setState({event_comments: event_result.comments})
         }
@@ -119,7 +122,6 @@ class EventPage extends React.Component {
     getEvent() {
         let token = this.state.auth.access_token;
         let query = this.props.location.query.q;
-        this.setState({loaded: true});
 
         fetch("/view/event?q=" + query, {
             headers: {
@@ -129,9 +131,11 @@ class EventPage extends React.Component {
             .then(checkStatus)
             .then(this.success_found_event)
             .then(this.checkUserRSVPd)
+            .then(this.getRelatedEvents)
             .catch(this.fail)
 
     }
+
 
     checkUserRSVPd(){
         let token = this.state.auth.access_token;
@@ -347,6 +351,41 @@ class EventPage extends React.Component {
         }
     }
 
+    getRelatedEvents(){
+        let token = this.state.auth.access_token;
+        let query = this.props.location.query.q;
+        console.log("token = ", token);
+
+        fetch("/api/event/get_related_events?current_event_category=" + this.state.category + "&q=" + query, {
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        })
+            .then(checkStatus)
+            .then(this.success_got_related_events)
+            .catch(this.failed_related)
+    }
+
+    success_got_related_events(related_events){
+        console.log("got related events = ", related_events);
+        this.setState({related_events: related_events});
+        console.log("related_events state is now " + this.state.related_events)
+    }
+
+    getImageURL(event){
+        return event.img_url;
+    }
+
+    failed_related(error) {
+        if (error.response.status == 401) {
+            auth.logOut();
+            this.props.router.replace({
+                pathname: "/signin",
+                state: {nextPath: "/search"}
+            })
+        }
+    }
+
     render() {
         // stops the infinite looping & app crashing
         if (this.state.loaded == false) {
@@ -363,6 +402,23 @@ class EventPage extends React.Component {
         let AnticipationRemoved = () => <p className="alert alert-info">You have removed your anticipation to this event.</p>;
 
 
+        let related_events = this.state.related_events.map( (related_event) => {
+            return <div className="card">
+                <a href={"/event?q=" + related_event.eventbrite_id} target="_self">
+                    <img className="card-img-top img-fluid" src={this.getImageURL(related_event)}/>
+                </a>
+                <div className="card-block">
+                    <a href={"/event?q=" + related_event.eventbrite_id} target="_self">
+                        <h4 className="card-title">{related_event.name}</h4></a>
+                    <p className="card-text">{related_event.description}</p><br/>
+                </div>
+                <div className="card-footer">
+                    <small className="text-muted">
+                        Because you liked: {related_event.category_name} </small>
+                </div>
+            </div>
+        });
+
         return (
 
             <div className="container">
@@ -375,6 +431,30 @@ class EventPage extends React.Component {
                     <div className="col-md-7">
                         <img className="img-responsive" src={this.state.image_url} alt=""/>
                         <br/>
+
+                        {this.state.loaded ? <div className="col-md-6">
+                            <iframe width="550" height="450" src={"https://www.google.com/maps/embed/v1/place?q=" + this.state.venue_address +
+                            "&zoom=17&key=AIzaSyDxYMTYMBgLXzsw8WXEHuPX8g2sNzHEzyk"}>
+                            </iframe>
+                        </div>
+                            : null
+                        }
+                        <br/>
+                    </div>
+
+                    <br/>
+
+                    <div className="col-md-5">
+                        <h3>Event Description</h3>
+                        <p>{this.state.description}</p>
+                        <h4>Event Category</h4>
+                        <p>{this.state.category}</p>
+                        <h4>Location</h4>
+                        <a href={"http://maps.google.com/maps?q=" + this.state.venue_latitude + "," + this.state.venue_longitude}> <p>{this.state.venue_address}</p> </a>
+                        <p>Start Date: {this.state.start_date_local}</p>
+                        <p>Time Zone: {this.state.start_date_timezone}</p>
+
+                        <div className="row">
                         <div className="col-md-7">
                             {this.state.user_entered_RSVP ? this.state.user_RSVP ?
                                     <div>
@@ -386,14 +466,15 @@ class EventPage extends React.Component {
                                         <AnticipationRemoved/>
                                     </div>
                                     : <div><button className="btn btn-default" type="RSVP" onClick={() => this.handleRSVP()}>RSVP!</button>
-                                         <RSVPRemoved/>
-                                    </div>
+                                        <RSVPRemoved/></div>
                                 : <button className="btn btn-default" type="RSVP" onClick={() => this.handleRSVP()}>RSVP!</button>
                             }
                         </div>
                         <br/><br/>
+                        </div>
 
-                        <div className="col-md-7">
+                        <div className="row">
+                        <div className="col-md-4">
                             <fieldset className="rating">
                                 <legend>Ratings</legend>
                                 <p>Average Rating: {this.state.rating}</p>
@@ -415,30 +496,29 @@ class EventPage extends React.Component {
                                                                                      title="1 star"/>
                             </fieldset>
                         </div>
+                        </div>
 
-                    </div>
-
-                    <br/>
-
-                    <div className="col-md-5">
-                        <h3>Event Description</h3>
-                        <p>{this.state.description}</p>
-                        <h4>Event Category</h4>
-                        <p>{this.state.category}</p>
-                        <h4>Location</h4>
-                        <p>{this.state.venue_address}</p>
-                        <p>Longitude: {this.state.venue_longitude}</p>
-                        <p>Latitude: {this.state.venue_latitude}</p>
-                        <p>Start Date: {this.state.start_date_local}</p>
-                        <p>Time Zone: {this.state.start_date_timezone}</p>
                     </div>
                 </div>
+
 
                 <div className="col-md-10">
                     <h2> Comments: </h2> <hr/>
                     {comments}
                     <CommentForm submitLabel="Post Comment" onSubmit={this.update_comments} ref={ (ref) => this.form = ref }/>
                 </div>
+
+                <hr/>
+
+                <div className="row">
+                {this.state.loaded ?
+                    <div className="card-deck">
+                        {related_events}
+                    </div>
+                    : null
+                }
+                </div>
+
 
             </div>
         )

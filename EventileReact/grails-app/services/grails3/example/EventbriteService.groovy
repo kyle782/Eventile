@@ -17,28 +17,35 @@ class EventbriteService {
 
     }
 
-    ArrayList<Event> search(String q, Boolean date){
+    ArrayList<Event> search(String q, String sort){
 
         ArrayList<Event> event_results = new ArrayList<Event>()
         def response_eventbrite
 
         if (q){
+            System.out.print(sort)
 
-            System.out.print(date)
-            if (date)
-            {
-                response_eventbrite = new RestBuilder().get("https://www.eventbriteapi.com/v3/events/search/?q={query}&sort_by=date"){
-                    header "Authorization", "Bearer 2S34UCIHKW5MXVP4S5M7" // authenticate with header
-                    urlVariables query:q
-                }
-            }
-            else {
+            if (sort == ""){
                 // perform a GET call to Eventbrite's REST API, returns JSON response
                 response_eventbrite = new RestBuilder().get("https://www.eventbriteapi.com/v3/events/search/?q={query}") {
                     header "Authorization", "Bearer 2S34UCIHKW5MXVP4S5M7" // authenticate with header
                     urlVariables query: q
                 }
+
             }
+            else if (sort == "free") {
+                response_eventbrite = new RestBuilder().get("https://www.eventbriteapi.com/v3/events/search/?q={query}&price=free") {
+                    header "Authorization", "Bearer 2S34UCIHKW5MXVP4S5M7" // authenticate with header
+                    urlVariables query: q
+                }
+            }
+            else {
+                response_eventbrite = new RestBuilder().get("https://www.eventbriteapi.com/v3/events/search/?q={query}&sort_by=" + sort) {
+                    header "Authorization", "Bearer 2S34UCIHKW5MXVP4S5M7" // authenticate with header
+                    urlVariables query: q
+                }
+            }
+
 
         } else {
             throw new IllegalArgumentException("The search cannot be empty!")
@@ -101,7 +108,7 @@ class EventbriteService {
             String start_date_timezone
             if (obj["events"][i].start != null){
                 start_date_local = obj["events"][i].start.local
-                start_date_timezone = obj["events"][i].start.local
+                start_date_timezone = obj["events"][i].start.timezone
             } else {
                 start_date_local = ""
                 start_date_timezone = ""

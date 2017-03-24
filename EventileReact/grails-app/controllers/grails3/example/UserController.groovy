@@ -200,5 +200,50 @@ class UserController {
 
         respond users_rating
     }
+    
+    @Secured(['ROLE_USER'])
+    def edit() {
+        User userInstance = User.get(springSecurityService.principal.id)
+        if (!userInstance) {
+            redirect(action: "list")
+            return
+        }
+        [userInstance: userInstance]
+        flash.message = 'User preferences saved'
+    }
+
+
+    def list() {
+        params.max = Math.min(params.max ? params.int('max') : 10, 100)
+        [userList: User.list(params), userTotal: User.count()]
+    }
+
+    def index() {
+        redirect action: list, params: params
+    }
+
+    def create() {
+        respond new User(params)
+    }
+
+    def save() {
+        User user = User.get(springSecurityService.principal.id)
+        if (user == null) {
+            render status: HttpStatus.NOT_FOUND
+            return
+        }
+        if (user.hasErrors()) {
+            respond user.errors, view: 'create'
+            return
+        }
+
+        user.save flush:true
+
+        request.withFormat {
+            form multipartForm { redirect user }
+            '*' { respond user, status: HttpStatus.CREATED }
+        }
+    }
+
 
 }

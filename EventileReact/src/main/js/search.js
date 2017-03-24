@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import 'whatwg-fetch';
 import auth from './auth';
-
 import { withRouter } from 'react-router';
 
 function checkStatus(response) {
@@ -22,11 +21,12 @@ class Search extends React.Component {
         this.search = this.search.bind(this);
         this.fail = this.fail.bind(this);
         this.success = this.success.bind(this);
-        this.handleInputChange = this.handleInputChange.bind(this);
+        this.change = this.change.bind(this);
 
         this.state = {
             events: [],
             auth: JSON.parse(localStorage.auth),
+            value: "",
             sort_date: false,
             sort_dist: false,
             found_events: true
@@ -41,7 +41,7 @@ class Search extends React.Component {
 
         this.setState({inProgress: true});
 
-        fetch("/api/search?q=" + query + "&date=" + this.state.sort_date , {
+        fetch("/api/search?q=" + query + "&sort=" + this.state.value, {
             headers: {
                 'Authorization': 'Bearer ' + token
             }
@@ -53,7 +53,6 @@ class Search extends React.Component {
 
     success(events) {
         console.log("Search result", events);
-        console.log("number of events = " + events.length);
         this.setState({events: events, inProgress: false});
         if (events.length > 0){
             this.setState({found_events: true});
@@ -65,7 +64,7 @@ class Search extends React.Component {
     fail(error) {
         console.error("Search has failed", error);
         this.setState({inProgress: false});
-        if(error.response.status == 401) {
+        if (error.response.status == 401) {
             auth.logOut();
             this.props.router.replace({
                 pathname: "/signin",
@@ -78,16 +77,10 @@ class Search extends React.Component {
         return event.img_url;
     }
 
-    handleInputChange(event) {
-        const target = event.target;
-        const value = target.type === 'checkbox' ? target.checked : target.value;
-        const name = target.name;
-        console.log(target.type);
-
-        this.setState({
-            [name]: value
-        });
+    change(event) {
+        this.setState({value: event.target.value});
     }
+
 
     render() {
 
@@ -111,12 +104,13 @@ class Search extends React.Component {
         </div>;
         return (
 
+
             <div className="container">
                 <center><h2> Search Page </h2></center>
                 <hr/>
                 <div className="row">
                     <div className="container">
-                        <form className="col-lg-7" onSubmit={this.search} >
+                        <form className="col-lg-7" onSubmit={this.search}>
                             <div className="form-group col-lg-7">
                                 <label className="sr-only" htmlFor="query">Search:</label>
                                 <input type="text"
@@ -127,40 +121,23 @@ class Search extends React.Component {
                                        disabled={this.state.inProgress}
                                 />
                             </div>
-                            <button type="submit" className="btn btn-default" disabled={this.state.inProgress}>Search!</button>
+                            <button type="submit" className="btn btn-default" disabled={this.state.inProgress}>Search!
+                            </button>
                         </form>
                     </div>
                 </div>
-                <hr/>
-                <div className="row">
-                    <center><h4> Sort By </h4></center>
-                    <div className="form-group">
-                        <label htmlFor="sort_date" className="col-sm-2 control-label">Date</label>
-                        <div className="col-sm-2">
-                            <input
-                                name="sort_date"
-                                className="form-check"
-                                type="checkbox"
-                                checked={this.state.sort_date}
-                                onChange={this.handleInputChange}
-                                ref="sort_date"
-                            />
-                        </div>
-                    </div>
+                <br/>
 
-                    <div className="form-group">
-                        <label htmlFor="restrict_date" className="col-sm-2 control-label">Distance</label>
-                        <div className="col-sm-2">
-                            <input
-                                name="sort_dist"
-                                className="form-check"
-                                type="checkbox"
-                                checked={this.state.sort_dist}
-                                onChange={this.handleInputChange}
-                                ref="sort_dist"
-                            />
-                        </div>
-                    </div>
+                <div>
+                    <label>
+                        Sort By
+                        <select className="selectpicker" value={this.state.value} onChange={this.change}>
+                            <option value="">Most Relevant</option>
+                            <option value="date">Date</option>
+                            <option value="distance">Distance</option>
+                            <option value="free">Free Events Only</option>
+                        </select>
+                    </label>
                 </div>
                 <hr/>
 
@@ -175,7 +152,5 @@ class Search extends React.Component {
             </div>
         )
     }
-
 }
-
 export default withRouter(Search);

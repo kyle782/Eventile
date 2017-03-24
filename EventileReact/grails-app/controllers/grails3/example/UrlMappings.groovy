@@ -8,6 +8,8 @@ class UrlMappings {
 
         "/api/user"(controller:"user", action: "show_user", method: "GET")
 
+        "/api/edit"(controller:"user", action: "edit", method: "PUT")
+
         "/"(view:"/index")
         "/**"(view:"/index")
 
@@ -54,6 +56,8 @@ class UrlMappings {
         "/api/user/get_have_gone"(controller: "user", action: "get_have_gone", method: "GET", parseRequest: true)
 
 
+
+        "/api/event/get_related_events"(controller: "event", action: "get_related_events", method: "GET", parseRequest: true)
 
     }
 }

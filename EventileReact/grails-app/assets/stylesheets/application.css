@@ -618,3 +618,8 @@ p.copyright {
 .rating > label:hover ~ input:checked ~ label, /* lighten current selection */
 .rating > input:checked ~ label:hover ~ label { color: #FFED85;  }
 
+.img-responsive {
+    display: block;
+    width: 90% !important;
+    height: 100% !important;
+}

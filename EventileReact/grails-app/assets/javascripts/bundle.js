@@ -29181,8 +29181,6 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -29210,11 +29208,12 @@
 	        _this.search = _this.search.bind(_this);
 	        _this.fail = _this.fail.bind(_this);
 	        _this.success = _this.success.bind(_this);
-	        _this.handleInputChange = _this.handleInputChange.bind(_this);
+	        _this.change = _this.change.bind(_this);
 
 	        _this.state = {
 	            events: [],
 	            auth: JSON.parse(localStorage.auth),
+	            value: "",
 	            sort_date: false,
 	            sort_dist: false,
 	            found_events: true
@@ -29232,7 +29231,7 @@
 
 	            this.setState({ inProgress: true });
 
-	            fetch("/api/search?q=" + query + "&date=" + this.state.sort_date, {
+	            fetch("/api/search?q=" + query + "&sort=" + this.state.value, {
 	                headers: {
 	                    'Authorization': 'Bearer ' + token
 	                }
@@ -29242,7 +29241,6 @@
 	        key: 'success',
 	        value: function success(events) {
 	            console.log("Search result", events);
-	            console.log("number of events = " + events.length);
 	            this.setState({ events: events, inProgress: false });
 	            if (events.length > 0) {
 	                this.setState({ found_events: true });
@@ -29269,14 +29267,9 @@
 	            return event.img_url;
 	        }
 	    }, {
-	        key: 'handleInputChange',
-	        value: function handleInputChange(event) {
-	            var target = event.target;
-	            var value = target.type === 'checkbox' ? target.checked : target.value;
-	            var name = target.name;
-	            console.log(target.type);
-
-	            this.setState(_defineProperty({}, name, value));
+	        key: 'change',
+	        value: function change(event) {
+	            this.setState({ value: event.target.value });
 	        }
 	    }, {
 	        key: 'render',
@@ -29381,59 +29374,37 @@
 	                        )
 	                    )
 	                ),
-	                _react2.default.createElement('hr', null),
+	                _react2.default.createElement('br', null),
 	                _react2.default.createElement(
 	                    'div',
-	                    { className: 'row' },
+	                    null,
 	                    _react2.default.createElement(
-	                        'center',
+	                        'label',
 	                        null,
+	                        'Sort By',
 	                        _react2.default.createElement(
-	                            'h4',
-	                            null,
-	                            ' Sort By '
-	                        )
-	                    ),
-	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'form-group' },
-	                        _react2.default.createElement(
-	                            'label',
-	                            { htmlFor: 'sort_date', className: 'col-sm-2 control-label' },
-	                            'Date'
-	                        ),
-	                        _react2.default.createElement(
-	                            'div',
-	                            { className: 'col-sm-2' },
-	                            _react2.default.createElement('input', {
-	                                name: 'sort_date',
-	                                className: 'form-check',
-	                                type: 'checkbox',
-	                                checked: this.state.sort_date,
-	                                onChange: this.handleInputChange,
-	                                ref: 'sort_date'
-	                            })
-	                        )
-	                    ),
-	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'form-group' },
-	                        _react2.default.createElement(
-	                            'label',
-	                            { htmlFor: 'restrict_date', className: 'col-sm-2 control-label' },
-	                            'Distance'
-	                        ),
-	                        _react2.default.createElement(
-	                            'div',
-	                            { className: 'col-sm-2' },
-	                            _react2.default.createElement('input', {
-	                                name: 'sort_dist',
-	                                className: 'form-check',
-	                                type: 'checkbox',
-	                                checked: this.state.sort_dist,
-	                                onChange: this.handleInputChange,
-	                                ref: 'sort_dist'
-	                            })
+	                            'select',
+	                            { className: 'selectpicker', value: this.state.value, onChange: this.change },
+	                            _react2.default.createElement(
+	                                'option',
+	                                { value: '' },
+	                                'Most Relevant'
+	                            ),
+	                            _react2.default.createElement(
+	                                'option',
+	                                { value: 'date' },
+	                                'Date'
+	                            ),
+	                            _react2.default.createElement(
+	                                'option',
+	                                { value: 'distance' },
+	                                'Distance'
+	                            ),
+	                            _react2.default.createElement(
+	                                'option',
+	                                { value: 'free' },
+	                                'Free Events Only'
+	                            )
 	                        )
 	                    )
 	                ),
@@ -29847,10 +29818,10 @@
 	        _this.checkUserRSVPd = _this.checkUserRSVPd.bind(_this);
 	        _this.success_check_user_rsvp = _this.success_check_user_rsvp.bind(_this);
 	        _this.success_remove_rsvp = _this.success_remove_rsvp.bind(_this);
-	        _this.handle_first_time = _this.handle_first_time.bind(_this);
-	        _this.handle_have_gone = _this.handle_have_gone.bind(_this);
 	        _this.update_comments = _this.update_comments.bind(_this);
 	        _this.success_update_comment = _this.success_update_comment.bind(_this);
+	        _this.getRelatedEvents = _this.getRelatedEvents.bind(_this);
+	        _this.success_got_related_events = _this.success_got_related_events.bind(_this);
 
 	        _this.state = {
 	            name: 'Loading...',
@@ -29865,15 +29836,14 @@
 	            eventbrite_id: '',
 	            user_RSVP: false,
 	            user_entered_RSVP: false,
-	            user_first_time: false,
-	            user_have_gone: false,
 	            loaded: false,
 	            users_rating: '',
 	            start_date_local: '',
 	            start_date_timezone: '',
 	            auth: JSON.parse(localStorage.auth),
 	            event_comments_ids: [],
-	            event_comments: []
+	            event_comments: [],
+	            related_events: []
 	        };
 
 	        return _this;
@@ -29883,6 +29853,7 @@
 	        key: 'success_found_event',
 	        value: function success_found_event(event_result) {
 	            console.log("got event with address info? ", event_result);
+	            this.setState({ loaded: true });
 	            this.setState({
 	                name: event_result.name, description: event_result.description,
 	                category: event_result.category_name, venue_address: event_result.venue_address,
@@ -29896,8 +29867,6 @@
 	            if (event_result.image_url != "") {
 	                this.setState({ image_url: event_result.img_url });
 	            }
-	            console.log(event_result.comments.length);
-	            console.log(event_result.comments);
 	            if (event_result.comments.length != 0) {
 	                this.setState({ event_comments: event_result.comments });
 	            }
@@ -29930,13 +29899,12 @@
 	        value: function getEvent() {
 	            var token = this.state.auth.access_token;
 	            var query = this.props.location.query.q;
-	            this.setState({ loaded: true });
 
 	            fetch("/view/event?q=" + query, {
 	                headers: {
 	                    'Authorization': 'Bearer ' + token
 	                }
-	            }).then(checkStatus).then(this.success_found_event).then(this.checkUserRSVPd).catch(this.fail);
+	            }).then(checkStatus).then(this.success_found_event).then(this.checkUserRSVPd).then(this.getRelatedEvents).catch(this.fail);
 	        }
 	    }, {
 	        key: 'checkUserRSVPd',
@@ -30001,7 +29969,7 @@
 	    }, {
 	        key: 'update_rating',
 	        value: function update_rating(new_rating) {
-	            var token = this.state.auth.access_tokgen;
+	            var token = this.state.auth.access_token;
 	            var query = this.props.location.query.q;
 
 	            this.setState({ users_rating: new_rating });
@@ -30043,7 +30011,7 @@
 	                    headers: {
 	                        'Authorization': 'Bearer ' + token
 	                    }
-	                }).then(checkStatus).then(this.success_remove_rsvp).catch(this.fail_comment);
+	                }).then(checkStatus).then(this.success_remove_rsvp).catch(this.fail);
 	            } else {
 	                // user is not RSVP'd to the event, add it to their rsvp
 	                var _token = this.state.auth.access_token;
@@ -30056,7 +30024,7 @@
 	                    headers: {
 	                        'Authorization': 'Bearer ' + _token
 	                    }
-	                }).then(checkStatus).then(this.success_rsvp).catch(this.fail_comment);
+	                }).then(checkStatus).then(this.success_rsvp).catch(this.fail);
 	            }
 	        }
 	    }, {
@@ -30072,69 +30040,39 @@
 	            this.setState({ user_RSVP: false, user_entered_RSVP: true });
 	        }
 	    }, {
-	        key: 'handle_first_time',
-	        value: function handle_first_time() {
-	            if (this.state.user_RSVP) {
-	                // user is RSVP'd to the event, remove the first time
-	                this.setState({ user_first_time: false });
+	        key: 'getRelatedEvents',
+	        value: function getRelatedEvents() {
+	            var token = this.state.auth.access_token;
+	            var query = this.props.location.query.q;
+	            console.log("token = ", token);
 
-	                var token = this.state.auth.access_token;
-
-	                var eventbrite_id = this.state.eventbrite_id;
-
-	                // make PUT REST call to be handled by UserController (mapped in urlMappings.groovy)
-	                fetch("/api/user/remove_first_time?eventbrite_id=" + eventbrite_id, {
-	                    method: 'PUT',
-	                    headers: {
-	                        'Authorization': 'Bearer ' + token
-	                    }
-	                }).then(checkStatus).catch(this.fail_comment);
-	            } else {
-	                // user is not RSVP'd to the event, add it to their rsvp
-	                var _token2 = this.state.auth.access_token;
-
-	                var _eventbrite_id2 = this.state.eventbrite_id;
-
-	                // make PUT REST call to be handled by UserController (mapped in urlMappings.groovy)
-	                fetch("/api/user/add_first_time?eventbrite_id=" + _eventbrite_id2, {
-	                    method: 'PUT',
-	                    headers: {
-	                        'Authorization': 'Bearer ' + _token2
-	                    }
-	                }).then(checkStatus).catch(this.fail_comment);
-	            }
+	            fetch("/api/event/get_related_events?current_event_category=" + this.state.category + "&q=" + query, {
+	                headers: {
+	                    'Authorization': 'Bearer ' + token
+	                }
+	            }).then(checkStatus).then(this.success_got_related_events).catch(this.failed_related);
 	        }
 	    }, {
-	        key: 'handle_have_gone',
-	        value: function handle_have_gone() {
-	            if (this.state.user_RSVP) {
-	                // user is RSVP'd to the event, remove the have gone
-	                this.setState({ user_have_gone: false });
-
-	                var token = this.state.auth.access_token;
-
-	                var eventbrite_id = this.state.eventbrite_id;
-
-	                // make PUT REST call to be handled by UserController (mapped in urlMappings.groovy)
-	                fetch("/api/user/remove_have_gone?eventbrite_id=" + eventbrite_id, {
-	                    method: 'PUT',
-	                    headers: {
-	                        'Authorization': 'Bearer ' + token
-	                    }
-	                }).then(checkStatus).catch(this.fail_comment);
-	            } else {
-	                // user is not RSVP'd to the event, add it to their rsvp
-	                var _token3 = this.state.auth.access_token;
-
-	                var _eventbrite_id3 = this.state.eventbrite_id;
-
-	                // make PUT REST call to be handled by UserController (mapped in urlMappings.groovy)
-	                fetch("/api/user/add_have_gone?eventbrite_id=" + _eventbrite_id3, {
-	                    method: 'PUT',
-	                    headers: {
-	                        'Authorization': 'Bearer ' + _token3
-	                    }
-	                }).then(checkStatus).catch(this.fail_comment);
+	        key: 'success_got_related_events',
+	        value: function success_got_related_events(related_events) {
+	            console.log("got related events = ", related_events);
+	            this.setState({ related_events: related_events });
+	            console.log("related_events state is now " + this.state.related_events);
+	        }
+	    }, {
+	        key: 'getImageURL',
+	        value: function getImageURL(event) {
+	            return event.img_url;
+	        }
+	    }, {
+	        key: 'failed_related',
+	        value: function failed_related(error) {
+	            if (error.response.status == 401) {
+	                _auth2.default.logOut();
+	                this.props.router.replace({
+	                    pathname: "/signin",
+	                    state: { nextPath: "/search" }
+	                });
 	            }
 	        }
 	    }, {
@@ -30172,20 +30110,48 @@
 	                    'You are no longer RSVP\'d to this event.'
 	                );
 	            };
-	            var AnticipationCreated = function AnticipationCreated() {
+
+	            var related_events = this.state.related_events.map(function (related_event) {
 	                return _react2.default.createElement(
-	                    'p',
-	                    { className: 'alert alert-success' },
-	                    'You have added you anticipation! Check it out in your profile page.'
+	                    'div',
+	                    { className: 'card' },
+	                    _react2.default.createElement(
+	                        'a',
+	                        { href: "/event?q=" + related_event.eventbrite_id, target: '_self' },
+	                        _react2.default.createElement('img', { className: 'card-img-top img-fluid', src: _this2.getImageURL(related_event) })
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'card-block' },
+	                        _react2.default.createElement(
+	                            'a',
+	                            { href: "/event?q=" + related_event.eventbrite_id, target: '_self' },
+	                            _react2.default.createElement(
+	                                'h4',
+	                                { className: 'card-title' },
+	                                related_event.name
+	                            )
+	                        ),
+	                        _react2.default.createElement(
+	                            'p',
+	                            { className: 'card-text' },
+	                            related_event.description
+	                        ),
+	                        _react2.default.createElement('br', null)
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'card-footer' },
+	                        _react2.default.createElement(
+	                            'small',
+	                            { className: 'text-muted' },
+	                            'Because you liked: ',
+	                            related_event.category_name,
+	                            ' '
+	                        )
+	                    )
 	                );
-	            };
-	            var AnticipationRemoved = function AnticipationRemoved() {
-	                return _react2.default.createElement(
-	                    'p',
-	                    { className: 'alert alert-info' },
-	                    'You have removed your anticipation to this event.'
-	                );
-	            };
+	            });
 
 	            return _react2.default.createElement(
 	                'div',
@@ -30210,112 +30176,12 @@
 	                        { className: 'col-md-7' },
 	                        _react2.default.createElement('img', { className: 'img-responsive', src: this.state.image_url, alt: '' }),
 	                        _react2.default.createElement('br', null),
-	                        _react2.default.createElement(
+	                        this.state.loaded ? _react2.default.createElement(
 	                            'div',
-	                            { className: 'col-md-7' },
-	                            this.state.user_entered_RSVP ? this.state.user_RSVP ? _react2.default.createElement(
-	                                'div',
-	                                null,
-	                                _react2.default.createElement(
-	                                    'button',
-	                                    { className: 'btn btn-default', type: 'RSVP', onClick: function onClick() {
-	                                            return _this2.handleRSVP();
-	                                        } },
-	                                    'Revoke RSVP'
-	                                ),
-	                                _react2.default.createElement(RSVPCreated, null),
-	                                _react2.default.createElement(
-	                                    'button',
-	                                    { className: 'btn btn-default', type: 'first-time', onClick: function onClick() {
-	                                            return _this2.handle_first_time();
-	                                        } },
-	                                    'First Time!'
-	                                ),
-	                                _react2.default.createElement(AnticipationCreated, null),
-	                                _react2.default.createElement(
-	                                    'button',
-	                                    { className: 'btn btn-default', type: 'have-gone', onClick: function onClick() {
-	                                            return _this2.handle_have_gone();
-	                                        } },
-	                                    'I Have Gone Before!'
-	                                ),
-	                                _react2.default.createElement(AnticipationRemoved, null)
-	                            ) : _react2.default.createElement(
-	                                'div',
-	                                null,
-	                                _react2.default.createElement(
-	                                    'button',
-	                                    { className: 'btn btn-default', type: 'RSVP', onClick: function onClick() {
-	                                            return _this2.handleRSVP();
-	                                        } },
-	                                    'RSVP!'
-	                                ),
-	                                _react2.default.createElement(RSVPRemoved, null)
-	                            ) : _react2.default.createElement(
-	                                'button',
-	                                { className: 'btn btn-default', type: 'RSVP', onClick: function onClick() {
-	                                        return _this2.handleRSVP();
-	                                    } },
-	                                'RSVP!'
-	                            )
-	                        ),
-	                        _react2.default.createElement('br', null),
-	                        _react2.default.createElement('br', null),
-	                        _react2.default.createElement(
-	                            'div',
-	                            { className: 'col-md-7' },
-	                            _react2.default.createElement(
-	                                'fieldset',
-	                                { className: 'rating' },
-	                                _react2.default.createElement(
-	                                    'legend',
-	                                    null,
-	                                    'Ratings'
-	                                ),
-	                                _react2.default.createElement(
-	                                    'p',
-	                                    null,
-	                                    'Average Rating: ',
-	                                    this.state.rating
-	                                ),
-	                                _react2.default.createElement(
-	                                    'p',
-	                                    null,
-	                                    'Your Rating: ',
-	                                    this.state.users_rating
-	                                ),
-	                                _react2.default.createElement('input', { type: 'radio', id: 'star5', name: 'rating', value: '5',
-	                                    onClick: function onClick() {
-	                                        return _this2.update_rating(5);
-	                                    } }),
-	                                _react2.default.createElement('label', { className: 'full', htmlFor: 'star5',
-	                                    title: '5 stars' }),
-	                                _react2.default.createElement('input', { type: 'radio', id: 'star4', name: 'rating', value: '4',
-	                                    onClick: function onClick() {
-	                                        return _this2.update_rating(4);
-	                                    } }),
-	                                _react2.default.createElement('label', { className: 'full', htmlFor: 'star4',
-	                                    title: '4 stars' }),
-	                                _react2.default.createElement('input', { type: 'radio', id: 'star3', name: 'rating', value: '3',
-	                                    onClick: function onClick() {
-	                                        return _this2.update_rating(3);
-	                                    } }),
-	                                _react2.default.createElement('label', { className: 'full', htmlFor: 'star3',
-	                                    title: '3 stars' }),
-	                                _react2.default.createElement('input', { type: 'radio', id: 'star2', name: 'rating', value: '2',
-	                                    onClick: function onClick() {
-	                                        return _this2.update_rating(2);
-	                                    } }),
-	                                _react2.default.createElement('label', { className: 'full', htmlFor: 'star2',
-	                                    title: '2 stars' }),
-	                                _react2.default.createElement('input', { type: 'radio', id: 'star1', name: 'rating', value: '1',
-	                                    onClick: function onClick() {
-	                                        return _this2.update_rating(1);
-	                                    } }),
-	                                _react2.default.createElement('label', { className: 'full', htmlFor: 'star1',
-	                                    title: '1 star' })
-	                            )
-	                        )
+	                            { className: 'col-md-6' },
+	                            _react2.default.createElement('iframe', { width: '550', height: '450', src: "https://www.google.com/maps/embed/v1/place?q=" + this.state.venue_address + "&zoom=17&key=AIzaSyDxYMTYMBgLXzsw8WXEHuPX8g2sNzHEzyk" })
+	                        ) : null,
+	                        _react2.default.createElement('br', null)
 	                    ),
 	                    _react2.default.createElement('br', null),
 	                    _react2.default.createElement(
@@ -30347,21 +30213,15 @@
 	                            'Location'
 	                        ),
 	                        _react2.default.createElement(
-	                            'p',
-	                            null,
-	                            this.state.venue_address
-	                        ),
-	                        _react2.default.createElement(
-	                            'p',
-	                            null,
-	                            'Longitude: ',
-	                            this.state.venue_longitude
-	                        ),
-	                        _react2.default.createElement(
-	                            'p',
-	                            null,
-	                            'Latitude: ',
-	                            this.state.venue_latitude
+	                            'a',
+	                            { href: "http://maps.google.com/maps?q=" + this.state.venue_latitude + "," + this.state.venue_longitude },
+	                            ' ',
+	                            _react2.default.createElement(
+	                                'p',
+	                                null,
+	                                this.state.venue_address
+	                            ),
+	                            ' '
 	                        ),
 	                        _react2.default.createElement(
 	                            'p',
@@ -30374,6 +30234,104 @@
 	                            null,
 	                            'Time Zone: ',
 	                            this.state.start_date_timezone
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'row' },
+	                            _react2.default.createElement(
+	                                'div',
+	                                { className: 'col-md-7' },
+	                                this.state.user_entered_RSVP ? this.state.user_RSVP ? _react2.default.createElement(
+	                                    'div',
+	                                    null,
+	                                    _react2.default.createElement(
+	                                        'button',
+	                                        { className: 'btn btn-default', type: 'RSVP', onClick: function onClick() {
+	                                                return _this2.handleRSVP();
+	                                            } },
+	                                        'Revoke RSVP'
+	                                    ),
+	                                    _react2.default.createElement(RSVPCreated, null)
+	                                ) : _react2.default.createElement(
+	                                    'div',
+	                                    null,
+	                                    _react2.default.createElement(
+	                                        'button',
+	                                        { className: 'btn btn-default', type: 'RSVP', onClick: function onClick() {
+	                                                return _this2.handleRSVP();
+	                                            } },
+	                                        'RSVP!'
+	                                    ),
+	                                    _react2.default.createElement(RSVPRemoved, null)
+	                                ) : _react2.default.createElement(
+	                                    'button',
+	                                    { className: 'btn btn-default', type: 'RSVP', onClick: function onClick() {
+	                                            return _this2.handleRSVP();
+	                                        } },
+	                                    'RSVP!'
+	                                )
+	                            ),
+	                            _react2.default.createElement('br', null),
+	                            _react2.default.createElement('br', null)
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'row' },
+	                            _react2.default.createElement(
+	                                'div',
+	                                { className: 'col-md-4' },
+	                                _react2.default.createElement(
+	                                    'fieldset',
+	                                    { className: 'rating' },
+	                                    _react2.default.createElement(
+	                                        'legend',
+	                                        null,
+	                                        'Ratings'
+	                                    ),
+	                                    _react2.default.createElement(
+	                                        'p',
+	                                        null,
+	                                        'Average Rating: ',
+	                                        this.state.rating
+	                                    ),
+	                                    _react2.default.createElement(
+	                                        'p',
+	                                        null,
+	                                        'Your Rating: ',
+	                                        this.state.users_rating
+	                                    ),
+	                                    _react2.default.createElement('input', { type: 'radio', id: 'star5', name: 'rating', value: '5',
+	                                        onClick: function onClick() {
+	                                            return _this2.update_rating(5);
+	                                        } }),
+	                                    _react2.default.createElement('label', { className: 'full', htmlFor: 'star5',
+	                                        title: '5 stars' }),
+	                                    _react2.default.createElement('input', { type: 'radio', id: 'star4', name: 'rating', value: '4',
+	                                        onClick: function onClick() {
+	                                            return _this2.update_rating(4);
+	                                        } }),
+	                                    _react2.default.createElement('label', { className: 'full', htmlFor: 'star4',
+	                                        title: '4 stars' }),
+	                                    _react2.default.createElement('input', { type: 'radio', id: 'star3', name: 'rating', value: '3',
+	                                        onClick: function onClick() {
+	                                            return _this2.update_rating(3);
+	                                        } }),
+	                                    _react2.default.createElement('label', { className: 'full', htmlFor: 'star3',
+	                                        title: '3 stars' }),
+	                                    _react2.default.createElement('input', { type: 'radio', id: 'star2', name: 'rating', value: '2',
+	                                        onClick: function onClick() {
+	                                            return _this2.update_rating(2);
+	                                        } }),
+	                                    _react2.default.createElement('label', { className: 'full', htmlFor: 'star2',
+	                                        title: '2 stars' }),
+	                                    _react2.default.createElement('input', { type: 'radio', id: 'star1', name: 'rating', value: '1',
+	                                        onClick: function onClick() {
+	                                            return _this2.update_rating(1);
+	                                        } }),
+	                                    _react2.default.createElement('label', { className: 'full', htmlFor: 'star1',
+	                                        title: '1 star' })
+	                                )
+	                            )
 	                        )
 	                    )
 	                ),
@@ -30391,6 +30349,16 @@
 	                    _react2.default.createElement(_commentForm2.default, { submitLabel: 'Post Comment', onSubmit: this.update_comments, ref: function ref(_ref) {
 	                            return _this2.form = _ref;
 	                        } })
+	                ),
+	                _react2.default.createElement('hr', null),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'row' },
+	                    this.state.loaded ? _react2.default.createElement(
+	                        'div',
+	                        { className: 'card-deck' },
+	                        related_events
+	                    ) : null
 	                )
 	            );
 	        }
