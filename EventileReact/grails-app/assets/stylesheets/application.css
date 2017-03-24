@@ -623,3 +623,10 @@ p.copyright {
     width: 90% !important;
     height: 100% !important;
 }
+
+.col-sm-4-control-label {
+    display:flex;
+    justify-content: flex-start;
+    margin-left: 10px;
+
+}
