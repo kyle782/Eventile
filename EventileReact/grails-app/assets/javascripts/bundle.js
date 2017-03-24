@@ -84,19 +84,19 @@
 
 	var _eventPage2 = _interopRequireDefault(_eventPage);
 
-	var _welcomePage = __webpack_require__(253);
+	var _welcomePage = __webpack_require__(254);
 
 	var _welcomePage2 = _interopRequireDefault(_welcomePage);
 
-	var _homeDashboard = __webpack_require__(254);
+	var _homeDashboard = __webpack_require__(255);
 
 	var _homeDashboard2 = _interopRequireDefault(_homeDashboard);
 
-	var _publicEventPage = __webpack_require__(255);
+	var _publicEventPage = __webpack_require__(256);
 
 	var _publicEventPage2 = _interopRequireDefault(_publicEventPage);
 
-	var _createEvent = __webpack_require__(256);
+	var _createEvent = __webpack_require__(257);
 
 	var _createEvent2 = _interopRequireDefault(_createEvent);
 
@@ -29510,6 +29510,10 @@
 	        _this.success = _this.success.bind(_this);
 	        _this.fail = _this.fail.bind(_this);
 	        _this.render = _this.render.bind(_this);
+	        _this.getUserCreatedEvents = _this.getUserCreatedEvents.bind(_this);
+	        _this.success_got_created_events = _this.success_got_created_events.bind(_this);
+	        _this.getUserRSVPEvents = _this.getUserRSVPEvents.bind(_this);
+	        _this.success_got_rsvp_events = _this.success_got_rsvp_events.bind(_this);
 
 	        _this.state = {
 	            name: '',
@@ -29517,6 +29521,8 @@
 	            location: '',
 	            gotUser: false,
 	            user_preferences: [],
+	            user_created_events: [],
+	            user_rsvp_events: [],
 	            auth: JSON.parse(localStorage.auth)
 	        };
 	        return _this;
@@ -29531,7 +29537,42 @@
 	                headers: {
 	                    'Authorization': 'Bearer ' + token // pass authentication token as a header to the REST API call
 	                }
-	            }).then(checkStatus).then(this.success).catch(this.fail);
+	            }).then(checkStatus).then(this.success).then(this.getUserCreatedEvents).catch(this.fail);
+	        }
+	    }, {
+	        key: 'getUserCreatedEvents',
+	        value: function getUserCreatedEvents() {
+	            var token = this.state.auth.access_token;
+
+	            fetch("/api/event/get_user_created_events", {
+	                headers: {
+	                    'Authorization': 'Bearer ' + token
+	                }
+	            }).then(checkStatus).then(this.success_got_created_events).then(this.getUserRSVPEvents).catch(this.fail);
+	        }
+	    }, {
+	        key: 'getUserRSVPEvents',
+	        value: function getUserRSVPEvents() {
+	            var token = this.state.auth.access_token;
+
+	            fetch("/api/user/get_user_rsvp_events", {
+	                headers: {
+	                    'Authorization': 'Bearer ' + token
+	                }
+	            }).then(checkStatus).then(this.success_got_rsvp_events).catch(this.fail);
+	        }
+	    }, {
+	        key: 'success_got_rsvp_events',
+	        value: function success_got_rsvp_events(rsvp_events) {
+	            console.log("!!got user's rsvp events = ", rsvp_events);
+	            this.setState({ user_rsvp_events: rsvp_events });
+	        }
+	    }, {
+	        key: 'success_got_created_events',
+	        value: function success_got_created_events(created_events) {
+	            console.log("!!got user's created events = ", created_events);
+	            console.log("num of created events = ", created_events.length);
+	            this.setState({ user_created_events: created_events });
 	        }
 	    }, {
 	        key: 'success',
@@ -29563,6 +29604,19 @@
 	                this.getUser();
 	            }
 
+	            var created_events = this.state.user_created_events.map(function (created_event) {
+	                return _react2.default.createElement(
+	                    'div',
+	                    null,
+	                    _react2.default.createElement(
+	                        'p',
+	                        null,
+	                        'Name: ',
+	                        created_event.name
+	                    )
+	                );
+	            });
+
 	            var prefs = this.state.user_preferences.map(function (preference) {
 	                return _react2.default.createElement(
 	                    'div',
@@ -29571,6 +29625,19 @@
 	                        'p',
 	                        null,
 	                        preference
+	                    )
+	                );
+	            });
+
+	            var rsvp_events = this.state.user_rsvp_events.map(function (rsvp_event) {
+	                return _react2.default.createElement(
+	                    'div',
+	                    null,
+	                    _react2.default.createElement(
+	                        'p',
+	                        null,
+	                        'Name: ',
+	                        rsvp_event.name
 	                    )
 	                );
 	            });
@@ -29660,6 +29727,10 @@
 
 	var _auth2 = _interopRequireDefault(_auth);
 
+	var _commentForm = __webpack_require__(253);
+
+	var _commentForm2 = _interopRequireDefault(_commentForm);
+
 	var _reactRouter = __webpack_require__(178);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -29697,8 +29768,8 @@
 	        _this.update_rating = _this.update_rating.bind(_this);
 	        _this.success_update_rating = _this.success_update_rating.bind(_this);
 	        _this.render = _this.render.bind(_this);
-	        _this.handleRSVP = _this.handleRSVP.bind(_this);
-	        _this.success_rsvp = _this.success_rsvp.bind(_this);
+	        _this.update_comments = _this.update_comments.bind(_this);
+	        _this.success_update_comment = _this.success_update_comment(_this);
 
 	        _this.state = {
 	            name: 'Loading...',
@@ -29709,11 +29780,9 @@
 	            venue_address: '',
 	            venue_longitude: '',
 	            venue_latitude: '',
-	            eventbrite_id: '',
-	            user_RSVP: false,
 	            loaded: false,
 	            auth: JSON.parse(localStorage.auth),
-	            comments: []
+	            event_comments: []
 	        };
 
 	        return _this;
@@ -29726,7 +29795,7 @@
 	            this.setState({
 	                name: event_result.name, description: event_result.description,
 	                category: event_result.category_name, venue_address: event_result.venue_address,
-	                venue_longitude: event_result.longitude, venue_latitude: event_result.latitude, eventbrite_id: event_result.eventbrite_id
+	                venue_longitude: event_result.longitude, venue_latitude: event_result.latitude
 	            });
 	            if (event_result.num_ratings != 0) {
 	                this.setState({ rating: event_result.average_rating });
@@ -29734,9 +29803,9 @@
 	            if (event_result.image_url != "") {
 	                this.setState({ image_url: event_result.img_url });
 	            }
-	            console.log(event_result.comments.length);
+	            console.log(event_result.comments);
 	            if (event_result.comments.length != 0) {
-	                this.setState({ comments: event_result.comments });
+	                this.setState({ event_comments: event_result.comments });
 	            }
 	        }
 	    }, {
@@ -29762,6 +29831,40 @@
 	                    'Authorization': 'Bearer ' + token
 	                }
 	            }).then(checkStatus).then(this.success_found_event).catch(this.fail);
+	        }
+
+	        /**
+	         * Method to update the comments for the event. Called when clicking on the button
+	         * @param new_comment, from the form on the page (just the button for now)
+	         */
+
+	    }, {
+	        key: 'update_comments',
+	        value: function update_comments(e) {
+	            e.preventDefault();
+	            var form = this.form.data();
+
+	            var body = "comment=" + form.comment + "&date=" + form.date;
+
+	            var token = this.state.auth.access_token;
+	            var query = this.props.location.query.q;
+
+	            console.log("token=" + token);
+
+	            // make PUT REST call to be handled by EventController (mapped in urlMappings.groovy)
+	            fetch("/api/event/update_comments?q=" + query + "&c=" + form.comment, { // parameters for the method
+	                method: 'PUT',
+	                headers: {
+	                    'Authorization': 'Bearer ' + token
+	                },
+	                body: body
+	            }).then(checkStatus).then(this.success_update_comment).catch(this.fail);
+	        }
+	    }, {
+	        key: 'success_update_comment',
+	        value: function success_update_comment(event_result) {
+	            console.log("event_result is ", event_result);
+	            this.setState({ event_comments: event_result.comments });
 	        }
 
 	        /**
@@ -29797,35 +29900,6 @@
 	            this.setState({ rating: event_result.average_rating });
 	        }
 	    }, {
-	        key: 'handleRSVP',
-	        value: function handleRSVP() {
-	            console.log("ok rsvping");
-
-	            if (this.state.user_RSVP) {
-	                // user is RSVP'd to the event, remove the event from their rsvp
-	                this.setState({ user_RSVP: false });
-	            } else {
-	                // user is not RSVP'd to the event, add it to their rsvp
-	                var token = this.state.auth.access_token;
-
-	                var eventbrite_id = this.state.eventbrite_id;
-
-	                // make PUT REST call to be handled by UserController (mapped in urlMappings.groovy)
-	                fetch("/api/user/addRSVP?eventbrite_id=" + eventbrite_id, {
-	                    method: 'PUT',
-	                    headers: {
-	                        'Authorization': 'Bearer ' + token
-	                    }
-	                }).then(checkStatus).then(this.success_rsvp).catch(this.fail);
-	            }
-	        }
-	    }, {
-	        key: 'success_rsvp',
-	        value: function success_rsvp() {
-	            console.log("rsvp'd!");
-	            this.setState({ user_RSVP: true });
-	        }
-	    }, {
 	        key: 'render',
 	        value: function render() {
 	            var _this2 = this;
@@ -29834,19 +29908,16 @@
 	            if (this.state.loaded == false) {
 	                this.getEvent();
 	            }
-	            var comments = this.state.comments.map(function (thecomments) {
+	            var comments = this.state.event_comments.map(function (comment) {
+	                debugger;
 	                return _react2.default.createElement(
 	                    'div',
 	                    { className: 'main' },
 	                    _react2.default.createElement(
 	                        'p',
 	                        null,
-	                        'thecomments.comment_body '
-	                    ),
-	                    _react2.default.createElement(
-	                        'p',
-	                        null,
-	                        'thecomments.dateCreated'
+	                        comment,
+	                        ' '
 	                    )
 	                );
 	            });
@@ -29954,20 +30025,7 @@
 	                        _react2.default.createElement('label', { className: 'full', htmlFor: 'star1',
 	                            title: 'Sucks big time - 1 star' })
 	                    ),
-	                    this.state.user_RSVP ? _react2.default.createElement(
-	                        'button',
-	                        { type: 'RSVP', onClick: function onClick() {
-	                                return _this2.handleRSVP();
-	                            } },
-	                        'Revoke RSVP'
-	                    ) : _react2.default.createElement(
-	                        'button',
-	                        { type: 'RSVP', onClick: function onClick() {
-	                                return _this2.handleRSVP();
-	                            } },
-	                        'RSVP!'
-	                    )
-	                    ),
+	                    _react2.default.createElement('br', null),
 	                    _react2.default.createElement(
 	                        'h2',
 	                        null,
@@ -29975,7 +30033,11 @@
 	                    ),
 	                    ' ',
 	                    _react2.default.createElement('br', null),
-	                    comments
+	                    comments,
+	                    _react2.default.createElement('br', null),
+	                    _react2.default.createElement(_commentForm2.default, { submitLabel: 'Post Comment', onSubmit: this.update_comments, ref: function ref(_ref) {
+	                            return _this2.form = _ref;
+	                        } })
 	                )
 	            );
 	        }
@@ -29988,6 +30050,102 @@
 
 /***/ },
 /* 253 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactDom = __webpack_require__(32);
+
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+
+	__webpack_require__(246);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Created by FrankJiao on 2017-03-23.
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
+
+	var CommentForm = function (_React$Component) {
+	    _inherits(CommentForm, _React$Component);
+
+	    function CommentForm(props) {
+	        _classCallCheck(this, CommentForm);
+
+	        return _possibleConstructorReturn(this, (CommentForm.__proto__ || Object.getPrototypeOf(CommentForm)).call(this, props));
+	    }
+
+	    _createClass(CommentForm, [{
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'form',
+	                { className: 'form-horizontal', name: 'commentForm', onSubmit: this.props.onSubmit, ref: 'commentForm' },
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'form-group' },
+	                    _react2.default.createElement(
+	                        'label',
+	                        { htmlFor: 'comment', className: 'col-sm-3 control-label' },
+	                        'Write Your Comment:'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-sm-5' },
+	                        _react2.default.createElement('input', { type: 'text',
+	                            className: 'form-control', id: 'comment',
+	                            placeholder: 'Comment',
+	                            ref: 'comment'
+	                        })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'form-group' },
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-sm-offset-3 col-sm-5' },
+	                        _react2.default.createElement(
+	                            'button',
+	                            { type: 'submit', className: 'btn btn-default' },
+	                            this.props.submitLabel
+	                        )
+	                    )
+	                )
+	            );
+	        }
+	    }, {
+	        key: 'data',
+	        value: function data() {
+	            var comment = _reactDom2.default.findDOMNode(this.refs.comment).value.trim();
+	            return {
+	                comment: comment
+	            };
+	        }
+	    }]);
+
+	    return CommentForm;
+	}(_react2.default.Component);
+
+	exports.default = CommentForm;
+
+/***/ },
+/* 254 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -30241,7 +30399,7 @@
 	exports.default = (0, _reactRouter.withRouter)(WelcomePage);
 
 /***/ },
-/* 254 */
+/* 255 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -30491,7 +30649,7 @@
 	exports.default = (0, _reactRouter.withRouter)(HomeDashboard);
 
 /***/ },
-/* 255 */
+/* 256 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -30684,7 +30842,7 @@
 	exports.default = (0, _reactRouter.withRouter)(PublicEventPage);
 
 /***/ },
-/* 256 */
+/* 257 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -30703,7 +30861,7 @@
 
 	var _reactRouter = __webpack_require__(178);
 
-	var _createEventForm = __webpack_require__(257);
+	var _createEventForm = __webpack_require__(258);
 
 	var _createEventForm2 = _interopRequireDefault(_createEventForm);
 
@@ -30826,7 +30984,7 @@
 	exports.default = (0, _reactRouter.withRouter)(CreateEvent);
 
 /***/ },
-/* 257 */
+/* 258 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';

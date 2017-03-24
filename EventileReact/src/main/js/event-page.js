@@ -5,6 +5,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import 'whatwg-fetch';
 import auth from './auth';
+import CommentForm from './comment-form';
+
 
 import {withRouter} from 'react-router';
 
@@ -28,7 +30,8 @@ class EventPage extends React.Component {
         this.update_rating = this.update_rating.bind(this);
         this.success_update_rating = this.success_update_rating.bind(this);
         this.render = this.render.bind(this);
-        this.saveComment = this.saveComment.bind(this);
+        this.update_comments = this.update_comments.bind(this);
+        this.success_update_comment = this.success_update_comment(this);
 
         this.state = {
             name: 'Loading...',
@@ -41,7 +44,7 @@ class EventPage extends React.Component {
             venue_latitude: '',
             loaded: false,
             auth: JSON.parse(localStorage.auth),
-            comments: []
+            event_comments: []
         }
 
     }
@@ -59,9 +62,9 @@ class EventPage extends React.Component {
         if (event_result.image_url != ""){
             this.setState({image_url: event_result.img_url})
         }
-        console.log(event_result.comments.length);
+        console.log(event_result.comments);
         if (event_result.comments.length !=0){
-            this.setState({comments: event_result.comments})
+            this.setState({event_comments: event_result.comments})
         }
     }
 
@@ -92,10 +95,37 @@ class EventPage extends React.Component {
 
     }
 
-    saveComment(event_result){
-        console.log("event_result is ", event_result);
-        this.setState({comments: event_result.comments});
+    /**
+     * Method to update the comments for the event. Called when clicking on the button
+     * @param new_comment, from the form on the page (just the button for now)
+     */
+    update_comments(e) {
+        e.preventDefault();
+        let form = this.form.data();
 
+        let body = "comment=" + form.comment + "&date=" + form.date;
+
+        let token = this.state.auth.access_token;
+        let query = this.props.location.query.q;
+
+        console.log("token="+token);
+
+        // make PUT REST call to be handled by EventController (mapped in urlMappings.groovy)
+        fetch("/api/event/update_comments?q=" + query + "&c=" + form.comment, { // parameters for the method
+            method: 'PUT',
+            headers: {
+                'Authorization': 'Bearer ' + token
+            },
+            body:body
+        })
+            .then(checkStatus)
+            .then(this.success_update_comment)
+            .catch(this.fail);
+    }
+
+    success_update_comment(event_result){
+        console.log("event_result is ", event_result);
+        this.setState({event_comments: event_result.comments});
     }
 
     /**
@@ -133,10 +163,9 @@ class EventPage extends React.Component {
         if (this.state.loaded == false) {
             this.getEvent();
         }
-        let comments = this.state.comments.map( (comment) => {
+        let comments = this.state.event_comments.map( (comment) => {
             return <div className="main">
-                <p>{comment.comment_body} </p>
-                <p>{comment.dateCreated}</p>
+                <p>{comment} </p>
             </div>
         });
 
@@ -181,31 +210,18 @@ class EventPage extends React.Component {
                                onClick={() => this.update_rating(1)}/><label className="full" htmlFor="star1"
                                                                              title="Sucks big time - 1 star"/>
                     </fieldset>
+
                     <br/>
+
                     <h2> Comments: </h2> <br/>
                     {comments}
 
                     <br/>
 
-                    <div className="row">
-                        <div className="container">
-                            <form className="col-lg-7" onSubmit={this.saveComment}>
-                                <div className="form-group col-lg-7">
-                                    <label className="sr-only" htmlFor="query">Search</label>
-                                    <input type="text"
-                                           className="form-control"
-                                           id="query"
-                                           placeholder="Enter your comments here"
-                                           ref="query"
-                                    />
-                                </div>
-                                <button type="submit" className="btn btn-default">Submit</button>
-                            </form>
-                        </div>
-                    </div>
+                    <CommentForm submitLabel="Post Comment" onSubmit={this.update_comments} ref={ (ref) => this.form = ref }/>
+
                 </div>
             </div>
-
         )
     }
 }
