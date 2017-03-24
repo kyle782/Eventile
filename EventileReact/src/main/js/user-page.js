@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import UserForm from './new-signup';
 import 'whatwg-fetch';
 import auth from './auth';
 import { withRouter } from 'react-router';
@@ -29,7 +30,8 @@ class UserPage extends React.Component {
         this.getUserRatedEvents = this.getUserRatedEvents.bind(this);
         this.success_got_rated_events = this.success_got_rated_events.bind(this);
         this.getRatedEventName = this.getRatedEventName.bind(this);
-
+        this.edit = this.edit.bind(this);              
+        this.toggleEdit = this.toggleEdit.bind(this);    
 
         this.state = {
             name: '',
@@ -41,6 +43,7 @@ class UserPage extends React.Component {
             user_rsvp_events: [],
             user_ratings: [],
             rated_event: '',
+            edited: false,    
             auth: JSON.parse(localStorage.auth)
         }
     }
@@ -152,12 +155,41 @@ class UserPage extends React.Component {
 
         this.setState({rated_event: response_event});
     }
+    
+    edit() {
+        let token = this.state.auth.access_token;
+
+        fetch("/api/edit", {
+            method: "PUT",
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        })
+            .then(checkStatus)
+            .then(this.success_edited)
+            .catch(this.fail)
+
+    }    
+
+    toggleEdit() {
+        this.setState({edited: !this.state.edited})
+    }
+
+    success_edited(edits){
+        console.log("edited!!");
+        this.setState({edited: true});
+
+    }
 
     render() {
 
         // needed to stop the infinite looping
         if (this.state.gotUser == false){
             this.getUser();
+        }
+        
+        if (this.state.edited == false) {
+            this.edit();
         }
 
         let created_events = this.state.user_created_events.map( (created_event) => {
@@ -204,6 +236,9 @@ class UserPage extends React.Component {
                     {rsvp_events}
                     <h2> Your Event Ratings: </h2>
                     {rated_events}
+            
+                    <button onClick={this.edit} ref={ (ref) => this.form = ref }>Edit</button>
+                    
                 </div>
             </div>
 
