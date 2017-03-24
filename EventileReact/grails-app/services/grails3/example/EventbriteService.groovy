@@ -101,7 +101,7 @@ class EventbriteService {
             String start_date_timezone
             if (obj["events"][i].start != null){
                 start_date_local = obj["events"][i].start.local
-                start_date_timezone = obj["events"][i].start.local
+                start_date_timezone = obj["events"][i].start.timezone
             } else {
                 start_date_local = ""
                 start_date_timezone = ""

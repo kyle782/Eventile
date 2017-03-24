@@ -29879,6 +29879,7 @@
 	        key: 'success_found_event',
 	        value: function success_found_event(event_result) {
 	            console.log("got event with address info? ", event_result);
+	            this.setState({ loaded: true });
 	            this.setState({
 	                name: event_result.name, description: event_result.description,
 	                category: event_result.category_name, venue_address: event_result.venue_address,
@@ -29926,7 +29927,6 @@
 	        value: function getEvent() {
 	            var token = this.state.auth.access_token;
 	            var query = this.props.location.query.q;
-	            this.setState({ loaded: true });
 
 	            fetch("/view/event?q=" + query, {
 	                headers: {
@@ -30126,96 +30126,12 @@
 	                        { className: 'col-md-7' },
 	                        _react2.default.createElement('img', { className: 'img-responsive', src: this.state.image_url, alt: '' }),
 	                        _react2.default.createElement('br', null),
-	                        _react2.default.createElement(
+	                        this.state.loaded ? _react2.default.createElement(
 	                            'div',
-	                            { className: 'col-md-7' },
-	                            this.state.user_entered_RSVP ? this.state.user_RSVP ? _react2.default.createElement(
-	                                'div',
-	                                null,
-	                                _react2.default.createElement(
-	                                    'button',
-	                                    { className: 'btn btn-default', type: 'RSVP', onClick: function onClick() {
-	                                            return _this2.handleRSVP();
-	                                        } },
-	                                    'Revoke RSVP'
-	                                ),
-	                                _react2.default.createElement(RSVPCreated, null)
-	                            ) : _react2.default.createElement(
-	                                'div',
-	                                null,
-	                                _react2.default.createElement(
-	                                    'button',
-	                                    { className: 'btn btn-default', type: 'RSVP', onClick: function onClick() {
-	                                            return _this2.handleRSVP();
-	                                        } },
-	                                    'RSVP!'
-	                                ),
-	                                _react2.default.createElement(RSVPRemoved, null)
-	                            ) : _react2.default.createElement(
-	                                'button',
-	                                { className: 'btn btn-default', type: 'RSVP', onClick: function onClick() {
-	                                        return _this2.handleRSVP();
-	                                    } },
-	                                'RSVP!'
-	                            )
-	                        ),
-	                        _react2.default.createElement('br', null),
-	                        _react2.default.createElement('br', null),
-	                        _react2.default.createElement(
-	                            'div',
-	                            { className: 'col-md-7' },
-	                            _react2.default.createElement(
-	                                'fieldset',
-	                                { className: 'rating' },
-	                                _react2.default.createElement(
-	                                    'legend',
-	                                    null,
-	                                    'Ratings'
-	                                ),
-	                                _react2.default.createElement(
-	                                    'p',
-	                                    null,
-	                                    'Average Rating: ',
-	                                    this.state.rating
-	                                ),
-	                                _react2.default.createElement(
-	                                    'p',
-	                                    null,
-	                                    'Your Rating: ',
-	                                    this.state.users_rating
-	                                ),
-	                                _react2.default.createElement('input', { type: 'radio', id: 'star5', name: 'rating', value: '5',
-	                                    onClick: function onClick() {
-	                                        return _this2.update_rating(5);
-	                                    } }),
-	                                _react2.default.createElement('label', { className: 'full', htmlFor: 'star5',
-	                                    title: '5 stars' }),
-	                                _react2.default.createElement('input', { type: 'radio', id: 'star4', name: 'rating', value: '4',
-	                                    onClick: function onClick() {
-	                                        return _this2.update_rating(4);
-	                                    } }),
-	                                _react2.default.createElement('label', { className: 'full', htmlFor: 'star4',
-	                                    title: '4 stars' }),
-	                                _react2.default.createElement('input', { type: 'radio', id: 'star3', name: 'rating', value: '3',
-	                                    onClick: function onClick() {
-	                                        return _this2.update_rating(3);
-	                                    } }),
-	                                _react2.default.createElement('label', { className: 'full', htmlFor: 'star3',
-	                                    title: '3 stars' }),
-	                                _react2.default.createElement('input', { type: 'radio', id: 'star2', name: 'rating', value: '2',
-	                                    onClick: function onClick() {
-	                                        return _this2.update_rating(2);
-	                                    } }),
-	                                _react2.default.createElement('label', { className: 'full', htmlFor: 'star2',
-	                                    title: '2 stars' }),
-	                                _react2.default.createElement('input', { type: 'radio', id: 'star1', name: 'rating', value: '1',
-	                                    onClick: function onClick() {
-	                                        return _this2.update_rating(1);
-	                                    } }),
-	                                _react2.default.createElement('label', { className: 'full', htmlFor: 'star1',
-	                                    title: '1 star' })
-	                            )
-	                        )
+	                            { className: 'col-md-6' },
+	                            _react2.default.createElement('iframe', { width: '550', height: '450', src: "https://www.google.com/maps/embed/v1/place?q=" + this.state.venue_address + "&zoom=17&key=AIzaSyDxYMTYMBgLXzsw8WXEHuPX8g2sNzHEzyk" })
+	                        ) : null,
+	                        _react2.default.createElement('br', null)
 	                    ),
 	                    _react2.default.createElement('br', null),
 	                    _react2.default.createElement(
@@ -30247,21 +30163,15 @@
 	                            'Location'
 	                        ),
 	                        _react2.default.createElement(
-	                            'p',
-	                            null,
-	                            this.state.venue_address
-	                        ),
-	                        _react2.default.createElement(
-	                            'p',
-	                            null,
-	                            'Longitude: ',
-	                            this.state.venue_longitude
-	                        ),
-	                        _react2.default.createElement(
-	                            'p',
-	                            null,
-	                            'Latitude: ',
-	                            this.state.venue_latitude
+	                            'a',
+	                            { href: "http://maps.google.com/maps?q=" + this.state.venue_latitude + "," + this.state.venue_longitude },
+	                            ' ',
+	                            _react2.default.createElement(
+	                                'p',
+	                                null,
+	                                this.state.venue_address
+	                            ),
+	                            ' '
 	                        ),
 	                        _react2.default.createElement(
 	                            'p',
@@ -30274,6 +30184,104 @@
 	                            null,
 	                            'Time Zone: ',
 	                            this.state.start_date_timezone
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'row' },
+	                            _react2.default.createElement(
+	                                'div',
+	                                { className: 'col-md-7' },
+	                                this.state.user_entered_RSVP ? this.state.user_RSVP ? _react2.default.createElement(
+	                                    'div',
+	                                    null,
+	                                    _react2.default.createElement(
+	                                        'button',
+	                                        { className: 'btn btn-default', type: 'RSVP', onClick: function onClick() {
+	                                                return _this2.handleRSVP();
+	                                            } },
+	                                        'Revoke RSVP'
+	                                    ),
+	                                    _react2.default.createElement(RSVPCreated, null)
+	                                ) : _react2.default.createElement(
+	                                    'div',
+	                                    null,
+	                                    _react2.default.createElement(
+	                                        'button',
+	                                        { className: 'btn btn-default', type: 'RSVP', onClick: function onClick() {
+	                                                return _this2.handleRSVP();
+	                                            } },
+	                                        'RSVP!'
+	                                    ),
+	                                    _react2.default.createElement(RSVPRemoved, null)
+	                                ) : _react2.default.createElement(
+	                                    'button',
+	                                    { className: 'btn btn-default', type: 'RSVP', onClick: function onClick() {
+	                                            return _this2.handleRSVP();
+	                                        } },
+	                                    'RSVP!'
+	                                )
+	                            ),
+	                            _react2.default.createElement('br', null),
+	                            _react2.default.createElement('br', null)
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'row' },
+	                            _react2.default.createElement(
+	                                'div',
+	                                { className: 'col-md-4' },
+	                                _react2.default.createElement(
+	                                    'fieldset',
+	                                    { className: 'rating' },
+	                                    _react2.default.createElement(
+	                                        'legend',
+	                                        null,
+	                                        'Ratings'
+	                                    ),
+	                                    _react2.default.createElement(
+	                                        'p',
+	                                        null,
+	                                        'Average Rating: ',
+	                                        this.state.rating
+	                                    ),
+	                                    _react2.default.createElement(
+	                                        'p',
+	                                        null,
+	                                        'Your Rating: ',
+	                                        this.state.users_rating
+	                                    ),
+	                                    _react2.default.createElement('input', { type: 'radio', id: 'star5', name: 'rating', value: '5',
+	                                        onClick: function onClick() {
+	                                            return _this2.update_rating(5);
+	                                        } }),
+	                                    _react2.default.createElement('label', { className: 'full', htmlFor: 'star5',
+	                                        title: '5 stars' }),
+	                                    _react2.default.createElement('input', { type: 'radio', id: 'star4', name: 'rating', value: '4',
+	                                        onClick: function onClick() {
+	                                            return _this2.update_rating(4);
+	                                        } }),
+	                                    _react2.default.createElement('label', { className: 'full', htmlFor: 'star4',
+	                                        title: '4 stars' }),
+	                                    _react2.default.createElement('input', { type: 'radio', id: 'star3', name: 'rating', value: '3',
+	                                        onClick: function onClick() {
+	                                            return _this2.update_rating(3);
+	                                        } }),
+	                                    _react2.default.createElement('label', { className: 'full', htmlFor: 'star3',
+	                                        title: '3 stars' }),
+	                                    _react2.default.createElement('input', { type: 'radio', id: 'star2', name: 'rating', value: '2',
+	                                        onClick: function onClick() {
+	                                            return _this2.update_rating(2);
+	                                        } }),
+	                                    _react2.default.createElement('label', { className: 'full', htmlFor: 'star2',
+	                                        title: '2 stars' }),
+	                                    _react2.default.createElement('input', { type: 'radio', id: 'star1', name: 'rating', value: '1',
+	                                        onClick: function onClick() {
+	                                            return _this2.update_rating(1);
+	                                        } }),
+	                                    _react2.default.createElement('label', { className: 'full', htmlFor: 'star1',
+	                                        title: '1 star' })
+	                                )
+	                            )
 	                        )
 	                    )
 	                ),
