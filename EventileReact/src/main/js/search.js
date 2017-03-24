@@ -126,6 +126,7 @@ class Search extends React.Component {
                             <option value="">no sort</option>
                             <option value="date">Date</option>
                             <option value="distance">Distance</option>
+                            <option value="free">Free Events Only</option>
                         </select>
                     </label>
                 </div>

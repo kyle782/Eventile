@@ -29304,6 +29304,11 @@
 	                                'option',
 	                                { value: 'distance' },
 	                                'Distance'
+	                            ),
+	                            _react2.default.createElement(
+	                                'option',
+	                                { value: 'free' },
+	                                'Free Events Only'
 	                            )
 	                        )
 	                    )

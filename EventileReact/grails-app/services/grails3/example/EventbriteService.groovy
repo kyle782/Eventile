@@ -28,7 +28,15 @@ class EventbriteService {
                     header "Authorization", "Bearer 2S34UCIHKW5MXVP4S5M7" // authenticate with header
                     urlVariables query: q
                 }
-            } else{
+
+            }
+            else if (sort == "free") {
+                response_eventbrite = new RestBuilder().get("https://www.eventbriteapi.com/v3/events/search/?q={query}&price=free") {
+                    header "Authorization", "Bearer 2S34UCIHKW5MXVP4S5M7" // authenticate with header
+                    urlVariables query: q
+                }
+            }
+            else {
                 response_eventbrite = new RestBuilder().get("https://www.eventbriteapi.com/v3/events/search/?q={query}&sort_by=" + sort) {
                     header "Authorization", "Bearer 2S34UCIHKW5MXVP4S5M7" // authenticate with header
                     urlVariables query: q
