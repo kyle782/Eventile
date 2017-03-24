@@ -29114,13 +29114,13 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	/*import Select, {Option, OptGroup} from 'rc-select';*/
 
 	function checkStatus(response) {
 	    if (response.status >= 200 && response.status < 300) {
@@ -29143,14 +29143,12 @@
 	        _this.search = _this.search.bind(_this);
 	        _this.fail = _this.fail.bind(_this);
 	        _this.success = _this.success.bind(_this);
-	        _this.handleInputChange = _this.handleInputChange.bind(_this);
+	        _this.change = _this.change.bind(_this);
 
 	        _this.state = {
 	            events: [],
 	            auth: JSON.parse(localStorage.auth),
-	            sort_date: false,
-	            sort_dist: false
-
+	            value: ""
 	        };
 	        return _this;
 	    }
@@ -29165,7 +29163,7 @@
 
 	            this.setState({ inProgress: true });
 
-	            fetch("/api/search?q=" + query + "&date=" + this.state.sort_date, {
+	            fetch("/api/search?q=" + query + "&sort=" + this.state.value, {
 	                headers: {
 	                    'Authorization': 'Bearer ' + token
 	                }
@@ -29191,24 +29189,13 @@
 	            }
 	        }
 	    }, {
-	        key: 'getImageURL',
-	        value: function getImageURL(event) {
-	            return event.img_url;
-	        }
-	    }, {
-	        key: 'handleInputChange',
-	        value: function handleInputChange(event) {
-	            var target = event.target;
-	            var value = target.type === 'checkbox' ? target.checked : target.value;
-	            var name = target.name;
-	            console.log(target.type);
-
-	            this.setState(_defineProperty({}, name, value));
+	        key: 'change',
+	        value: function change(event) {
+	            this.setState({ value: event.target.value });
 	        }
 	    }, {
 	        key: 'render',
 	        value: function render() {
-	            var _this2 = this;
 
 	            var events = this.state.events.map(function (event) {
 	                return _react2.default.createElement(
@@ -29217,7 +29204,7 @@
 	                    _react2.default.createElement(
 	                        'a',
 	                        { href: "/pub/event?q=" + event.eventbrite_id, target: '_self' },
-	                        _react2.default.createElement('img', { className: 'card-img-top img-fluid', src: _this2.getImageURL(event) })
+	                        _react2.default.createElement('img', { className: 'card-img-top img-fluid', src: Search.getImageURL(event) })
 	                    ),
 	                    _react2.default.createElement(
 	                        'div',
@@ -29294,53 +29281,39 @@
 	                    events
 	                ),
 	                _react2.default.createElement(
-	                    'h',
+	                    'div',
 	                    null,
-	                    ' Sort By  '
-	                ),
-	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'form-group' },
 	                    _react2.default.createElement(
 	                        'label',
-	                        { htmlFor: 'sort_date', className: 'col-sm-3 control-label' },
-	                        'Date'
-	                    ),
-	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'col-sm-9' },
-	                        _react2.default.createElement('input', {
-	                            name: 'sort_date',
-	                            className: 'form-check',
-	                            type: 'checkbox',
-	                            checked: this.state.sort_date,
-	                            onChange: this.handleInputChange,
-	                            ref: 'sort_date'
-	                        })
-	                    )
-	                ),
-	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'form-group' },
-	                    _react2.default.createElement(
-	                        'label',
-	                        { htmlFor: 'restrict_date', className: 'col-sm-3 control-label' },
-	                        'Distance'
-	                    ),
-	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'col-sm-9' },
-	                        _react2.default.createElement('input', {
-	                            name: 'sort_dist',
-	                            className: 'form-check',
-	                            type: 'checkbox',
-	                            checked: this.state.sort_dist,
-	                            onChange: this.handleInputChange,
-	                            ref: 'sort_dist'
-	                        })
+	                        null,
+	                        'Sort By',
+	                        _react2.default.createElement(
+	                            'select',
+	                            { value: this.state.value, onChange: this.change },
+	                            _react2.default.createElement(
+	                                'option',
+	                                { value: '' },
+	                                'no sort'
+	                            ),
+	                            _react2.default.createElement(
+	                                'option',
+	                                { value: 'date' },
+	                                'Date'
+	                            ),
+	                            _react2.default.createElement(
+	                                'option',
+	                                { value: 'distance' },
+	                                'Distance'
+	                            )
+	                        )
 	                    )
 	                )
 	            );
+	        }
+	    }], [{
+	        key: 'getImageURL',
+	        value: function getImageURL(event) {
+	            return event.img_url;
 	        }
 	    }]);
 
