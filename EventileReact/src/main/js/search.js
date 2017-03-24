@@ -131,8 +131,8 @@ class Search extends React.Component {
                 <div>
                     <label>
                         Sort By
-                        <select value={this.state.value} onChange={this.change}>
-                            <option value="">no sort</option>
+                        <select className="selectpicker" value={this.state.value} onChange={this.change}>
+                            <option value="">Most Relevant</option>
                             <option value="date">Date</option>
                             <option value="distance">Distance</option>
                             <option value="free">Free Events Only</option>

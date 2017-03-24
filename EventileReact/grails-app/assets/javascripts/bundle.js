@@ -29181,8 +29181,6 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -29210,11 +29208,12 @@
 	        _this.search = _this.search.bind(_this);
 	        _this.fail = _this.fail.bind(_this);
 	        _this.success = _this.success.bind(_this);
-	        _this.handleInputChange = _this.handleInputChange.bind(_this);
+	        _this.change = _this.change.bind(_this);
 
 	        _this.state = {
 	            events: [],
 	            auth: JSON.parse(localStorage.auth),
+	            value: "",
 	            sort_date: false,
 	            sort_dist: false,
 	            found_events: true
@@ -29232,7 +29231,7 @@
 
 	            this.setState({ inProgress: true });
 
-	            fetch("/api/search?q=" + query + "&date=" + this.state.sort_date, {
+	            fetch("/api/search?q=" + query + "&sort=" + this.state.value, {
 	                headers: {
 	                    'Authorization': 'Bearer ' + token
 	                }
@@ -29242,7 +29241,6 @@
 	        key: 'success',
 	        value: function success(events) {
 	            console.log("Search result", events);
-	            console.log("number of events = " + events.length);
 	            this.setState({ events: events, inProgress: false });
 	            if (events.length > 0) {
 	                this.setState({ found_events: true });
@@ -29269,14 +29267,9 @@
 	            return event.img_url;
 	        }
 	    }, {
-	        key: 'handleInputChange',
-	        value: function handleInputChange(event) {
-	            var target = event.target;
-	            var value = target.type === 'checkbox' ? target.checked : target.value;
-	            var name = target.name;
-	            console.log(target.type);
-
-	            this.setState(_defineProperty({}, name, value));
+	        key: 'change',
+	        value: function change(event) {
+	            this.setState({ value: event.target.value });
 	        }
 	    }, {
 	        key: 'render',
@@ -29381,59 +29374,37 @@
 	                        )
 	                    )
 	                ),
-	                _react2.default.createElement('hr', null),
+	                _react2.default.createElement('br', null),
 	                _react2.default.createElement(
 	                    'div',
-	                    { className: 'row' },
+	                    null,
 	                    _react2.default.createElement(
-	                        'center',
+	                        'label',
 	                        null,
+	                        'Sort By',
 	                        _react2.default.createElement(
-	                            'h4',
-	                            null,
-	                            ' Sort By '
-	                        )
-	                    ),
-	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'form-group' },
-	                        _react2.default.createElement(
-	                            'label',
-	                            { htmlFor: 'sort_date', className: 'col-sm-2 control-label' },
-	                            'Date'
-	                        ),
-	                        _react2.default.createElement(
-	                            'div',
-	                            { className: 'col-sm-2' },
-	                            _react2.default.createElement('input', {
-	                                name: 'sort_date',
-	                                className: 'form-check',
-	                                type: 'checkbox',
-	                                checked: this.state.sort_date,
-	                                onChange: this.handleInputChange,
-	                                ref: 'sort_date'
-	                            })
-	                        )
-	                    ),
-	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'form-group' },
-	                        _react2.default.createElement(
-	                            'label',
-	                            { htmlFor: 'restrict_date', className: 'col-sm-2 control-label' },
-	                            'Distance'
-	                        ),
-	                        _react2.default.createElement(
-	                            'div',
-	                            { className: 'col-sm-2' },
-	                            _react2.default.createElement('input', {
-	                                name: 'sort_dist',
-	                                className: 'form-check',
-	                                type: 'checkbox',
-	                                checked: this.state.sort_dist,
-	                                onChange: this.handleInputChange,
-	                                ref: 'sort_dist'
-	                            })
+	                            'select',
+	                            { className: 'selectpicker', value: this.state.value, onChange: this.change },
+	                            _react2.default.createElement(
+	                                'option',
+	                                { value: '' },
+	                                'Most Relevant'
+	                            ),
+	                            _react2.default.createElement(
+	                                'option',
+	                                { value: 'date' },
+	                                'Date'
+	                            ),
+	                            _react2.default.createElement(
+	                                'option',
+	                                { value: 'distance' },
+	                                'Distance'
+	                            ),
+	                            _react2.default.createElement(
+	                                'option',
+	                                { value: 'free' },
+	                                'Free Events Only'
+	                            )
 	                        )
 	                    )
 	                ),
