@@ -163,13 +163,17 @@ class UserController {
 
         User user = User.get(springSecurityService.principal.id)
 
-        def lowerCaseUsername = username.toLowerCase()
-        if (User.findByUsername(lowerCaseUsername)){
-            System.out.println("username already taken!")
-            throw new UserExistsException("Username ${lowerCaseUsername} is already taken.")
+        if (user.username != username){
+            def lowerCaseUsername = username.toLowerCase()
+            if (User.findByUsername(lowerCaseUsername)){
+                System.out.println("username already taken!")
+                throw new UserExistsException("Username ${lowerCaseUsername} is already taken.")
+            }
         }
 
         /** change password too TODO **/
+        System.out.println("user.password = " + user.password)
+        System.out.println("password = " + password)
 
 
         if (user.age != age){
@@ -424,6 +428,10 @@ class UserController {
         user.save()
 
         respond user
+    }
+
+    def checkUserPreferences(){
+
     }
 
 }

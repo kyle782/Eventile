@@ -34,9 +34,11 @@ class UserPage extends React.Component {
         this.submitEdit = this.submitEdit.bind(this);
         this.toggleEdit = this.toggleEdit.bind(this);
         this.success_edited = this.success_edited.bind(this);
+        this.fail_update = this.fail_update.bind(this);
 
         this.state = {
             name: '',
+            password: '',
             age: '',
             location: '',
             gotUser: false,
@@ -45,7 +47,10 @@ class UserPage extends React.Component {
             user_rsvp_events: [],
             user_ratings: [],
             rated_event: '',
+            error_message: '',
+            error: false,
             editing: false,
+            edited: false,
             auth: JSON.parse(localStorage.auth)
         }
     }
@@ -126,13 +131,26 @@ class UserPage extends React.Component {
     success(user) {
         // update the states with the user JSON object
         console.log("success: user = ", user);
-        this.setState({name: user.username, age: user.age, location: user.location,
+        this.setState({name: user.username, password: user.password, age: user.age, location: user.location,
             gotUser: true, user_preferences: user.preferences});
     }
 
     fail(error) {
         console.error("Search has failed", error);
         this.setState({gotUser: true});
+        if(error.response.status == 401) {
+            auth.logOut();
+            this.props.router.replace({
+                pathname: "/signin",
+                state: {nextPath: "/search"}
+            })
+        }
+    }
+
+    fail_update(error) {
+        console.error("failed editing user", error);
+
+        this.setState({gotUser: true, error_message: error.message, error: true, edited: true});
         if(error.response.status == 401) {
             auth.logOut();
             this.props.router.replace({
@@ -194,7 +212,7 @@ class UserPage extends React.Component {
         })
             .then(checkStatus)
             .then(this.success_edited)
-            .catch(this.fail)
+            .catch(this.fail_update)
 
     }    
 
@@ -204,7 +222,7 @@ class UserPage extends React.Component {
 
     success_edited(edited_user_response){
         console.log("edited!! resposne = ", edited_user_response);
-        this.setState({editing: false});
+        this.setState({editing: false, error: false, edited: true});
         this.setState({name: edited_user_response.username, age: edited_user_response.age, location: edited_user_response.location,
             gotUser: true, user_preferences: edited_user_response.preferences});
     }
@@ -241,32 +259,56 @@ class UserPage extends React.Component {
             </div>
         });
 
+        let Error = () => <p className="alert alert-danger">{this.state.error_message}</p>;
+        let Success = () => <p className="alert alert-success">Successfully updated your profile.</p>;
+
         return (
 
             <div>
                 <center><h2> Profile Page for {this.state.name} </h2></center>
                 <hr/>
                 <div className="container">
-                    Name: {this.state.name} <br/>
-                    Location: {this.state.location} <br/>
-                    Age: {this.state.age} <br/>
+                    <div className="jumbotron">
+                        <div className="row">
+                            <div className="col-md-4 col-xs-12 col-sm-6 col-lg-4">
+                                <img src="https://www.svgimages.com/svg-image/s5/man-passportsize-silhouette-icon-256x256.png" alt="stack photo" className="img"/>
+                            </div>
+                            <div className="col-md-8 col-xs-12 col-sm-6 col-lg-8">
+                                <div className="container">
+                                    <h2>{this.state.name} </h2>
+                                </div>
 
-                    <h2> Selected Preferences: </h2>
-                    {prefs}
-                    <br/>
-                    <h2> Your Created Events: </h2>
-                    {created_events}
-                    <h2> Your RSVPs: </h2>
-                    {rsvp_events}
-                    <h2> Your Event Ratings: </h2>
-                    {rated_events}
-            
-                    <button className="btn btn-default" onClick={() => this.toggleEdit()} ref={ (ref) => this.form = ref }>Edit</button>
+                                <ul className="container details">
+                                    <h4>Location: {this.state.location}</h4><br/>
+                                    <h4>Age: {this.state.age} <br/></h4>
+                                    <br/>
+                                    <h2> Your Preferences </h2>
+                                    {prefs}
+                                    <h2> Your Created Events </h2>
+                                    {created_events}
+                                    <h2> Your RSVPs </h2>
+                                    {rsvp_events}
+                                    <h2> Your Event Ratings </h2>
+                                    {rated_events}
+
+                                    <br/> <br/> <br/>
+
+                                    <button className="btn btn-default" onClick={() => this.toggleEdit()} ref={ (ref) => this.form = ref }>Edit Information</button>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
                     {this.state.editing ?
-                        <UserForm submitLabel="Submit Changes" onSubmit={this.submitEdit} ref={ (ref) => this.form = ref }/>
+                        <div>
+                            <UserForm submitLabel="Submit Changes" username={this.state.name} password={this.state.password}
+                                      age={this.state.age} location = {this.state.location} user_prefs = {this.state.user_preferences}
+                                      onSubmit={this.submitEdit} ref={ (ref) => this.form = ref }/>
+
+                            {this.state.edited ? this.state.error ? <Error/> : null : null}
+                        </div>
                         : null
                     }
-                    
+                    {this.state.edited ? this.state.error ? null: this.state.editing ? null : <Success/> : null}
                 </div>
             </div>
 

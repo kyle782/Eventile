@@ -29495,9 +29495,11 @@
 	        _this.submitEdit = _this.submitEdit.bind(_this);
 	        _this.toggleEdit = _this.toggleEdit.bind(_this);
 	        _this.success_edited = _this.success_edited.bind(_this);
+	        _this.fail_update = _this.fail_update.bind(_this);
 
 	        _this.state = {
 	            name: '',
+	            password: '',
 	            age: '',
 	            location: '',
 	            gotUser: false,
@@ -29506,7 +29508,10 @@
 	            user_rsvp_events: [],
 	            user_ratings: [],
 	            rated_event: '',
+	            error_message: '',
+	            error: false,
 	            editing: false,
+	            edited: false,
 	            auth: JSON.parse(localStorage.auth)
 	        };
 	        return _this;
@@ -29580,7 +29585,7 @@
 	        value: function success(user) {
 	            // update the states with the user JSON object
 	            console.log("success: user = ", user);
-	            this.setState({ name: user.username, age: user.age, location: user.location,
+	            this.setState({ name: user.username, password: user.password, age: user.age, location: user.location,
 	                gotUser: true, user_preferences: user.preferences });
 	        }
 	    }, {
@@ -29588,6 +29593,20 @@
 	        value: function fail(error) {
 	            console.error("Search has failed", error);
 	            this.setState({ gotUser: true });
+	            if (error.response.status == 401) {
+	                _auth2.default.logOut();
+	                this.props.router.replace({
+	                    pathname: "/signin",
+	                    state: { nextPath: "/search" }
+	                });
+	            }
+	        }
+	    }, {
+	        key: 'fail_update',
+	        value: function fail_update(error) {
+	            console.error("failed editing user", error);
+
+	            this.setState({ gotUser: true, error_message: error.message, error: true, edited: true });
 	            if (error.response.status == 401) {
 	                _auth2.default.logOut();
 	                this.props.router.replace({
@@ -29625,7 +29644,7 @@
 	                headers: {
 	                    'Authorization': 'Bearer ' + token
 	                }
-	            }).then(checkStatus).then(this.success_edited).catch(this.fail);
+	            }).then(checkStatus).then(this.success_edited).catch(this.fail_update);
 	        }
 	    }, {
 	        key: 'toggleEdit',
@@ -29636,7 +29655,7 @@
 	        key: 'success_edited',
 	        value: function success_edited(edited_user_response) {
 	            console.log("edited!! resposne = ", edited_user_response);
-	            this.setState({ editing: false });
+	            this.setState({ editing: false, error: false, edited: true });
 	            this.setState({ name: edited_user_response.username, age: edited_user_response.age, location: edited_user_response.location,
 	                gotUser: true, user_preferences: edited_user_response.preferences });
 	        }
@@ -29719,6 +29738,21 @@
 	                );
 	            });
 
+	            var Error = function Error() {
+	                return _react2.default.createElement(
+	                    'p',
+	                    { className: 'alert alert-danger' },
+	                    _this2.state.error_message
+	                );
+	            };
+	            var Success = function Success() {
+	                return _react2.default.createElement(
+	                    'p',
+	                    { className: 'alert alert-success' },
+	                    'Successfully updated your profile.'
+	                );
+	            };
+
 	            return _react2.default.createElement(
 	                'div',
 	                null,
@@ -29737,55 +29771,102 @@
 	                _react2.default.createElement(
 	                    'div',
 	                    { className: 'container' },
-	                    'Name: ',
-	                    this.state.name,
-	                    ' ',
-	                    _react2.default.createElement('br', null),
-	                    'Location: ',
-	                    this.state.location,
-	                    ' ',
-	                    _react2.default.createElement('br', null),
-	                    'Age: ',
-	                    this.state.age,
-	                    ' ',
-	                    _react2.default.createElement('br', null),
 	                    _react2.default.createElement(
-	                        'h2',
+	                        'div',
+	                        { className: 'jumbotron' },
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'row' },
+	                            _react2.default.createElement(
+	                                'div',
+	                                { className: 'col-md-4 col-xs-12 col-sm-6 col-lg-4' },
+	                                _react2.default.createElement('img', { src: 'https://www.svgimages.com/svg-image/s5/man-passportsize-silhouette-icon-256x256.png', alt: 'stack photo', className: 'img' })
+	                            ),
+	                            _react2.default.createElement(
+	                                'div',
+	                                { className: 'col-md-8 col-xs-12 col-sm-6 col-lg-8' },
+	                                _react2.default.createElement(
+	                                    'div',
+	                                    { className: 'container' },
+	                                    _react2.default.createElement(
+	                                        'h2',
+	                                        null,
+	                                        this.state.name,
+	                                        ' '
+	                                    ),
+	                                    _react2.default.createElement('hr', null)
+	                                ),
+	                                _react2.default.createElement(
+	                                    'ul',
+	                                    { className: 'container details' },
+	                                    _react2.default.createElement(
+	                                        'h4',
+	                                        null,
+	                                        'Location: ',
+	                                        this.state.location
+	                                    ),
+	                                    _react2.default.createElement('br', null),
+	                                    _react2.default.createElement(
+	                                        'h4',
+	                                        null,
+	                                        'Age: ',
+	                                        this.state.age,
+	                                        ' ',
+	                                        _react2.default.createElement('br', null)
+	                                    ),
+	                                    _react2.default.createElement(
+	                                        'h2',
+	                                        null,
+	                                        ' Your Preferences '
+	                                    ),
+	                                    prefs,
+	                                    _react2.default.createElement(
+	                                        'h2',
+	                                        null,
+	                                        ' Your Created Events '
+	                                    ),
+	                                    created_events,
+	                                    _react2.default.createElement(
+	                                        'h2',
+	                                        null,
+	                                        ' Your RSVPs: '
+	                                    ),
+	                                    rsvp_events,
+	                                    _react2.default.createElement(
+	                                        'h2',
+	                                        null,
+	                                        ' Your Event Ratings '
+	                                    ),
+	                                    rated_events,
+	                                    _react2.default.createElement('br', null),
+	                                    ' ',
+	                                    _react2.default.createElement('br', null),
+	                                    ' ',
+	                                    _react2.default.createElement('br', null),
+	                                    _react2.default.createElement(
+	                                        'button',
+	                                        { className: 'btn btn-default', onClick: function onClick() {
+	                                                return _this2.toggleEdit();
+	                                            }, ref: function ref(_ref) {
+	                                                return _this2.form = _ref;
+	                                            } },
+	                                        'Edit Information'
+	                                    )
+	                                )
+	                            )
+	                        )
+	                    ),
+	                    this.state.editing ? _react2.default.createElement(
+	                        'div',
 	                        null,
-	                        ' Selected Preferences: '
-	                    ),
-	                    prefs,
-	                    _react2.default.createElement('br', null),
-	                    _react2.default.createElement(
-	                        'h2',
-	                        null,
-	                        ' Your Created Events: '
-	                    ),
-	                    created_events,
-	                    _react2.default.createElement(
-	                        'h2',
-	                        null,
-	                        ' Your RSVPs: '
-	                    ),
-	                    rsvp_events,
-	                    _react2.default.createElement(
-	                        'h2',
-	                        null,
-	                        ' Your Event Ratings: '
-	                    ),
-	                    rated_events,
-	                    _react2.default.createElement(
-	                        'button',
-	                        { className: 'btn btn-default', onClick: function onClick() {
-	                                return _this2.toggleEdit();
-	                            }, ref: function ref(_ref) {
-	                                return _this2.form = _ref;
-	                            } },
-	                        'Edit'
-	                    ),
-	                    this.state.editing ? _react2.default.createElement(_profileEditForm2.default, { submitLabel: 'Submit Changes', onSubmit: this.submitEdit, ref: function ref(_ref2) {
-	                            return _this2.form = _ref2;
-	                        } }) : null
+	                        _react2.default.createElement(_profileEditForm2.default, { submitLabel: 'Submit Changes', username: this.state.name, password: this.state.password,
+	                            age: this.state.age, location: this.state.location, user_prefs: this.state.user_preferences,
+	                            onSubmit: this.submitEdit, ref: function ref(_ref2) {
+	                                return _this2.form = _ref2;
+	                            } }),
+	                        this.state.edited ? this.state.error ? _react2.default.createElement(Error, null) : null : null
+	                    ) : null,
+	                    this.state.edited ? this.state.error ? null : this.state.editing ? null : _react2.default.createElement(Success, null) : null
 	                )
 	            );
 	        }
@@ -29897,7 +29978,7 @@
 	                        { className: 'col-sm-9' },
 	                        _react2.default.createElement('input', { type: 'text',
 	                            className: 'form-control', id: 'signin-name',
-	                            placeholder: 'Username',
+	                            value: this.props.username,
 	                            ref: 'name'
 	                        })
 	                    )
@@ -29916,7 +29997,7 @@
 	                        _react2.default.createElement('input', { type: 'password',
 	                            className: 'form-control',
 	                            id: 'signin-password',
-	                            placeholder: 'Password',
+	                            value: this.props.password,
 	                            ref: 'password'
 	                        })
 	                    )
@@ -29935,7 +30016,7 @@
 	                        _react2.default.createElement('input', { type: 'age',
 	                            className: 'form-control',
 	                            id: 'signin-age',
-	                            placeholder: 'Age',
+	                            value: this.props.age,
 	                            ref: 'age'
 	                        })
 	                    )
@@ -29954,7 +30035,8 @@
 	                        _react2.default.createElement('input', { type: 'location',
 	                            className: 'form-control',
 	                            id: 'signin-location',
-	                            placeholder: 'Location',
+	                            placeholder: this.props.location,
+	                            value: this.props.location,
 	                            ref: 'location'
 	                        })
 	                    )
@@ -30408,10 +30490,37 @@
 	    }, {
 	        key: 'data',
 	        value: function data() {
-	            var name = _reactDom2.default.findDOMNode(this.refs.name).value.trim(),
-	                password = _reactDom2.default.findDOMNode(this.refs.password).value.trim(),
-	                age = _reactDom2.default.findDOMNode(this.refs.age).value.trim(),
+	            var name = "";
+	            if (_reactDom2.default.findDOMNode(this.refs.name).value.trim() == "") {
+	                name = this.props.username;
+	                console.log("blank username, using " + name);
+	            } else {
+	                name = _reactDom2.default.findDOMNode(this.refs.name).value.trim();
+	            }
+
+	            var password = "";
+	            if (_reactDom2.default.findDOMNode(this.refs.password).value.trim() == "") {
+	                password = this.props.password;
+	                console.log("blank password, using " + password);
+	            } else {
+	                password = _reactDom2.default.findDOMNode(this.refs.password).value.trim();
+	            }
+
+	            var age = "";
+	            if (_reactDom2.default.findDOMNode(this.refs.age).value.trim() == "") {
+	                age = this.props.age;
+	                console.log("blank age, using " + this.props.age);
+	            } else {
+	                age = _reactDom2.default.findDOMNode(this.refs.age).value.trim();
+	            }
+
+	            var location = "";
+	            if (_reactDom2.default.findDOMNode(this.refs.location).value.trim() == "") {
+	                location = this.props.location;
+	                console.log("blank location, using " + this.props.location);
+	            } else {
 	                location = _reactDom2.default.findDOMNode(this.refs.location).value.trim();
+	            }
 
 	            return {
 	                username: name,

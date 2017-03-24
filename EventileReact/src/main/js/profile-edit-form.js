@@ -32,7 +32,7 @@ class UserForm extends React.Component {
             pref_home_life: false,
             pref_auto_boat_air: false,
             pref_hobbies_ints: false,
-            pref_other: false,
+            pref_other: false
         };
 
         this.handleInputChange = this.handleInputChange.bind(this);
@@ -57,7 +57,7 @@ class UserForm extends React.Component {
                     <div className="col-sm-9">
                         <input type="text"
                                className="form-control" id="signin-name"
-                               placeholder="Username"
+                               value={this.props.username}
                                ref="name"
                         />
                     </div>
@@ -68,7 +68,7 @@ class UserForm extends React.Component {
                         <input type="password"
                                className="form-control"
                                id="signin-password"
-                               placeholder="Password"
+                               value={this.props.password}
                                ref="password"
                         />
                     </div>
@@ -79,7 +79,7 @@ class UserForm extends React.Component {
                         <input type="age"
                                className="form-control"
                                id="signin-age"
-                               placeholder="Age"
+                               value={this.props.age}
                                ref="age"
                         />
                     </div>
@@ -90,7 +90,8 @@ class UserForm extends React.Component {
                         <input type="location"
                                className="form-control"
                                id="signin-location"
-                               placeholder="Location"
+                               placeholder={this.props.location}
+                               value={this.props.location}
                                ref="location"
                         />
                     </div>
@@ -396,10 +397,38 @@ class UserForm extends React.Component {
     }
 
     data() {
-        let name = ReactDOM.findDOMNode(this.refs.name).value.trim(),
-            password = ReactDOM.findDOMNode(this.refs.password).value.trim(),
-            age = ReactDOM.findDOMNode(this.refs.age).value.trim(),
+        let name = "";
+        if (ReactDOM.findDOMNode(this.refs.name).value.trim() == ""){
+            name = this.props.username;
+            console.log("blank username, using " + name);
+        } else {
+            name = ReactDOM.findDOMNode(this.refs.name).value.trim()
+        }
+
+        let password = "";
+        if (ReactDOM.findDOMNode(this.refs.password).value.trim() == ""){
+             password = this.props.password;
+            console.log("blank password, using " + password);
+
+        } else {
+            password = ReactDOM.findDOMNode(this.refs.password).value.trim();
+        }
+
+        let age = "";
+        if (ReactDOM.findDOMNode(this.refs.age).value.trim() == ""){
+            age = this.props.age;
+            console.log("blank age, using " + this.props.age);
+        } else {
+            age = ReactDOM.findDOMNode(this.refs.age).value.trim();
+        }
+
+        let location = "";
+        if (ReactDOM.findDOMNode(this.refs.location).value.trim() == ""){
+            location = this.props.location;
+            console.log("blank location, using " + this.props.location);
+        } else {
             location = ReactDOM.findDOMNode(this.refs.location).value.trim();
+        }
 
         return {
             username: name,
