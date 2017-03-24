@@ -2,7 +2,7 @@ package grails3.example
 
 class Event {
 
-    static hasMany = [comments: Comment, ratings: Rating]
+    static hasMany = [comments: Comment, ratings: Rating, first_time: User, have_gone: User]
 
     static belongsTo = [creator: User, attendees: User]
 
@@ -24,6 +24,8 @@ class Event {
         creator nullable: true
         attendees nullable: true
         ratings nullable: true
+        first_time nullable: true
+        have_gone nullable: true
     }
 
     String name

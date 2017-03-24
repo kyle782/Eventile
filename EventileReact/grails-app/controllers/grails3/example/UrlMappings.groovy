@@ -41,5 +41,19 @@ class UrlMappings {
 
         "/api/event/check_user_rsvp"(controller: "event", action: "check_if_user_rsvpd", method: "GET", parseRequest: true)
 
+        "/api/user/add_first_time"(controller: "user", action: "add_user_first_time", method: "PUT")
+
+        "/api/user/add_have_gone"(controller: "user", action: "add_user_have_gone", method: "PUT")
+
+        "/api/user/remove_first_time"(controller: "user", action: "remove_user_first_time", method: "PUT")
+
+        "/api/user/remove_have_gone"(controller: "user", action: "remove_user_have_gone", method: "PUT")
+
+        "/api/user/get_first_time"(controller: "user", action: "get_first_time", method: "GET", parseRequest: true)
+
+        "/api/user/get_have_gone"(controller: "user", action: "get_have_gone", method: "GET", parseRequest: true)
+
+
+
     }
 }

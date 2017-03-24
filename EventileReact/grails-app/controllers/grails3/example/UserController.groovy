@@ -17,7 +17,7 @@ class UserController {
 
     def signUp(@RequestParameter('username') String username, @RequestParameter('password') String password,
                @RequestParameter('age') String age, @RequestParameter('location') String location,
-                @RequestParameter('pref_music') boolean pref_music,
+               @RequestParameter('pref_music') boolean pref_music,
                @RequestParameter('pref_bus_prof') boolean pref_bus_prof,
                @RequestParameter('pref_food_drink') boolean pref_food_drink,
                @RequestParameter('pref_comm_culture') boolean pref_comm_culture,
@@ -110,10 +110,76 @@ class UserController {
     }
 
     @Secured(['ROLE_USER'])
+    def add_user_first_time(@RequestParameter('eventbrite_id') String eventbrite_id){
+        User user = User.get(springSecurityService.principal.id)
+        Event event = Event.findByEventbrite_id(eventbrite_id)
+
+        user.addToFirst_time(event)
+
+        user.save()
+
+        respond status: HttpStatus.ACCEPTED
+
+    }
+
+    @Secured(['ROLE_USER'])
+    def remove_user_first_time(@RequestParameter('eventbrite_id') String eventbrite_id){
+        User user = User.get(springSecurityService.principal.id)
+        Event event = Event.findByEventbrite_id(eventbrite_id)
+
+        user.removeFromFirst_time(event)
+
+        user.save()
+
+        respond status: HttpStatus.ACCEPTED
+
+    }
+
+    @Secured(['ROLE_USER'])
+    def add_user_have_gone(@RequestParameter('eventbrite_id') String eventbrite_id){
+        User user = User.get(springSecurityService.principal.id)
+        Event event = Event.findByEventbrite_id(eventbrite_id)
+
+        user.addToHave_gone(event)
+
+        user.save()
+
+        respond status: HttpStatus.ACCEPTED
+
+    }
+
+    @Secured(['ROLE_USER'])
+    def remove_user_have_gone(@RequestParameter('eventbrite_id') String eventbrite_id){
+        User user = User.get(springSecurityService.principal.id)
+        Event event = Event.findByEventbrite_id(eventbrite_id)
+
+        user.removeFromHave_gone(event)
+
+        user.save()
+
+        respond status: HttpStatus.ACCEPTED
+
+    }
+
+    @Secured(['ROLE_USER'])
     def get_rsvp_events(){
         User user = User.get(springSecurityService.principal.id)
         def rsvp_events = user.getRsvp_events()
         respond rsvp_events
+    }
+
+    @Secured(['ROLE_USER'])
+    def get_first_time(){
+        User user = User.get(springSecurityService.principal.id)
+        def first_time_events = user.getFirst_time()
+        respond first_time_events
+    }
+
+    @Secured(['ROLE_USER'])
+    def get_have_gone(){
+        User user = User.get(springSecurityService.principal.id)
+        def have_gone_events = user.getHave_gone()
+        respond have_gone_events
     }
 
     @Secured(['ROLE_USER'])
