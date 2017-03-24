@@ -9,7 +9,9 @@ class Event {
     static constraints = {
         // need to make nullable since grails rejects storing the event in the database if they are null
         description nullable: true
-        start_date nullable: true
+        start_date_local nullable: true
+        start_date_local nullable: true
+        start_date_timezone nullable: true
         total_rating nullable: true
         num_ratings nullable: true
         average_rating nullable: true
@@ -27,7 +29,8 @@ class Event {
     String name
     String description
     String eventbrite_id
-    String start_date
+    String start_date_local
+    String start_date_timezone
     String eventbrite_url
     String category_name
     int total_rating

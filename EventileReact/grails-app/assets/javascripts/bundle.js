@@ -84,19 +84,19 @@
 
 	var _eventPage2 = _interopRequireDefault(_eventPage);
 
-	var _welcomePage = __webpack_require__(253);
+	var _welcomePage = __webpack_require__(254);
 
 	var _welcomePage2 = _interopRequireDefault(_welcomePage);
 
-	var _homeDashboard = __webpack_require__(254);
+	var _homeDashboard = __webpack_require__(255);
 
 	var _homeDashboard2 = _interopRequireDefault(_homeDashboard);
 
-	var _publicEventPage = __webpack_require__(255);
+	var _publicEventPage = __webpack_require__(256);
 
 	var _publicEventPage2 = _interopRequireDefault(_publicEventPage);
 
-	var _createEvent = __webpack_require__(256);
+	var _createEvent = __webpack_require__(257);
 
 	var _createEvent2 = _interopRequireDefault(_createEvent);
 
@@ -29801,6 +29801,10 @@
 
 	var _auth2 = _interopRequireDefault(_auth);
 
+	var _commentForm = __webpack_require__(253);
+
+	var _commentForm2 = _interopRequireDefault(_commentForm);
+
 	var _reactRouter = __webpack_require__(178);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -29843,6 +29847,8 @@
 	        _this.checkUserRSVPd = _this.checkUserRSVPd.bind(_this);
 	        _this.success_check_user_rsvp = _this.success_check_user_rsvp.bind(_this);
 	        _this.success_remove_rsvp = _this.success_remove_rsvp.bind(_this);
+	        _this.update_comments = _this.update_comments.bind(_this);
+	        _this.success_update_comment = _this.success_update_comment.bind(_this);
 
 	        _this.state = {
 	            name: 'Loading...',
@@ -29859,8 +29865,11 @@
 	            user_entered_RSVP: false,
 	            loaded: false,
 	            users_rating: '',
+	            start_date_local: '',
+	            start_date_timezone: '',
 	            auth: JSON.parse(localStorage.auth),
-	            comments: []
+	            event_comments_ids: [],
+	            event_comments: []
 	        };
 
 	        return _this;
@@ -29874,7 +29883,8 @@
 	                name: event_result.name, description: event_result.description,
 	                category: event_result.category_name, venue_address: event_result.venue_address,
 	                venue_longitude: event_result.longitude, venue_latitude: event_result.latitude,
-	                eventbrite_id: event_result.eventbrite_id
+	                eventbrite_id: event_result.eventbrite_id, start_date_local: event_result.start_date_local,
+	                start_date_timezone: event_result.start_date_timezone
 	            });
 	            if (event_result.num_ratings != 0) {
 	                this.setState({ rating: event_result.average_rating });
@@ -29883,8 +29893,9 @@
 	                this.setState({ image_url: event_result.img_url });
 	            }
 	            console.log(event_result.comments.length);
+	            console.log(event_result.comments);
 	            if (event_result.comments.length != 0) {
-	                this.setState({ comments: event_result.comments });
+	                this.setState({ event_comments: event_result.comments });
 	            }
 	        }
 	    }, {
@@ -29906,6 +29917,11 @@
 	            }).then(checkStatus).then(this.success_found_event).catch(this.fail);
 	        }
 	    }, {
+	        key: 'fail_comment',
+	        value: function fail_comment(error) {
+	            console.log("FAILED UPDATING COMMENT = ", error);
+	        }
+	    }, {
 	        key: 'getEvent',
 	        value: function getEvent() {
 	            var token = this.state.auth.access_token;
@@ -29922,7 +29938,6 @@
 	        key: 'checkUserRSVPd',
 	        value: function checkUserRSVPd() {
 	            var token = this.state.auth.access_token;
-	            console.log("token = " + token);
 	            var query = this.props.location.query.q;
 	            this.setState({ loaded: true });
 
@@ -29935,14 +29950,42 @@
 	    }, {
 	        key: 'success_check_user_rsvp',
 	        value: function success_check_user_rsvp(response) {
-	            console.log("success, did user rsvp = ", response);
-	            console.log("response length = ", response.length);
-
 	            if (response.length != 0) {
 	                this.setState({ user_entered_RSVP: true, user_RSVP: true });
 	            } else {
 	                this.setState({ user_entered_RSVP: false, user_RSVP: false });
 	            }
+	        }
+
+	        /**
+	         * Method to update the comments for the event. Called when clicking on the button
+	         * @param new_comment, from the form on the page (just the button for now)
+	         */
+
+	    }, {
+	        key: 'update_comments',
+	        value: function update_comments(e) {
+	            e.preventDefault();
+	            var form = this.form.data();
+	            console.log("COMMENT FORM = ", form);
+
+	            var token = this.state.auth.access_token;
+	            var query = this.props.location.query.q;
+
+	            // make PUT REST call to be handled by EventController (mapped in urlMappings.groovy)
+	            fetch("/api/event/update_comments?q=" + query + "&c=" + form.comment, { // parameters for the method
+	                method: 'PUT',
+	                headers: {
+	                    'Authorization': 'Bearer ' + token
+	                }
+	            }).then(checkStatus).then(this.success_update_comment).catch(this.fail_comment);
+	        }
+	    }, {
+	        key: 'success_update_comment',
+	        value: function success_update_comment(comment_response) {
+	            console.log("SUCCESS UPDATED COMMENT");
+	            console.log("event results after updating comments =  ", comment_response);
+	            this.setState({ event_comments: this.state.event_comments.concat(comment_response.comment_body) });
 	        }
 
 	        /**
@@ -29982,8 +30025,6 @@
 	    }, {
 	        key: 'handleRSVP',
 	        value: function handleRSVP() {
-	            console.log("ok rsvping");
-
 	            if (this.state.user_RSVP) {
 	                // user is RSVP'd to the event, remove the event from their rsvp
 	                this.setState({ user_RSVP: false });
@@ -30035,19 +30076,15 @@
 	            if (this.state.loaded == false) {
 	                this.getEvent();
 	            }
-	            var comments = this.state.comments.map(function (thecomments) {
+	            var comments = this.state.event_comments.map(function (comment) {
 	                return _react2.default.createElement(
 	                    'div',
-	                    { className: 'main' },
+	                    { className: 'row' },
 	                    _react2.default.createElement(
 	                        'p',
 	                        null,
-	                        'thecomments.comment_body '
-	                    ),
-	                    _react2.default.createElement(
-	                        'p',
-	                        null,
-	                        'thecomments.dateCreated'
+	                        comment,
+	                        ' '
 	                    )
 	                );
 	            });
@@ -30178,20 +30215,9 @@
 	                                _react2.default.createElement('label', { className: 'full', htmlFor: 'star1',
 	                                    title: '1 star' })
 	                            )
-	                        ),
-	                        _react2.default.createElement(
-	                            'div',
-	                            { className: 'col-md-10' },
-	                            _react2.default.createElement(
-	                                'h2',
-	                                null,
-	                                ' Comments: '
-	                            ),
-	                            ' ',
-	                            _react2.default.createElement('hr', null),
-	                            comments
 	                        )
 	                    ),
+	                    _react2.default.createElement('br', null),
 	                    _react2.default.createElement(
 	                        'div',
 	                        { className: 'col-md-5' },
@@ -30236,8 +30262,35 @@
 	                            null,
 	                            'Latitude: ',
 	                            this.state.venue_latitude
+	                        ),
+	                        _react2.default.createElement(
+	                            'p',
+	                            null,
+	                            'Start Date: ',
+	                            this.state.start_date_local
+	                        ),
+	                        _react2.default.createElement(
+	                            'p',
+	                            null,
+	                            'Time Zone: ',
+	                            this.state.start_date_timezone
 	                        )
 	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'col-md-10' },
+	                    _react2.default.createElement(
+	                        'h2',
+	                        null,
+	                        ' Comments: '
+	                    ),
+	                    ' ',
+	                    _react2.default.createElement('hr', null),
+	                    comments,
+	                    _react2.default.createElement(_commentForm2.default, { submitLabel: 'Post Comment', onSubmit: this.update_comments, ref: function ref(_ref) {
+	                            return _this2.form = _ref;
+	                        } })
 	                )
 	            );
 	        }
@@ -30250,6 +30303,102 @@
 
 /***/ },
 /* 253 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactDom = __webpack_require__(32);
+
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+
+	__webpack_require__(246);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Created by FrankJiao on 2017-03-23.
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
+
+	var CommentForm = function (_React$Component) {
+	    _inherits(CommentForm, _React$Component);
+
+	    function CommentForm(props) {
+	        _classCallCheck(this, CommentForm);
+
+	        return _possibleConstructorReturn(this, (CommentForm.__proto__ || Object.getPrototypeOf(CommentForm)).call(this, props));
+	    }
+
+	    _createClass(CommentForm, [{
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'form',
+	                { className: 'form-horizontal', name: 'commentForm', onSubmit: this.props.onSubmit, ref: 'commentForm' },
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'form-group' },
+	                    _react2.default.createElement(
+	                        'label',
+	                        { htmlFor: 'comment', className: 'col-sm-4 control-label' },
+	                        'Write Your Comment:'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-sm-10' },
+	                        _react2.default.createElement('input', { type: 'text',
+	                            className: 'form-control', id: 'comment',
+	                            placeholder: 'Comment',
+	                            ref: 'comment'
+	                        })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'form-group' },
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-sm-offset-3 col-sm-5' },
+	                        _react2.default.createElement(
+	                            'button',
+	                            { type: 'submit', className: 'btn btn-default' },
+	                            this.props.submitLabel
+	                        )
+	                    )
+	                )
+	            );
+	        }
+	    }, {
+	        key: 'data',
+	        value: function data() {
+	            var comment = _reactDom2.default.findDOMNode(this.refs.comment).value.trim();
+	            return {
+	                comment: comment
+	            };
+	        }
+	    }]);
+
+	    return CommentForm;
+	}(_react2.default.Component);
+
+	exports.default = CommentForm;
+
+/***/ },
+/* 254 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -30503,7 +30652,7 @@
 	exports.default = (0, _reactRouter.withRouter)(WelcomePage);
 
 /***/ },
-/* 254 */
+/* 255 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -30753,7 +30902,7 @@
 	exports.default = (0, _reactRouter.withRouter)(HomeDashboard);
 
 /***/ },
-/* 255 */
+/* 256 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -30946,7 +31095,7 @@
 	exports.default = (0, _reactRouter.withRouter)(PublicEventPage);
 
 /***/ },
-/* 256 */
+/* 257 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -30965,7 +31114,7 @@
 
 	var _reactRouter = __webpack_require__(178);
 
-	var _createEventForm = __webpack_require__(257);
+	var _createEventForm = __webpack_require__(258);
 
 	var _createEventForm2 = _interopRequireDefault(_createEventForm);
 
@@ -31095,7 +31244,7 @@
 	exports.default = (0, _reactRouter.withRouter)(CreateEvent);
 
 /***/ },
-/* 257 */
+/* 258 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';

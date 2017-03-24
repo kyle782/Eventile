@@ -16,8 +16,8 @@ class CommentForm extends React.Component {
 
             <form className="form-horizontal" name="commentForm" onSubmit={this.props.onSubmit} ref="commentForm">
                 <div className="form-group">
-                    <label htmlFor="comment" className="col-sm-3 control-label">Write Your Comment:</label>
-                    <div className="col-sm-5">
+                    <label htmlFor="comment" className="col-sm-4 control-label">Write Your Comment:</label>
+                    <div className="col-sm-10">
                         <input type="text"
                                className="form-control" id="comment"
                                placeholder="Comment"
