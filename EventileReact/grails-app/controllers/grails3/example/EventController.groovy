@@ -17,12 +17,51 @@ class EventController {
 
     def index() { }
 
+    @Secured(['ROLE_USER'])
+    def show_created_event(String q){
+        // since events from the search result were saved to database, we find the event
+        def target_event = Event.findByEventbrite_id(q)
+        respond target_event, status: HttpStatus.ACCEPTED
+    }
+
+    @Secured(['ROLE_USER'])
+    def show_rated_event(String q){
+        Long id = Integer.parseInt(q)
+        System.out.println("id = " + id)
+        def target_event = Event.findById(id)
+        System.out.println("target_event is " + target_event)
+        respond target_event
+    }
+
+    @Secured(['ROLE_USER'])
+    def check_if_user_rsvpd(String q){
+        def target_event = Event.findByEventbrite_id(q)
+        User user = User.get(springSecurityService.principal.id)
+
+        ArrayList<String> response = new ArrayList<String>()
+        boolean found = false
+
+        for (User attendee : target_event.attendees){
+            System.out.println("event's attendee = " + attendee)
+            if (attendee.username == user.username){
+                found = true
+            }
+        }
+        if (found){
+            response.add(0, "found")
+            System.out.println("returning true " + response)
+            respond response
+        } else {
+            System.out.println("returning false = " + response)
+            respond response
+        }
+
+    }
+
     def show(String q) {
 
         // since events from the search result were saved to database, we find the event
         def target_event = Event.findByEventbrite_id(q)
-
-        System.out.println(target_event.name)
 
         // perform a GET to eventbrite to retrieve the complete event information since the event's description is trimmed in database
         def response_eventbrite = new RestBuilder().get("https://www.eventbriteapi.com/v3/events/{id}"){
@@ -32,6 +71,10 @@ class EventController {
 
         // cast response to JSON object
         JSONObject obj = (JSONObject) response_eventbrite.json
+
+        if (obj["status_code"] == 404){
+            throw new IllegalArgumentException("Could not find event")
+        }
 
         target_event.description = obj["description"]["text"]
         target_event.save()
@@ -69,10 +112,13 @@ class EventController {
 
         User user = User.get(springSecurityService.principal.id)
 
-        Event new_event = new Event(name: event_name, description: event_description,
-                location: event_location, start_date: event_date, category_name: "test cat", eventbrite_id: "123123",
-                eventbrite_url: "blahblah", creator: user)
+        // genereate a random id for the event
+        int random_id_int = Math.abs(new Random().nextInt() % 15000000) + 1
+        String random_id = String.valueOf(random_id_int)
 
+        Event new_event = new Event(name: event_name, description: event_description,
+                location: event_location, start_date: event_date, category_name: "test cat", eventbrite_id: random_id,
+                eventbrite_url: "blahblah", creator: user)
 
         if (!new_event.save()){
             System.out.println(new_event.errors)
@@ -93,17 +139,34 @@ class EventController {
     def update_rating(@RequestParameter('q') String q, @RequestParameter('r') int r){
         def target_event = Event.findByEventbrite_id(q)
 
+        User user = User.get(springSecurityService.principal.id)
+
         int current_num_ratings = target_event.num_ratings
 
-        if (current_num_ratings == 0){
-            target_event.total_rating = r
-            target_event.num_ratings++
-            target_event.average_rating = r
-        } else {
-            target_event.num_ratings++
-            target_event.total_rating+= r
+        Rating rating = Rating.findByEventAndRater(target_event, user)
+
+        if (rating){
+
+            target_event.total_rating -= rating.users_rating
+            target_event.total_rating += r
             target_event.average_rating = (target_event.total_rating)/(target_event.num_ratings)
+
+            rating.users_rating = r
+
+        } else {
+
+            rating = new Rating(users_rating: r, rater: user, event: target_event,
+                    event_name: target_event.name, eventbrite_id: target_event.eventbrite_id)
+            user.addToRatings(rating)
+
+            target_event.total_rating += r
+            target_event.num_ratings += 1
+            target_event.average_rating = (target_event.total_rating)/(target_event.num_ratings)
+
         }
+
+        rating.save()
+        user.save()
 
         // save to database, print errors for debugging if unable to save
         if(!target_event.save(flush:true) ) {

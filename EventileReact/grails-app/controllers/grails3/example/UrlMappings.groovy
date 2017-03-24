@@ -25,7 +25,19 @@ class UrlMappings {
 
         "/api/user/addRSVP"(controller: "user", action: "add_user_RSVP", method: "PUT")
 
+        "/api/user/removeRSVP"(controller: "user", action: "remove_user_RSVP", method: "PUT")
+
         "/api/user/get_user_rsvp_events"(controller: "user", action: "get_rsvp_events", method: "GET", parseRequest: true)
+
+        "/api/user/get_user_rated_events"(controller: "user", action: "get_user_rated_events", method: "GET", parseRequest: true)
+
+        "/api/user/get_users_rating"(controller: "user", action: "get_users_rating", method: "GET", parseRequest: true)
+
+        "/api/event/show_rated_event"(controller: "event", action: "show_rated_event", method: "GET", parseRequest: true)
+
+        "/api/event/show_created_event"(controller: "event", action: "show_created_event", method: "GET", parseRequest: true)
+
+        "/api/event/check_user_rsvp"(controller: "event", action: "check_if_user_rsvpd", method: "GET", parseRequest: true)
 
     }
 }
