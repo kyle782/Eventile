@@ -1,9 +1,10 @@
 package grails3.example
 
 import grails.plugin.springsecurity.annotation.Secured
+import grails.rest.RestfulController
 
 @Secured(['ROLE_USER'])
-class SearchController {
+class SearchController extends RestfulController {
 
     static responseFormats = ['json']
 
@@ -11,13 +12,17 @@ class SearchController {
     def EventbriteService
     def springSecurityService
 
-    def search(String q) {
+    SearchController() {
+        super(SearchController)
+    }
+
+    def search(String q, String sort) {
         // Gets the current user name - can be used to control permissions
         def info = springSecurityService.currentUser.username
         log.debug("Searching by query = ${q}...")
 
         // perform a GET requestion to Eventbrite's API using EventbriteService class
-        def response_eventbrite = EventbriteService.search(q)
+        def response_eventbrite = EventbriteService.search(q, sort)
 
         respond response_eventbrite
     }

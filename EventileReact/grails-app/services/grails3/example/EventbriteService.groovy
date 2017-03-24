@@ -7,6 +7,9 @@ import org.grails.datastore.mapping.query.Query
 import org.grails.web.json.JSONObject
 import groovy.json.JsonSlurper
 
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+
 @Transactional
 class EventbriteService {
 
@@ -14,18 +17,35 @@ class EventbriteService {
 
     }
 
-    ArrayList<Event> search(String q){
+    ArrayList<Event> search(String q, String sort){
 
         ArrayList<Event> event_results = new ArrayList<Event>()
         def response_eventbrite
 
         if (q){
+            System.out.print(sort)
 
-            // perform a GET call to Eventbrite's REST API, returns JSON response
-            response_eventbrite = new RestBuilder().get("https://www.eventbriteapi.com/v3/events/search/?q={query}"){
-                header "Authorization", "Bearer 2S34UCIHKW5MXVP4S5M7" // authenticate with header
-                urlVariables query:q
+            if (sort == ""){
+                // perform a GET call to Eventbrite's REST API, returns JSON response
+                response_eventbrite = new RestBuilder().get("https://www.eventbriteapi.com/v3/events/search/?q={query}") {
+                    header "Authorization", "Bearer 2S34UCIHKW5MXVP4S5M7" // authenticate with header
+                    urlVariables query: q
+                }
+
             }
+            else if (sort == "free") {
+                response_eventbrite = new RestBuilder().get("https://www.eventbriteapi.com/v3/events/search/?q={query}&price=free") {
+                    header "Authorization", "Bearer 2S34UCIHKW5MXVP4S5M7" // authenticate with header
+                    urlVariables query: q
+                }
+            }
+            else {
+                response_eventbrite = new RestBuilder().get("https://www.eventbriteapi.com/v3/events/search/?q={query}&sort_by=" + sort) {
+                    header "Authorization", "Bearer 2S34UCIHKW5MXVP4S5M7" // authenticate with header
+                    urlVariables query: q
+                }
+            }
+
 
         } else {
             throw new IllegalArgumentException("The search cannot be empty!")
@@ -46,6 +66,7 @@ class EventbriteService {
             // get relevant properties
             String event_name = obj["events"][i].name.text
             String event_description_full = obj["events"][i].description.text
+            String event_date = obj["events"][i].start.local
 
             // clean and/or truncate the description (truncate if > 140 characters long)
             String event_description_trimmed = null
@@ -66,10 +87,50 @@ class EventbriteService {
                 eventbrite_category_name = "Unspecified"
             }
 
-            // create new Event object
-            Event new_event = new Event(name: event_name, description: event_description_trimmed, start_date: null,
-                    eventbrite_url: obj["events"][i].url, eventbrite_id: 0, category_name: eventbrite_category_name)
+            String eventbrite_id = obj["events"][i].id
 
+            String eventbrite_img_url
+            if (obj["events"][i].logo != null){
+                eventbrite_img_url = obj["events"][i].logo.url
+            } else {
+                eventbrite_img_url = ""
+            }
+
+            /** get the venue id **/
+            String eventbrite_venue_id
+            if (obj["events"][i].venue_id != null){
+                eventbrite_venue_id = obj["events"][i].venue_id
+            } else {
+                eventbrite_venue_id = ""
+            }
+
+            String start_date_local
+            String start_date_timezone
+            if (obj["events"][i].start != null){
+                start_date_local = obj["events"][i].start.local
+                start_date_timezone = obj["events"][i].start.timezone
+            } else {
+                start_date_local = ""
+                start_date_timezone = ""
+            }
+
+            // create new Event object, save to database after
+            Event new_event = new Event(name: event_name, description: event_description_trimmed, start_date_local: start_date_local,
+                    eventbrite_url: obj["events"][i].url, eventbrite_id: eventbrite_id,
+                    category_name: eventbrite_category_name, num_ratings: 0, total_rating: 0, average_rating: 0,
+                    img_url: eventbrite_img_url, eventbrite_venue_id: eventbrite_venue_id, start_date_timezone: start_date_timezone)
+
+            //creating new comment object
+            def testEvent = new Event(name: "test1", description: "test", eventbrite_id: "0000",
+                    start_date: "test", eventbrite_url: "test", category_name: "test", total_rating: 5,
+                    num_ratings: 5, average_rating: 5.0, img_url: "test").save()
+            testEvent.addToComments(new Comment(comment_body: "test comment")).save()
+            testEvent.addToComments(new Comment(comment_body: "test comment2")).save()
+
+            // save to database, print errors for debugging if unable to save
+            if(!new_event.save(flush:true) ) {
+                System.out.println(new_event.errors)
+            }
 
             // add to the collection
             event_results.add(new_event)
@@ -96,5 +157,6 @@ class EventbriteService {
         JSONObject inputJSON = (JSONObject) new JsonSlurper().parseText(inputFile.text)
         return inputJSON
     }
+
 
 }

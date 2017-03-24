@@ -80,6 +80,26 @@
 
 	var _userPage2 = _interopRequireDefault(_userPage);
 
+	var _eventPage = __webpack_require__(252);
+
+	var _eventPage2 = _interopRequireDefault(_eventPage);
+
+	var _welcomePage = __webpack_require__(254);
+
+	var _welcomePage2 = _interopRequireDefault(_welcomePage);
+
+	var _homeDashboard = __webpack_require__(255);
+
+	var _homeDashboard2 = _interopRequireDefault(_homeDashboard);
+
+	var _publicEventPage = __webpack_require__(256);
+
+	var _publicEventPage2 = _interopRequireDefault(_publicEventPage);
+
+	var _createEvent = __webpack_require__(257);
+
+	var _createEvent2 = _interopRequireDefault(_createEvent);
+
 	var _auth = __webpack_require__(243);
 
 	var _auth2 = _interopRequireDefault(_auth);
@@ -91,7 +111,12 @@
 	    SEARCH: "/search",
 	    LOGOUT: "/logout",
 	    SINGUP: "/signup",
-	    USERPAGE: "/user-page"
+	    USERPAGE: "/user-page",
+	    EVENTPAGE: "/event",
+	    WELCOME: "/welcome",
+	    HOME: "/home",
+	    PUBLICEVENTPAGE: "/pub/event",
+	    CREATEEVENT: "/create-event"
 	};
 
 	var Greet = function Greet() {
@@ -106,7 +131,7 @@
 	        _react2.default.createElement(
 	            'p',
 	            null,
-	            'Here you can search tweets from Twitter after signing in'
+	            'Here you can search for events after signing in'
 	        ),
 	        _react2.default.createElement(
 	            'p',
@@ -115,32 +140,6 @@
 	                _reactRouter.Link,
 	                { to: Paths.SIGNIN, className: 'btn btn-primary btn-lg' },
 	                'Sign in'
-	            )
-	        )
-	    );
-	};
-
-	var Welcome = function Welcome() {
-	    return _react2.default.createElement(
-	        'div',
-	        { className: 'jumbotron' },
-	        _react2.default.createElement(
-	            'h1',
-	            null,
-	            'Welcome!'
-	        ),
-	        _react2.default.createElement(
-	            'p',
-	            null,
-	            'You can now search for Events!'
-	        ),
-	        _react2.default.createElement(
-	            'p',
-	            null,
-	            _react2.default.createElement(
-	                _reactRouter.Link,
-	                { to: Paths.SEARCH, className: 'btn btn-primary btn-lg' },
-	                'Search'
 	            )
 	        )
 	    );
@@ -163,18 +162,27 @@
 	};
 
 	function checkAuth(next, replace) {
-
 	    var nextPath = next.location.pathname;
-	    if (_auth2.default.loggedIn()) {
-	        if (nextPath == Paths.SIGNIN || nextPath == Paths.SINGUP) {
-	            replace({ pathname: "/" });
+	    if (nextPath == "/") {
+	        if (_auth2.default.loggedIn()) {
+	            replace({ pathname: "/home" });
+	        } else {
+	            replace({ pathname: "/welcome" });
 	        }
 	    } else {
-	        if (nextPath != Paths.SIGNIN && nextPath != Paths.SINGUP) {
-	            replace({
-	                pathname: Paths.SIGNIN,
-	                state: { nextPath: nextPath }
-	            });
+	        if (_auth2.default.loggedIn()) {
+	            if (nextPath == Paths.SIGNIN || nextPath == Paths.SINGUP || nextPath == Paths.WELCOME) {
+	                replace({ pathname: "/home" });
+	            }
+	        } else {
+	            if (nextPath != Paths.WELCOME) {
+	                if (nextPath != Paths.SIGNIN && nextPath != Paths.SINGUP && nextPath != Paths.PUBLICEVENTPAGE) {
+	                    replace({
+	                        pathname: Paths.SIGNIN,
+	                        state: { nextPath: nextPath }
+	                    });
+	                }
+	            }
 	        }
 	    }
 	}
@@ -184,13 +192,18 @@
 	    { history: _reactRouter.browserHistory },
 	    _react2.default.createElement(
 	        _reactRouter.Route,
-	        { path: '/', component: _app2.default },
+	        { path: '/', component: _app2.default, onEnter: checkAuth },
 	        _react2.default.createElement(_reactRouter.IndexRoute, { component: Greet }),
 	        _react2.default.createElement(_reactRouter.Route, { path: Paths.SIGNIN, component: _signin2.default, onEnter: checkAuth }),
 	        _react2.default.createElement(_reactRouter.Route, { path: Paths.SEARCH, component: _search2.default, onEnter: checkAuth }),
 	        _react2.default.createElement(_reactRouter.Route, { path: Paths.LOGOUT, component: _logout2.default }),
 	        _react2.default.createElement(_reactRouter.Route, { path: Paths.SINGUP, component: _signup2.default, onEnter: checkAuth }),
 	        _react2.default.createElement(_reactRouter.Route, { path: Paths.USERPAGE, component: _userPage2.default, onEnter: checkAuth }),
+	        _react2.default.createElement(_reactRouter.Route, { path: Paths.EVENTPAGE, component: _eventPage2.default, onEnter: checkAuth }),
+	        _react2.default.createElement(_reactRouter.Route, { path: Paths.WELCOME, component: _welcomePage2.default }),
+	        _react2.default.createElement(_reactRouter.Route, { path: Paths.HOME, component: _homeDashboard2.default, onEnter: checkAuth }),
+	        _react2.default.createElement(_reactRouter.Route, { path: Paths.PUBLICEVENTPAGE, component: _publicEventPage2.default, onEnter: checkAuth }),
+	        _react2.default.createElement(_reactRouter.Route, { path: Paths.CREATEEVENT, component: _createEvent2.default, onEnter: checkAuth }),
 	        _react2.default.createElement(_reactRouter.Route, { path: '*', component: NotFound })
 	    )
 	), document.getElementById('app'));
@@ -27438,9 +27451,13 @@
 	                    _react2.default.createElement(
 	                        'div',
 	                        { className: 'navbar-header' },
-	                        _react2.default.createElement(
+	                        this.state.loggedIn ? _react2.default.createElement(
 	                            _reactRouter.Link,
-	                            { to: '/', className: 'navbar-brand' },
+	                            { to: '/home', className: 'navbar-brand' },
+	                            'Eventile'
+	                        ) : _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/welcome', className: 'navbar-brand' },
 	                            'Eventile'
 	                        )
 	                    ),
@@ -27461,8 +27478,8 @@
 	                            null,
 	                            _react2.default.createElement(
 	                                _reactRouter.Link,
-	                                { to: '/user-page' },
-	                                'Profile'
+	                                { to: '/create-event' },
+	                                'Create Event'
 	                            )
 	                        )
 	                    ) : null,
@@ -27487,8 +27504,33 @@
 	                            null,
 	                            _react2.default.createElement(
 	                                _reactRouter.Link,
+	                                { to: '/signup' },
+	                                'Register'
+	                            )
+	                        )
+	                    ),
+	                    this.state.loggedIn ? _react2.default.createElement(
+	                        'ul',
+	                        { className: 'nav navbar-nav navbar-right' },
+	                        _react2.default.createElement(
+	                            'li',
+	                            null,
+	                            _react2.default.createElement(
+	                                _reactRouter.Link,
+	                                { to: '/user-page' },
+	                                'Profile'
+	                            )
+	                        )
+	                    ) : _react2.default.createElement(
+	                        'ul',
+	                        { className: 'nav navbar-nav navbar-right' },
+	                        _react2.default.createElement(
+	                            'li',
+	                            null,
+	                            _react2.default.createElement(
+	                                _reactRouter.Link,
 	                                { to: '/signin' },
-	                                'Sign in'
+	                                'Login'
 	                            )
 	                        )
 	                    )
@@ -27599,6 +27641,7 @@
 	            error: ''
 	        };
 	        _this.signIn = _this.signIn.bind(_this);
+
 	        return _this;
 	    }
 
@@ -27623,8 +27666,8 @@
 	            console.log("Signed in", authObject);
 	            _auth2.default.signIn(authObject);
 	            var locationState = this.props.location.state,
-	                nextPath = locationState ? locationState.nextPath : "/";
-	            this.props.router.replace(nextPath ? nextPath : "/");
+	                nextPath = locationState ? locationState.nextPath : "/home";
+	            this.props.router.replace(nextPath ? nextPath : "/home");
 	            this.props.router.reload();
 	        }
 	    }, {
@@ -27642,22 +27685,37 @@
 	                return _react2.default.createElement(
 	                    'p',
 	                    { className: 'alert alert-danger' },
-	                    _this2.state.error,
-	                    ' ',
-	                    _react2.default.createElement(
-	                        _reactRouter.Link,
-	                        { to: '/signup' },
-	                        'Sign up'
-	                    )
+	                    _this2.state.error
 	                );
 	            };
 	            return _react2.default.createElement(
 	                'div',
 	                { className: 'col-sm-4 col-sm-offset-4' },
 	                this.state.error ? _react2.default.createElement(Error, null) : null,
-	                _react2.default.createElement(_userForm2.default, { submitLabel: 'Sign in', onSubmit: this.signIn, ref: function ref(_ref) {
+	                _react2.default.createElement(
+	                    'center',
+	                    null,
+	                    _react2.default.createElement(
+	                        'h2',
+	                        null,
+	                        ' Login Page '
+	                    )
+	                ),
+	                _react2.default.createElement('hr', null),
+	                _react2.default.createElement(_userForm2.default, { submitLabel: 'Login!', onSubmit: this.signIn, ref: function ref(_ref) {
 	                        return _this2.form = _ref;
-	                    } })
+	                    } }),
+	                _react2.default.createElement('hr', null),
+	                _react2.default.createElement(
+	                    'p',
+	                    null,
+	                    'No account? ',
+	                    _react2.default.createElement(
+	                        _reactRouter.Link,
+	                        { to: '/signup' },
+	                        'Register here'
+	                    )
+	                )
 	            );
 	        }
 	    }]);
@@ -27725,7 +27783,7 @@
 	                        { className: 'col-sm-9' },
 	                        _react2.default.createElement('input', { type: 'text',
 	                            className: 'form-control', id: 'signin-name',
-	                            placeholder: 'Name',
+	                            placeholder: 'Username',
 	                            ref: 'name'
 	                        })
 	                    )
@@ -28317,9 +28375,9 @@
 	        value: function signUp(e) {
 	            e.preventDefault();
 	            var form = this.form.data();
-	            console.log("Signing in...", form);
+	            console.log("Signing up!...", form);
 
-	            var body = "username=" + form.username + "&password=" + form.password + "&age=" + form.age + "&location=" + form.location;
+	            var body = "username=" + form.username + "&password=" + form.password + "&age=" + form.age + "&location=" + form.location + "&pref_music=" + form.pref_music + "&pref_bus_prof=" + form.pref_bus_prof + "&pref_food_drink=" + form.pref_food_drink + "&pref_comm_culture=" + form.pref_comm_culture + "&pref_perf_vis_art=" + form.pref_perf_vis_art + "&pref_film_media_ent=" + form.pref_film_media_ent + "&pref_sports_fitness=" + form.pref_sports_fitness + "&pref_health_well=" + form.pref_health_well + "&pref_sci_tech=" + form.pref_sci_tech + "&pref_trav_outd=" + form.pref_trav_outd + "&pref_char_games=" + form.pref_char_games + "&pref_religion_spirit=" + form.pref_religion_spirit + "&pref_family_edu=" + form.pref_family_edu + "&pref_season_holi=" + form.pref_season_holi + "&pref_gov_poli=" + form.pref_gov_poli + "&pref_fash_beaut=" + form.pref_fash_beaut + "&pref_home_life=" + form.pref_home_life + "&pref_auto_boat_air=" + form.pref_auto_boat_air + "&pref_hobbies_ints=" + form.pref_hobbies_ints + "&pref_other=" + form.pref_other;
 
 	            fetch("/api/signup", {
 	                method: 'POST',
@@ -28332,8 +28390,8 @@
 	    }, {
 	        key: 'success',
 	        value: function success(user) {
-	            console.log("Signed up", user);
-	            this.props.router.replace("/");
+	            console.log("Signed up, please sign in", user);
+	            this.props.router.replace("/signin");
 	        }
 	    }, {
 	        key: 'readError',
@@ -28362,6 +28420,16 @@
 	                'div',
 	                { className: 'col-sm-4 col-sm-offset-4' },
 	                this.state.error ? _react2.default.createElement(Error, null) : null,
+	                _react2.default.createElement(
+	                    'center',
+	                    null,
+	                    _react2.default.createElement(
+	                        'h2',
+	                        null,
+	                        ' Registration Page '
+	                    )
+	                ),
+	                _react2.default.createElement('hr', null),
 	                _react2.default.createElement(_newSignup2.default, { submitLabel: 'Sign up', onSubmit: this.signUp, ref: function ref(_ref) {
 	                        return _this2.form = _ref;
 	                    } })
@@ -28472,7 +28540,7 @@
 	                        { className: 'col-sm-9' },
 	                        _react2.default.createElement('input', { type: 'text',
 	                            className: 'form-control', id: 'signin-name',
-	                            placeholder: 'Name',
+	                            placeholder: 'Username',
 	                            ref: 'name'
 	                        })
 	                    )
@@ -28506,7 +28574,7 @@
 	                    ),
 	                    _react2.default.createElement(
 	                        'div',
-	                        { className: 'col-sm-9' },
+	                        { className: 'col-sm-3' },
 	                        _react2.default.createElement('input', { type: 'age',
 	                            className: 'form-control',
 	                            id: 'signin-age',
@@ -28534,6 +28602,17 @@
 	                        })
 	                    )
 	                ),
+	                _react2.default.createElement('hr', null),
+	                _react2.default.createElement(
+	                    'center',
+	                    null,
+	                    _react2.default.createElement(
+	                        'h4',
+	                        null,
+	                        ' Tell us what you are interested in: '
+	                    )
+	                ),
+	                _react2.default.createElement('br', null),
 	                _react2.default.createElement(
 	                    'div',
 	                    { className: 'form-group' },
@@ -28976,14 +29055,32 @@
 	                password = _reactDom2.default.findDOMNode(this.refs.password).value.trim(),
 	                age = _reactDom2.default.findDOMNode(this.refs.age).value.trim(),
 	                location = _reactDom2.default.findDOMNode(this.refs.location).value.trim();
-	            console.log(_reactDom2.default.findDOMNode(this.refs.pref_music).checked);
-	            console.log(_reactDom2.default.findDOMNode(this.refs.pref_bus_prof).checked);
 
 	            return {
 	                username: name,
 	                password: password,
 	                age: age,
-	                location: location
+	                location: location,
+	                pref_music: this.state.pref_music,
+	                pref_bus_prof: this.state.pref_bus_prof,
+	                pref_food_drink: this.state.pref_food_drink,
+	                pref_comm_culture: this.state.pref_comm_culture,
+	                pref_perf_vis_art: this.state.pref_perf_vis_art,
+	                pref_film_media_ent: this.state.pref_film_media_ent,
+	                pref_sports_fitness: this.state.pref_sports_fitness,
+	                pref_health_well: this.state.pref_health_well,
+	                pref_sci_tech: this.state.pref_sci_tech,
+	                pref_trav_outd: this.state.pref_trav_outd,
+	                pref_char_games: this.state.pref_char_games,
+	                pref_religion_spirit: this.state.pref_religion_spirit,
+	                pref_family_edu: this.state.pref_family_edu,
+	                pref_season_holi: this.state.pref_season_holi,
+	                pref_gov_poli: this.state.pref_gov_poli,
+	                pref_fash_beaut: this.state.pref_fash_beaut,
+	                pref_home_life: this.state.pref_home_life,
+	                pref_auto_boat_air: this.state.pref_auto_boat_air,
+	                pref_hobbies_ints: this.state.pref_hobbies_ints,
+	                pref_other: this.state.pref_other
 	            };
 	        }
 	    }]);
@@ -29036,7 +29133,7 @@
 	        key: 'componentDidMount',
 	        value: function componentDidMount() {
 	            _auth2.default.logOut();
-	            this.props.router.replace("/");
+	            this.props.router.replace("/welcome");
 	        }
 	    }, {
 	        key: 'render',
@@ -29111,10 +29208,15 @@
 	        _this.search = _this.search.bind(_this);
 	        _this.fail = _this.fail.bind(_this);
 	        _this.success = _this.success.bind(_this);
+	        _this.change = _this.change.bind(_this);
 
 	        _this.state = {
 	            events: [],
-	            auth: JSON.parse(localStorage.auth)
+	            auth: JSON.parse(localStorage.auth),
+	            value: "",
+	            sort_date: false,
+	            sort_dist: false,
+	            found_events: true
 	        };
 	        return _this;
 	    }
@@ -29129,7 +29231,7 @@
 
 	            this.setState({ inProgress: true });
 
-	            fetch("/api/search?q=" + query, {
+	            fetch("/api/search?q=" + query + "&sort=" + this.state.value, {
 	                headers: {
 	                    'Authorization': 'Bearer ' + token
 	                }
@@ -29140,6 +29242,11 @@
 	        value: function success(events) {
 	            console.log("Search result", events);
 	            this.setState({ events: events, inProgress: false });
+	            if (events.length > 0) {
+	                this.setState({ found_events: true });
+	            } else {
+	                this.setState({ found_events: false });
+	            }
 	        }
 	    }, {
 	        key: 'fail',
@@ -29155,67 +29262,158 @@
 	            }
 	        }
 	    }, {
+	        key: 'getImageURL',
+	        value: function getImageURL(event) {
+	            return event.img_url;
+	        }
+	    }, {
+	        key: 'change',
+	        value: function change(event) {
+	            this.setState({ value: event.target.value });
+	        }
+	    }, {
 	        key: 'render',
 	        value: function render() {
+	            var _this2 = this;
 
 	            var events = this.state.events.map(function (event) {
 	                return _react2.default.createElement(
 	                    'div',
-	                    { className: 'col-sm-12 col-md-12 col-lg-12 tweet' },
+	                    { className: 'card' },
 	                    _react2.default.createElement(
 	                        'a',
-	                        { href: event.eventbrite_url, target: '_blank' },
-	                        _react2.default.createElement(
-	                            'b',
-	                            null,
-	                            event.name
-	                        )
-	                    ),
-	                    ': ',
-	                    event.description,
-	                    ' ',
-	                    _react2.default.createElement('br', null),
-	                    ' Category: ',
-	                    event.category_name
-	                );
-	            });
-	            return _react2.default.createElement(
-	                'div',
-	                { className: 'row' },
-	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'container' },
-	                    _react2.default.createElement(
-	                        'form',
-	                        { className: 'form-inline col-lg-12', onSubmit: this.search },
-	                        _react2.default.createElement(
-	                            'div',
-	                            { className: 'form-group' },
-	                            _react2.default.createElement(
-	                                'label',
-	                                { className: 'sr-only', htmlFor: 'query' },
-	                                'Search:'
-	                            ),
-	                            _react2.default.createElement('input', { type: 'text',
-	                                className: 'form-control',
-	                                id: 'query',
-	                                placeholder: 'Query',
-	                                ref: 'query',
-	                                disabled: this.state.inProgress
-	                            })
-	                        ),
-	                        _react2.default.createElement(
-	                            'button',
-	                            { type: 'submit', className: 'btn btn-default', disabled: this.state.inProgress },
-	                            'Search'
-	                        )
+	                        { href: "/event?q=" + event.eventbrite_id, target: '_self' },
+	                        _react2.default.createElement('img', { className: 'card-img-top img-fluid', src: _this2.getImageURL(event) })
 	                    ),
 	                    _react2.default.createElement(
 	                        'div',
-	                        { className: 'col-lg-12' },
-	                        events
+	                        { className: 'card-block' },
+	                        _react2.default.createElement(
+	                            'a',
+	                            { href: "/event?q=" + event.eventbrite_id, target: '_self' },
+	                            _react2.default.createElement(
+	                                'h4',
+	                                { className: 'card-title' },
+	                                event.name
+	                            )
+	                        ),
+	                        _react2.default.createElement(
+	                            'p',
+	                            { className: 'card-text' },
+	                            event.description
+	                        ),
+	                        _react2.default.createElement('br', null)
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'card-footer' },
+	                        _react2.default.createElement(
+	                            'small',
+	                            { className: 'text-muted' },
+	                            ' Category: ',
+	                            event.category_name,
+	                            ' '
+	                        )
 	                    )
-	                )
+	                );
+	            });
+	            var Error = function Error() {
+	                return _react2.default.createElement(
+	                    'div',
+	                    { className: 'container' },
+	                    _react2.default.createElement(
+	                        'p',
+	                        { className: 'alert alert-danger' },
+	                        'Sorry, no events found!'
+	                    )
+	                );
+	            };
+	            return _react2.default.createElement(
+	                'div',
+	                { className: 'container' },
+	                _react2.default.createElement(
+	                    'center',
+	                    null,
+	                    _react2.default.createElement(
+	                        'h2',
+	                        null,
+	                        ' Search Page '
+	                    )
+	                ),
+	                _react2.default.createElement('hr', null),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'row' },
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'container' },
+	                        _react2.default.createElement(
+	                            'form',
+	                            { className: 'col-lg-7', onSubmit: this.search },
+	                            _react2.default.createElement(
+	                                'div',
+	                                { className: 'form-group col-lg-7' },
+	                                _react2.default.createElement(
+	                                    'label',
+	                                    { className: 'sr-only', htmlFor: 'query' },
+	                                    'Search:'
+	                                ),
+	                                _react2.default.createElement('input', { type: 'text',
+	                                    className: 'form-control',
+	                                    id: 'query',
+	                                    placeholder: 'Enter your search query here! Example: drake',
+	                                    ref: 'query',
+	                                    disabled: this.state.inProgress
+	                                })
+	                            ),
+	                            _react2.default.createElement(
+	                                'button',
+	                                { type: 'submit', className: 'btn btn-default', disabled: this.state.inProgress },
+	                                'Search!'
+	                            )
+	                        )
+	                    )
+	                ),
+	                _react2.default.createElement('br', null),
+	                _react2.default.createElement(
+	                    'div',
+	                    null,
+	                    _react2.default.createElement(
+	                        'label',
+	                        null,
+	                        'Sort By',
+	                        _react2.default.createElement(
+	                            'select',
+	                            { className: 'selectpicker', value: this.state.value, onChange: this.change },
+	                            _react2.default.createElement(
+	                                'option',
+	                                { value: '' },
+	                                'Most Relevant'
+	                            ),
+	                            _react2.default.createElement(
+	                                'option',
+	                                { value: 'date' },
+	                                'Date'
+	                            ),
+	                            _react2.default.createElement(
+	                                'option',
+	                                { value: 'distance' },
+	                                'Distance'
+	                            ),
+	                            _react2.default.createElement(
+	                                'option',
+	                                { value: 'free' },
+	                                'Free Events Only'
+	                            )
+	                        )
+	                    )
+	                ),
+	                _react2.default.createElement('hr', null),
+	                this.state.found_events ? _react2.default.createElement(
+	                    'div',
+	                    { className: 'card-columns' },
+	                    events
+	                ) : _react2.default.createElement(Error, null)
 	            );
 	        }
 	    }]);
@@ -29231,6 +29429,963 @@
 
 	'use strict';
 
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactDom = __webpack_require__(32);
+
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+
+	__webpack_require__(246);
+
+	var _auth = __webpack_require__(243);
+
+	var _auth2 = _interopRequireDefault(_auth);
+
+	var _reactRouter = __webpack_require__(178);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	function checkStatus(response) {
+	    if (response.status >= 200 && response.status < 300) {
+	        return response.json();
+	    } else {
+	        var error = new Error(response.statusText);
+	        error.response = response;
+	        throw error;
+	    }
+	};
+
+	var UserPage = function (_React$Component) {
+	    _inherits(UserPage, _React$Component);
+
+	    function UserPage() {
+	        _classCallCheck(this, UserPage);
+
+	        var _this = _possibleConstructorReturn(this, (UserPage.__proto__ || Object.getPrototypeOf(UserPage)).call(this));
+
+	        _this.getUser = _this.getUser.bind(_this);
+	        _this.success = _this.success.bind(_this);
+	        _this.fail = _this.fail.bind(_this);
+	        _this.render = _this.render.bind(_this);
+	        _this.getUserCreatedEvents = _this.getUserCreatedEvents.bind(_this);
+	        _this.success_got_created_events = _this.success_got_created_events.bind(_this);
+	        _this.getUserRSVPEvents = _this.getUserRSVPEvents.bind(_this);
+	        _this.success_got_rsvp_events = _this.success_got_rsvp_events.bind(_this);
+	        _this.getUserRatedEvents = _this.getUserRatedEvents.bind(_this);
+	        _this.success_got_rated_events = _this.success_got_rated_events.bind(_this);
+	        _this.getRatedEventName = _this.getRatedEventName.bind(_this);
+
+	        _this.state = {
+	            name: '',
+	            age: '',
+	            location: '',
+	            gotUser: false,
+	            user_preferences: [],
+	            user_created_events: [],
+	            user_rsvp_events: [],
+	            user_ratings: [],
+	            rated_event: '',
+	            auth: JSON.parse(localStorage.auth)
+	        };
+	        return _this;
+	    }
+
+	    _createClass(UserPage, [{
+	        key: 'getUser',
+	        value: function getUser() {
+	            var token = this.state.auth.access_token; // authentication token to make sure user is signed in/authorized
+
+	            fetch("/api/user", { // GET the user from the usercontroller, make REST call
+	                headers: {
+	                    'Authorization': 'Bearer ' + token // pass authentication token as a header to the REST API call
+	                }
+	            }).then(checkStatus).then(this.success).then(this.getUserCreatedEvents).catch(this.fail);
+	        }
+	    }, {
+	        key: 'getUserCreatedEvents',
+	        value: function getUserCreatedEvents() {
+	            var token = this.state.auth.access_token;
+
+	            fetch("/api/event/get_user_created_events", {
+	                headers: {
+	                    'Authorization': 'Bearer ' + token
+	                }
+	            }).then(checkStatus).then(this.success_got_created_events).then(this.getUserRSVPEvents).catch(this.fail);
+	        }
+	    }, {
+	        key: 'getUserRSVPEvents',
+	        value: function getUserRSVPEvents() {
+	            var token = this.state.auth.access_token;
+
+	            fetch("/api/user/get_user_rsvp_events", {
+	                headers: {
+	                    'Authorization': 'Bearer ' + token
+	                }
+	            }).then(checkStatus).then(this.success_got_rsvp_events).then(this.getUserRatedEvents).catch(this.fail);
+	        }
+	    }, {
+	        key: 'getUserRatedEvents',
+	        value: function getUserRatedEvents() {
+	            var token = this.state.auth.access_token;
+
+	            fetch("/api/user/get_user_rated_events", {
+	                headers: {
+	                    'Authorization': 'Bearer ' + token
+	                }
+	            }).then(checkStatus).then(this.success_got_rated_events).catch(this.fail);
+	        }
+	    }, {
+	        key: 'success_got_rated_events',
+	        value: function success_got_rated_events(rated_events) {
+	            console.log("VIEW: got user's rated events: ", rated_events);
+	            this.setState({ user_ratings: rated_events });
+	        }
+	    }, {
+	        key: 'success_got_rsvp_events',
+	        value: function success_got_rsvp_events(rsvp_events) {
+	            console.log("!!got user's rsvp events = ", rsvp_events);
+	            this.setState({ user_rsvp_events: rsvp_events });
+	        }
+	    }, {
+	        key: 'success_got_created_events',
+	        value: function success_got_created_events(created_events) {
+	            console.log("!!got user's created events = ", created_events);
+	            console.log("num of created events = ", created_events.length);
+	            this.setState({ user_created_events: created_events });
+	        }
+	    }, {
+	        key: 'success',
+	        value: function success(user) {
+	            // update the states with the user JSON object
+	            console.log("success: user = ", user);
+	            this.setState({ name: user.username, age: user.age, location: user.location,
+	                gotUser: true, user_preferences: user.preferences });
+	        }
+	    }, {
+	        key: 'fail',
+	        value: function fail(error) {
+	            console.error("Search has failed", error);
+	            this.setState({ gotUser: true });
+	            if (error.response.status == 401) {
+	                _auth2.default.logOut();
+	                this.props.router.replace({
+	                    pathname: "/signin",
+	                    state: { nextPath: "/search" }
+	                });
+	            }
+	        }
+	    }, {
+	        key: 'getRatedEventName',
+	        value: function getRatedEventName(rated_event) {
+	            var token = this.state.auth.access_token;
+
+	            var response_event = fetch("/api/event/show_rated_event?q=" + rated_event.event.id, {
+	                headers: {
+	                    'Authorization': 'Bearer ' + token
+	                }
+	            }).then(checkStatus).catch(this.fail);
+
+	            console.log("rated event = ", response_event);
+
+	            this.setState({ rated_event: response_event });
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+
+	            // needed to stop the infinite looping
+	            if (this.state.gotUser == false) {
+	                this.getUser();
+	            }
+
+	            var created_events = this.state.user_created_events.map(function (created_event) {
+	                return _react2.default.createElement(
+	                    'div',
+	                    null,
+	                    _react2.default.createElement(
+	                        'a',
+	                        { href: "/event?q=" + created_event.eventbrite_id, target: '_self' },
+	                        _react2.default.createElement(
+	                            'p',
+	                            null,
+	                            'Name: ',
+	                            created_event.name
+	                        )
+	                    )
+	                );
+	            });
+
+	            var prefs = this.state.user_preferences.map(function (preference) {
+	                return _react2.default.createElement(
+	                    'div',
+	                    null,
+	                    _react2.default.createElement(
+	                        'p',
+	                        null,
+	                        preference
+	                    )
+	                );
+	            });
+
+	            var rsvp_events = this.state.user_rsvp_events.map(function (rsvp_event) {
+	                return _react2.default.createElement(
+	                    'div',
+	                    null,
+	                    _react2.default.createElement(
+	                        'a',
+	                        { href: "/event?q=" + rsvp_event.eventbrite_id },
+	                        _react2.default.createElement(
+	                            'p',
+	                            null,
+	                            'Name: ',
+	                            rsvp_event.name
+	                        )
+	                    )
+	                );
+	            });
+
+	            var rated_events = this.state.user_ratings.map(function (rated_event) {
+	                return _react2.default.createElement(
+	                    'div',
+	                    null,
+	                    _react2.default.createElement(
+	                        'a',
+	                        { href: "/event?q=" + rated_event.eventbrite_id },
+	                        _react2.default.createElement(
+	                            'p',
+	                            null,
+	                            'Name: ',
+	                            rated_event.event_name
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        'p',
+	                        null,
+	                        'Your Rating: ',
+	                        rated_event.users_rating
+	                    )
+	                );
+	            });
+
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                _react2.default.createElement(
+	                    'center',
+	                    null,
+	                    _react2.default.createElement(
+	                        'h2',
+	                        null,
+	                        ' Profile Page for ',
+	                        this.state.name,
+	                        ' '
+	                    )
+	                ),
+	                _react2.default.createElement('hr', null),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'container' },
+	                    'Name: ',
+	                    this.state.name,
+	                    ' ',
+	                    _react2.default.createElement('br', null),
+	                    'Location: ',
+	                    this.state.location,
+	                    ' ',
+	                    _react2.default.createElement('br', null),
+	                    'Age: ',
+	                    this.state.age,
+	                    ' ',
+	                    _react2.default.createElement('br', null),
+	                    _react2.default.createElement(
+	                        'h2',
+	                        null,
+	                        ' Selected Preferences: '
+	                    ),
+	                    prefs,
+	                    _react2.default.createElement('br', null),
+	                    _react2.default.createElement(
+	                        'h2',
+	                        null,
+	                        ' Your Created Events: '
+	                    ),
+	                    created_events,
+	                    _react2.default.createElement(
+	                        'h2',
+	                        null,
+	                        ' Your RSVPs: '
+	                    ),
+	                    rsvp_events,
+	                    _react2.default.createElement(
+	                        'h2',
+	                        null,
+	                        ' Your Event Ratings: '
+	                    ),
+	                    rated_events
+	                )
+	            );
+	        }
+	    }]);
+
+	    return UserPage;
+	}(_react2.default.Component);
+
+	exports.default = (0, _reactRouter.withRouter)(UserPage);
+
+/***/ },
+/* 252 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactDom = __webpack_require__(32);
+
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+
+	__webpack_require__(246);
+
+	var _auth = __webpack_require__(243);
+
+	var _auth2 = _interopRequireDefault(_auth);
+
+	var _commentForm = __webpack_require__(253);
+
+	var _commentForm2 = _interopRequireDefault(_commentForm);
+
+	var _reactRouter = __webpack_require__(178);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Created by gary on 2017-03-09.
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
+
+	function checkStatus(response) {
+	    if (response.status >= 200 && response.status < 300) {
+	        return response.json();
+	    } else {
+	        var error = new Error(response.statusText);
+	        error.response = response;
+	        throw error;
+	    }
+	};
+
+	var EventPage = function (_React$Component) {
+	    _inherits(EventPage, _React$Component);
+
+	    function EventPage() {
+	        _classCallCheck(this, EventPage);
+
+	        var _this = _possibleConstructorReturn(this, (EventPage.__proto__ || Object.getPrototypeOf(EventPage)).call(this));
+
+	        _this.getEvent = _this.getEvent.bind(_this);
+	        _this.fail = _this.fail.bind(_this);
+	        _this.success_found_event = _this.success_found_event.bind(_this);
+	        _this.update_rating = _this.update_rating.bind(_this);
+	        _this.success_update_rating = _this.success_update_rating.bind(_this);
+	        _this.render = _this.render.bind(_this);
+	        _this.handleRSVP = _this.handleRSVP.bind(_this);
+	        _this.success_rsvp = _this.success_rsvp.bind(_this);
+	        _this.checkUserRSVPd = _this.checkUserRSVPd.bind(_this);
+	        _this.success_check_user_rsvp = _this.success_check_user_rsvp.bind(_this);
+	        _this.success_remove_rsvp = _this.success_remove_rsvp.bind(_this);
+	        _this.update_comments = _this.update_comments.bind(_this);
+	        _this.success_update_comment = _this.success_update_comment.bind(_this);
+
+	        _this.state = {
+	            name: 'Loading...',
+	            description: '',
+	            category: '',
+	            rating: '.....',
+	            rated: false,
+	            image_url: '',
+	            venue_address: '',
+	            venue_longitude: '',
+	            venue_latitude: '',
+	            eventbrite_id: '',
+	            user_RSVP: false,
+	            user_entered_RSVP: false,
+	            loaded: false,
+	            users_rating: '',
+	            start_date_local: '',
+	            start_date_timezone: '',
+	            auth: JSON.parse(localStorage.auth),
+	            event_comments_ids: [],
+	            event_comments: []
+	        };
+
+	        return _this;
+	    }
+
+	    _createClass(EventPage, [{
+	        key: 'success_found_event',
+	        value: function success_found_event(event_result) {
+	            console.log("got event with address info? ", event_result);
+	            this.setState({ loaded: true });
+	            this.setState({
+	                name: event_result.name, description: event_result.description,
+	                category: event_result.category_name, venue_address: event_result.venue_address,
+	                venue_longitude: event_result.longitude, venue_latitude: event_result.latitude,
+	                eventbrite_id: event_result.eventbrite_id, start_date_local: event_result.start_date_local,
+	                start_date_timezone: event_result.start_date_timezone
+	            });
+	            if (event_result.num_ratings != 0) {
+	                this.setState({ rating: event_result.average_rating });
+	            }
+	            if (event_result.image_url != "") {
+	                this.setState({ image_url: event_result.img_url });
+	            }
+	            console.log(event_result.comments.length);
+	            console.log(event_result.comments);
+	            if (event_result.comments.length != 0) {
+	                this.setState({ event_comments: event_result.comments });
+	            }
+	        }
+	    }, {
+	        key: 'fail',
+	        value: function fail(error) {
+	            if (error.response.status == 401) {
+	                _auth2.default.logOut();
+	                this.props.router.replace({
+	                    pathname: "/signin",
+	                    state: { nextPath: "/search" }
+	                });
+	            }
+	            var token = this.state.auth.access_token;
+	            var query = this.props.location.query.q;
+	            fetch("/api/event/show_created_event?q=" + query, {
+	                headers: {
+	                    'Authorization': 'Bearer ' + token
+	                }
+	            }).then(checkStatus).then(this.success_found_event).catch(this.fail);
+	        }
+	    }, {
+	        key: 'fail_comment',
+	        value: function fail_comment(error) {
+	            console.log("FAILED UPDATING COMMENT = ", error);
+	        }
+	    }, {
+	        key: 'getEvent',
+	        value: function getEvent() {
+	            var token = this.state.auth.access_token;
+	            var query = this.props.location.query.q;
+
+	            fetch("/view/event?q=" + query, {
+	                headers: {
+	                    'Authorization': 'Bearer ' + token
+	                }
+	            }).then(checkStatus).then(this.success_found_event).then(this.checkUserRSVPd).catch(this.fail);
+	        }
+	    }, {
+	        key: 'checkUserRSVPd',
+	        value: function checkUserRSVPd() {
+	            var token = this.state.auth.access_token;
+	            var query = this.props.location.query.q;
+	            this.setState({ loaded: true });
+
+	            fetch("/api/event/check_user_rsvp?q=" + query, {
+	                headers: {
+	                    'Authorization': 'Bearer ' + token
+	                }
+	            }).then(checkStatus).then(this.success_check_user_rsvp);
+	        }
+	    }, {
+	        key: 'success_check_user_rsvp',
+	        value: function success_check_user_rsvp(response) {
+	            if (response.length != 0) {
+	                this.setState({ user_entered_RSVP: true, user_RSVP: true });
+	            } else {
+	                this.setState({ user_entered_RSVP: false, user_RSVP: false });
+	            }
+	        }
+
+	        /**
+	         * Method to update the comments for the event. Called when clicking on the button
+	         * @param new_comment, from the form on the page (just the button for now)
+	         */
+
+	    }, {
+	        key: 'update_comments',
+	        value: function update_comments(e) {
+	            e.preventDefault();
+	            var form = this.form.data();
+	            console.log("COMMENT FORM = ", form);
+
+	            var token = this.state.auth.access_token;
+	            var query = this.props.location.query.q;
+
+	            // make PUT REST call to be handled by EventController (mapped in urlMappings.groovy)
+	            fetch("/api/event/update_comments?q=" + query + "&c=" + form.comment, { // parameters for the method
+	                method: 'PUT',
+	                headers: {
+	                    'Authorization': 'Bearer ' + token
+	                }
+	            }).then(checkStatus).then(this.success_update_comment).catch(this.fail_comment);
+	        }
+	    }, {
+	        key: 'success_update_comment',
+	        value: function success_update_comment(comment_response) {
+	            console.log("SUCCESS UPDATED COMMENT");
+	            console.log("event results after updating comments =  ", comment_response);
+	            this.setState({ event_comments: this.state.event_comments.concat(comment_response.comment_body) });
+	        }
+
+	        /**
+	         * Method to update the rating for the event. Called when clicking on the button
+	         * (TODO: disable rating buttons if already rated)
+	         * @param new_rating, from the form on the page (just the button for now)
+	         */
+
+	    }, {
+	        key: 'update_rating',
+	        value: function update_rating(new_rating) {
+	            var token = this.state.auth.access_token;
+	            var query = this.props.location.query.q;
+
+	            this.setState({ users_rating: new_rating });
+
+	            // make PUT REST call to be handled by EventController (mapped in urlMappings.groovy)
+	            fetch("/api/event/update_rating?q=" + query + "&r=" + new_rating, { // parameters for the method
+	                method: 'PUT',
+	                headers: {
+	                    'Authorization': 'Bearer ' + token
+	                }
+	            }).then(checkStatus).then(this.success_update_rating).catch(this.fail);
+	        }
+
+	        /**
+	         * Method to update the state variable with the new rating
+	         * @param event_result
+	         */
+
+	    }, {
+	        key: 'success_update_rating',
+	        value: function success_update_rating(event_result) {
+	            console.log("success, rating is now ", event_result.average_rating);
+	            this.setState({ rating: event_result.average_rating, rated: true });
+	        }
+	    }, {
+	        key: 'handleRSVP',
+	        value: function handleRSVP() {
+	            if (this.state.user_RSVP) {
+	                // user is RSVP'd to the event, remove the event from their rsvp
+	                this.setState({ user_RSVP: false });
+
+	                var token = this.state.auth.access_token;
+
+	                var eventbrite_id = this.state.eventbrite_id;
+
+	                // make PUT REST call to be handled by UserController (mapped in urlMappings.groovy)
+	                fetch("/api/user/removeRSVP?eventbrite_id=" + eventbrite_id, {
+	                    method: 'PUT',
+	                    headers: {
+	                        'Authorization': 'Bearer ' + token
+	                    }
+	                }).then(checkStatus).then(this.success_remove_rsvp).catch(this.fail);
+	            } else {
+	                // user is not RSVP'd to the event, add it to their rsvp
+	                var _token = this.state.auth.access_token;
+
+	                var _eventbrite_id = this.state.eventbrite_id;
+
+	                // make PUT REST call to be handled by UserController (mapped in urlMappings.groovy)
+	                fetch("/api/user/addRSVP?eventbrite_id=" + _eventbrite_id, {
+	                    method: 'PUT',
+	                    headers: {
+	                        'Authorization': 'Bearer ' + _token
+	                    }
+	                }).then(checkStatus).then(this.success_rsvp).catch(this.fail);
+	            }
+	        }
+	    }, {
+	        key: 'success_rsvp',
+	        value: function success_rsvp() {
+	            console.log("rsvp'd!");
+	            this.setState({ user_RSVP: true, user_entered_RSVP: true });
+	        }
+	    }, {
+	        key: 'success_remove_rsvp',
+	        value: function success_remove_rsvp() {
+	            console.log("removed rsvp!");
+	            this.setState({ user_RSVP: false, user_entered_RSVP: true });
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            var _this2 = this;
+
+	            // stops the infinite looping & app crashing
+	            if (this.state.loaded == false) {
+	                this.getEvent();
+	            }
+	            var comments = this.state.event_comments.map(function (comment) {
+	                return _react2.default.createElement(
+	                    'div',
+	                    { className: 'row' },
+	                    _react2.default.createElement(
+	                        'p',
+	                        null,
+	                        comment,
+	                        ' '
+	                    )
+	                );
+	            });
+	            var RSVPCreated = function RSVPCreated() {
+	                return _react2.default.createElement(
+	                    'p',
+	                    { className: 'alert alert-success' },
+	                    'You are now RSVP\'d to this event! Check it out in your profile page.'
+	                );
+	            };
+	            var RSVPRemoved = function RSVPRemoved() {
+	                return _react2.default.createElement(
+	                    'p',
+	                    { className: 'alert alert-info' },
+	                    'You are no longer RSVP\'d to this event.'
+	                );
+	            };
+
+	            return _react2.default.createElement(
+	                'div',
+	                { className: 'container' },
+	                _react2.default.createElement('br', null),
+	                _react2.default.createElement(
+	                    'center',
+	                    null,
+	                    _react2.default.createElement(
+	                        'h2',
+	                        null,
+	                        'Event: ',
+	                        this.state.name
+	                    )
+	                ),
+	                _react2.default.createElement('hr', null),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'row' },
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-md-7' },
+	                        _react2.default.createElement('img', { className: 'img-responsive', src: this.state.image_url, alt: '' }),
+	                        _react2.default.createElement('br', null),
+	                        this.state.loaded ? _react2.default.createElement(
+	                            'div',
+	                            { className: 'col-md-6' },
+	                            _react2.default.createElement('iframe', { width: '550', height: '450', src: "https://www.google.com/maps/embed/v1/place?q=" + this.state.venue_address + "&zoom=17&key=AIzaSyDxYMTYMBgLXzsw8WXEHuPX8g2sNzHEzyk" })
+	                        ) : null,
+	                        _react2.default.createElement('br', null)
+	                    ),
+	                    _react2.default.createElement('br', null),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-md-5' },
+	                        _react2.default.createElement(
+	                            'h3',
+	                            null,
+	                            'Event Description'
+	                        ),
+	                        _react2.default.createElement(
+	                            'p',
+	                            null,
+	                            this.state.description
+	                        ),
+	                        _react2.default.createElement(
+	                            'h4',
+	                            null,
+	                            'Event Category'
+	                        ),
+	                        _react2.default.createElement(
+	                            'p',
+	                            null,
+	                            this.state.category
+	                        ),
+	                        _react2.default.createElement(
+	                            'h4',
+	                            null,
+	                            'Location'
+	                        ),
+	                        _react2.default.createElement(
+	                            'a',
+	                            { href: "http://maps.google.com/maps?q=" + this.state.venue_latitude + "," + this.state.venue_longitude },
+	                            ' ',
+	                            _react2.default.createElement(
+	                                'p',
+	                                null,
+	                                this.state.venue_address
+	                            ),
+	                            ' '
+	                        ),
+	                        _react2.default.createElement(
+	                            'p',
+	                            null,
+	                            'Start Date: ',
+	                            this.state.start_date_local
+	                        ),
+	                        _react2.default.createElement(
+	                            'p',
+	                            null,
+	                            'Time Zone: ',
+	                            this.state.start_date_timezone
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'row' },
+	                            _react2.default.createElement(
+	                                'div',
+	                                { className: 'col-md-7' },
+	                                this.state.user_entered_RSVP ? this.state.user_RSVP ? _react2.default.createElement(
+	                                    'div',
+	                                    null,
+	                                    _react2.default.createElement(
+	                                        'button',
+	                                        { className: 'btn btn-default', type: 'RSVP', onClick: function onClick() {
+	                                                return _this2.handleRSVP();
+	                                            } },
+	                                        'Revoke RSVP'
+	                                    ),
+	                                    _react2.default.createElement(RSVPCreated, null)
+	                                ) : _react2.default.createElement(
+	                                    'div',
+	                                    null,
+	                                    _react2.default.createElement(
+	                                        'button',
+	                                        { className: 'btn btn-default', type: 'RSVP', onClick: function onClick() {
+	                                                return _this2.handleRSVP();
+	                                            } },
+	                                        'RSVP!'
+	                                    ),
+	                                    _react2.default.createElement(RSVPRemoved, null)
+	                                ) : _react2.default.createElement(
+	                                    'button',
+	                                    { className: 'btn btn-default', type: 'RSVP', onClick: function onClick() {
+	                                            return _this2.handleRSVP();
+	                                        } },
+	                                    'RSVP!'
+	                                )
+	                            ),
+	                            _react2.default.createElement('br', null),
+	                            _react2.default.createElement('br', null)
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'row' },
+	                            _react2.default.createElement(
+	                                'div',
+	                                { className: 'col-md-4' },
+	                                _react2.default.createElement(
+	                                    'fieldset',
+	                                    { className: 'rating' },
+	                                    _react2.default.createElement(
+	                                        'legend',
+	                                        null,
+	                                        'Ratings'
+	                                    ),
+	                                    _react2.default.createElement(
+	                                        'p',
+	                                        null,
+	                                        'Average Rating: ',
+	                                        this.state.rating
+	                                    ),
+	                                    _react2.default.createElement(
+	                                        'p',
+	                                        null,
+	                                        'Your Rating: ',
+	                                        this.state.users_rating
+	                                    ),
+	                                    _react2.default.createElement('input', { type: 'radio', id: 'star5', name: 'rating', value: '5',
+	                                        onClick: function onClick() {
+	                                            return _this2.update_rating(5);
+	                                        } }),
+	                                    _react2.default.createElement('label', { className: 'full', htmlFor: 'star5',
+	                                        title: '5 stars' }),
+	                                    _react2.default.createElement('input', { type: 'radio', id: 'star4', name: 'rating', value: '4',
+	                                        onClick: function onClick() {
+	                                            return _this2.update_rating(4);
+	                                        } }),
+	                                    _react2.default.createElement('label', { className: 'full', htmlFor: 'star4',
+	                                        title: '4 stars' }),
+	                                    _react2.default.createElement('input', { type: 'radio', id: 'star3', name: 'rating', value: '3',
+	                                        onClick: function onClick() {
+	                                            return _this2.update_rating(3);
+	                                        } }),
+	                                    _react2.default.createElement('label', { className: 'full', htmlFor: 'star3',
+	                                        title: '3 stars' }),
+	                                    _react2.default.createElement('input', { type: 'radio', id: 'star2', name: 'rating', value: '2',
+	                                        onClick: function onClick() {
+	                                            return _this2.update_rating(2);
+	                                        } }),
+	                                    _react2.default.createElement('label', { className: 'full', htmlFor: 'star2',
+	                                        title: '2 stars' }),
+	                                    _react2.default.createElement('input', { type: 'radio', id: 'star1', name: 'rating', value: '1',
+	                                        onClick: function onClick() {
+	                                            return _this2.update_rating(1);
+	                                        } }),
+	                                    _react2.default.createElement('label', { className: 'full', htmlFor: 'star1',
+	                                        title: '1 star' })
+	                                )
+	                            )
+	                        )
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'col-md-10' },
+	                    _react2.default.createElement(
+	                        'h2',
+	                        null,
+	                        ' Comments: '
+	                    ),
+	                    ' ',
+	                    _react2.default.createElement('hr', null),
+	                    comments,
+	                    _react2.default.createElement(_commentForm2.default, { submitLabel: 'Post Comment', onSubmit: this.update_comments, ref: function ref(_ref) {
+	                            return _this2.form = _ref;
+	                        } })
+	                )
+	            );
+	        }
+	    }]);
+
+	    return EventPage;
+	}(_react2.default.Component);
+
+	exports.default = (0, _reactRouter.withRouter)(EventPage);
+
+/***/ },
+/* 253 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactDom = __webpack_require__(32);
+
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+
+	__webpack_require__(246);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Created by FrankJiao on 2017-03-23.
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
+
+	var CommentForm = function (_React$Component) {
+	    _inherits(CommentForm, _React$Component);
+
+	    function CommentForm(props) {
+	        _classCallCheck(this, CommentForm);
+
+	        return _possibleConstructorReturn(this, (CommentForm.__proto__ || Object.getPrototypeOf(CommentForm)).call(this, props));
+	    }
+
+	    _createClass(CommentForm, [{
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'form',
+	                { className: 'form-horizontal', name: 'commentForm', onSubmit: this.props.onSubmit, ref: 'commentForm' },
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'form-group' },
+	                    _react2.default.createElement(
+	                        'label',
+	                        { htmlFor: 'comment', className: 'col-sm-4 control-label' },
+	                        'Write Your Comment:'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-sm-10' },
+	                        _react2.default.createElement('input', { type: 'text',
+	                            className: 'form-control', id: 'comment',
+	                            placeholder: 'Comment',
+	                            ref: 'comment'
+	                        })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'form-group' },
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-sm-offset-3 col-sm-5' },
+	                        _react2.default.createElement(
+	                            'button',
+	                            { type: 'submit', className: 'btn btn-default' },
+	                            this.props.submitLabel
+	                        )
+	                    )
+	                )
+	            );
+	        }
+	    }, {
+	        key: 'data',
+	        value: function data() {
+	            var comment = _reactDom2.default.findDOMNode(this.refs.comment).value.trim();
+	            return {
+	                comment: comment
+	            };
+	        }
+	    }]);
+
+	    return CommentForm;
+	}(_react2.default.Component);
+
+	exports.default = CommentForm;
+
+/***/ },
+/* 254 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	var _react = __webpack_require__(1);
@@ -29245,9 +30400,263 @@
 
 	var _reactRouter = __webpack_require__(178);
 
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Created by gary on 2017-03-11.
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
+
+	function checkStatus(response) {
+	    if (response.status >= 200 && response.status < 300) {
+	        return response.json();
+	    } else {
+	        var error = new Error(response.statusText);
+	        error.response = response;
+	        throw error;
+	    }
+	};
+
+	var WelcomePage = function (_React$Component) {
+	    _inherits(WelcomePage, _React$Component);
+
+	    function WelcomePage() {
+	        _classCallCheck(this, WelcomePage);
+
+	        var _this = _possibleConstructorReturn(this, (WelcomePage.__proto__ || Object.getPrototypeOf(WelcomePage)).call(this));
+
+	        _this.getNearbyEvents = _this.getNearbyEvents.bind(_this);
+	        _this.fail = _this.fail.bind(_this);
+	        _this.success = _this.success.bind(_this);
+	        _this.success_ip = _this.success_ip.bind(_this);
+	        _this.handleChange = _this.handleChange.bind(_this);
+	        _this.handleSubmit = _this.handleSubmit.bind(_this);
+
+	        _this.state = {
+	            events: [],
+	            loaded: false,
+	            location: 'London, Ontario',
+	            new_location: '',
+	            searching: false
+	        };
+	        return _this;
+	    }
+
+	    _createClass(WelcomePage, [{
+	        key: 'getNearbyEvents',
+	        value: function getNearbyEvents() {
+	            console.log("Searching nearby...");
+
+	            var location = this.state.location;
+	            console.log("this location = " + this.state.location);
+
+	            fetch("/welcome_search?location=" + location).then(checkStatus).then(this.success).catch(this.fail);
+	        }
+	    }, {
+	        key: 'success',
+	        value: function success(events) {
+	            console.log("Search result", events);
+	            this.setState({ events: events, loaded: true, searching: false });
+	        }
+	    }, {
+	        key: 'success_ip',
+	        value: function success_ip(ip) {
+	            console.log("Search result ip ", ip);
+	            this.setState({ location: ip.city });
+	        }
+	    }, {
+	        key: 'fail',
+	        value: function fail(error) {
+	            console.error("Search has failed", error);
+	            this.setState({ loaded: true, searching: false });
+	        }
+	    }, {
+	        key: 'getImageURL',
+	        value: function getImageURL(event) {
+	            return event.img_url;
+	        }
+	    }, {
+	        key: 'handleChange',
+	        value: function handleChange(event) {
+	            this.setState({ new_location: event.target.value });
+	        }
+	    }, {
+	        key: 'handleSubmit',
+	        value: function handleSubmit(event) {
+	            console.log("new location: " + this.state.new_location);
+	            this.setState({ location: this.state.new_location, searching: true, loaded: false });
+	            this.getNearbyEvents();
+	            event.preventDefault();
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            var _this2 = this;
+
+	            // stops the infinite looping & app crashing
+	            if (this.state.loaded == false) {
+	                this.getNearbyEvents();
+	            }
+	            var events = this.state.events.map(function (event) {
+	                return _react2.default.createElement(
+	                    'div',
+	                    { className: 'card' },
+	                    _this2.state.searching ? null : _react2.default.createElement(
+	                        'div',
+	                        null,
+	                        _react2.default.createElement(
+	                            'a',
+	                            { href: "/pub/event?q=" + event.eventbrite_id, target: '_self' },
+	                            _react2.default.createElement('img', { className: 'card-img-top img-fluid', src: _this2.getImageURL(event) })
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'card-block' },
+	                            _react2.default.createElement(
+	                                'a',
+	                                { href: "/pub/event?q=" + event.eventbrite_id, target: '_self' },
+	                                _react2.default.createElement(
+	                                    'h4',
+	                                    { className: 'card-title' },
+	                                    event.name
+	                                )
+	                            ),
+	                            _react2.default.createElement(
+	                                'p',
+	                                { className: 'card-text' },
+	                                event.description
+	                            ),
+	                            _react2.default.createElement('br', null)
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'card-footer' },
+	                            _react2.default.createElement(
+	                                'small',
+	                                { className: 'text-muted' },
+	                                ' Category: ',
+	                                event.category_name,
+	                                ' '
+	                            )
+	                        )
+	                    )
+	                );
+	            });
+	            return _react2.default.createElement(
+	                'div',
+	                { className: 'main' },
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'intro-header' },
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'container' },
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'row' },
+	                            _react2.default.createElement(
+	                                'div',
+	                                { className: 'col-lg-12' },
+	                                _react2.default.createElement(
+	                                    'div',
+	                                    { className: 'intro-message' },
+	                                    _react2.default.createElement(
+	                                        'h1',
+	                                        null,
+	                                        'Welcome to Eventile!'
+	                                    ),
+	                                    _react2.default.createElement(
+	                                        'h3',
+	                                        null,
+	                                        'Register/Login to find personalized events nearby!'
+	                                    )
+	                                )
+	                            )
+	                        )
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'container' },
+	                    _react2.default.createElement(
+	                        'div',
+	                        null,
+	                        _react2.default.createElement('br', null),
+	                        _react2.default.createElement(
+	                            'center',
+	                            null,
+	                            _react2.default.createElement(
+	                                'h2',
+	                                null,
+	                                'Popular Events Nearby (London, Ontario)'
+	                            )
+	                        ),
+	                        _react2.default.createElement('hr', null),
+	                        _react2.default.createElement(
+	                            'form',
+	                            { onSubmit: this.handleSubmit, className: 'form-inline' },
+	                            _react2.default.createElement(
+	                                'label',
+	                                null,
+	                                'Not your location? Change it here: \u2002 '
+	                            ),
+	                            _react2.default.createElement('input', { type: 'text', value: this.state.new_location, onChange: this.handleChange,
+	                                className: 'form-control', placeholder: 'London, Ontario' }),
+	                            _react2.default.createElement('input', { type: 'submit', value: 'Submit', className: 'btn btn-default' })
+	                        ),
+	                        _react2.default.createElement('br', null),
+	                        this.state.searching ? _react2.default.createElement(
+	                            'p',
+	                            null,
+	                            'Searching....please wait...'
+	                        ) : null,
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'card-columns' },
+	                            events
+	                        )
+	                    )
+	                )
+	            );
+	        }
+	    }]);
+
+	    return WelcomePage;
+	}(_react2.default.Component);
+
+	exports.default = (0, _reactRouter.withRouter)(WelcomePage);
+
+/***/ },
+/* 255 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactDom = __webpack_require__(32);
+
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+
+	__webpack_require__(246);
+
 	var _auth = __webpack_require__(243);
 
 	var _auth2 = _interopRequireDefault(_auth);
+
+	var _reactRouter = __webpack_require__(178);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -29255,40 +30664,740 @@
 
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Created by gary on 2017-03-11.
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
 
-	var UserPage = function (_React$Component) {
-	    _inherits(UserPage, _React$Component);
 
-	    function UserPage() {
-	        _classCallCheck(this, UserPage);
+	function checkStatus(response) {
 
-	        var _this = _possibleConstructorReturn(this, (UserPage.__proto__ || Object.getPrototypeOf(UserPage)).call(this));
+	    if (response.status >= 200 && response.status < 300) {
+	        return response.json();
+	    } else {
+	        var error = new Error(response.statusText);
+	        error.response = response;
+	        throw error;
+	    }
+	};
+
+	var HomeDashboard = function (_React$Component) {
+	    _inherits(HomeDashboard, _React$Component);
+
+	    function HomeDashboard() {
+	        _classCallCheck(this, HomeDashboard);
+
+	        var _this = _possibleConstructorReturn(this, (HomeDashboard.__proto__ || Object.getPrototypeOf(HomeDashboard)).call(this));
+
+	        _this.getPreferenceEvents = _this.getPreferenceEvents.bind(_this);
+	        _this.getLocation = _this.getLocation.bind(_this);
+	        _this.fail = _this.fail.bind(_this);
+	        _this.success = _this.success.bind(_this);
+	        _this.success_ip = _this.success_ip.bind(_this);
+	        _this.success_got_user = _this.success_got_user.bind(_this);
 
 	        _this.state = {
-	            name: index.username
+	            events: [],
+	            loaded: false,
+	            location: 'London, Ontario',
+	            user_has_prefs: false,
+	            user_prefs_ids: [],
+	            auth: JSON.parse(localStorage.auth)
+	        };
+	        return _this;
+	    }
+
+	    _createClass(HomeDashboard, [{
+	        key: 'getLocation',
+	        value: function getLocation() {
+	            fetch("api.db-ip.com/addrinfo?api_key=bc2ab711d740d7cfa6fcb0ca8822cb327e38844f&addr=129.100.93.162", {
+	                method: "GET"
+	            }).then(checkStatus).then(this.success_ip).catch(this.fail);
+	        }
+	    }, {
+	        key: 'success',
+	        value: function success(events) {
+	            console.log("Search result", events);
+	            this.setState({ events: events, loaded: true });
+	        }
+	    }, {
+	        key: 'success_ip',
+	        value: function success_ip(ip) {
+	            console.log("Search result", ip);
+	            this.setState({ location: ip.city });
+	        }
+	    }, {
+	        key: 'success_got_user',
+	        value: function success_got_user(user) {
+	            // update the states with the user JSON object
+	            console.log("dashboard success: user = ", user);
+
+	            if (user.preferences.length == 0) {
+	                this.setState({ loaded: true, user_has_prefs: false, user_prefs_ids: user.category_ids });
+	            } else {
+	                this.setState({ loaded: true, user_has_prefs: true, user_prefs_ids: user.category_ids });
+	            }
+	            this.getPreferenceEvents();
+	        }
+	    }, {
+	        key: 'fail',
+	        value: function fail(error) {
+	            console.error("Search has failed", error);
+	            this.setState({ loaded: true });
+	        }
+	    }, {
+	        key: 'getUser',
+	        value: function getUser() {
+	            var token = this.state.auth.access_token; // authentication token to make sure user is signed in/authorized
+
+	            fetch("/api/user", { // GET the user from the usercontroller, make REST call
+	                headers: {
+	                    'Authorization': 'Bearer ' + token // pass authentication token as a header to the REST API call
+	                }
+	            }).then(checkStatus).then(this.success_got_user).catch(this.fail);
+	        }
+	    }, {
+	        key: 'getPreferenceEvents',
+	        value: function getPreferenceEvents() {
+	            var token = this.state.auth.access_token; // authentication token to make sure user is signed in/authorized
+
+	            console.log("Searching based by preferences...");
+
+	            var preference_ids = this.state.user_prefs_ids;
+	            console.log("user's prefs = " + preference_ids);
+
+	            var has_prefs = this.state.user_has_prefs;
+	            console.log("has_prefs " + has_prefs);
+
+	            // if the user did not select any preferences, then just search by nearby like the Welcome page
+	            if (has_prefs == false) {
+	                console.log("user did not select any");
+	                fetch("/welcome_search?location=" + "London, Ontario").then(checkStatus).then(this.success).catch(this.fail);
+	            } else {
+	                // search based on the preferred categories if they have preferences
+	                console.log("user selected prefs");
+
+	                fetch("/api/dashboard?prefs=" + preference_ids, {
+	                    headers: {
+	                        'Authorization': 'Bearer ' + token // pass authentication token as a header to the REST API call
+	                    }
+	                }).then(checkStatus).then(this.success).catch(this.fail);
+	            }
+	        }
+	    }, {
+	        key: 'getImageURL',
+	        value: function getImageURL(event) {
+	            return event.img_url;
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            var _this2 = this;
+
+	            // stops the infinite looping & app crashing
+	            if (this.state.loaded == false) {
+	                this.getUser();
+	            }
+	            var events = this.state.events.map(function (event) {
+	                return _react2.default.createElement(
+	                    'div',
+	                    { className: 'card' },
+	                    _react2.default.createElement(
+	                        'a',
+	                        { href: "/event?q=" + event.eventbrite_id, target: '_self' },
+	                        _react2.default.createElement('img', { className: 'card-img-top img-fluid', src: _this2.getImageURL(event) })
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'card-block' },
+	                        _react2.default.createElement(
+	                            'a',
+	                            { href: "/event?q=" + event.eventbrite_id, target: '_self' },
+	                            _react2.default.createElement(
+	                                'h4',
+	                                { className: 'card-title' },
+	                                event.name
+	                            )
+	                        ),
+	                        _react2.default.createElement(
+	                            'p',
+	                            { className: 'card-text' },
+	                            event.description
+	                        ),
+	                        _react2.default.createElement('br', null)
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'card-footer' },
+	                        _this2.state.user_has_prefs ? _react2.default.createElement(
+	                            'small',
+	                            { className: 'text-muted' },
+	                            'Because you liked: ',
+	                            event.category_name,
+	                            ' '
+	                        ) : _react2.default.createElement(
+	                            'small',
+	                            { className: 'text-muted' },
+	                            'Category: ',
+	                            event.category_name
+	                        )
+	                    )
+	                );
+	            });
+	            return _react2.default.createElement(
+	                'div',
+	                { className: 'container' },
+	                _react2.default.createElement(
+	                    'div',
+	                    null,
+	                    _react2.default.createElement(
+	                        'center',
+	                        null,
+	                        _react2.default.createElement(
+	                            'h2',
+	                            null,
+	                            ' Your Home Dashboard '
+	                        )
+	                    ),
+	                    _react2.default.createElement('hr', null),
+	                    _react2.default.createElement(
+	                        'h3',
+	                        null,
+	                        'Here are your personalized events:'
+	                    ),
+	                    _react2.default.createElement('br', null),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'card-columns' },
+	                        events
+	                    )
+	                )
+	            );
+	        }
+	    }]);
+
+	    return HomeDashboard;
+	}(_react2.default.Component);
+
+	exports.default = (0, _reactRouter.withRouter)(HomeDashboard);
+
+/***/ },
+/* 256 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactDom = __webpack_require__(32);
+
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+
+	__webpack_require__(246);
+
+	var _auth = __webpack_require__(243);
+
+	var _auth2 = _interopRequireDefault(_auth);
+
+	var _reactRouter = __webpack_require__(178);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Created by gary on 2017-03-09.
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
+
+	function checkStatus(response) {
+	    if (response.status >= 200 && response.status < 300) {
+	        return response.json();
+	    } else {
+	        var error = new Error(response.statusText);
+	        error.response = response;
+	        throw error;
+	    }
+	};
+
+	var PublicEventPage = function (_React$Component) {
+	    _inherits(PublicEventPage, _React$Component);
+
+	    function PublicEventPage() {
+	        _classCallCheck(this, PublicEventPage);
+
+	        var _this = _possibleConstructorReturn(this, (PublicEventPage.__proto__ || Object.getPrototypeOf(PublicEventPage)).call(this));
+
+	        _this.getEvent = _this.getEvent.bind(_this);
+	        _this.fail = _this.fail.bind(_this);
+	        _this.success_found_event = _this.success_found_event.bind(_this);
+	        _this.render = _this.render.bind(_this);
+
+	        _this.state = {
+	            name: 'Loading...',
+	            description: '',
+	            category: '',
+	            rating: '.....',
+	            image_url: '',
+	            venue_address: '',
+	            venue_longitude: '',
+	            venue_latitude: '',
+	            loaded: false,
+	            comments: []
 	        };
 
 	        return _this;
 	    }
 
-	    _createClass(UserPage, [{
+	    _createClass(PublicEventPage, [{
+	        key: 'success_found_event',
+	        value: function success_found_event(event_result) {
+	            this.setState({
+	                name: event_result.name, description: event_result.description,
+	                category: event_result.category_name, venue_address: event_result.venue_address,
+	                venue_longitude: event_result.longitude, venue_latitude: event_result.latitude
+	            });
+	            if (event_result.num_ratings != 0) {
+	                this.setState({ rating: event_result.average_rating });
+	            }
+	            if (event_result.image_url != "") {
+	                this.setState({ image_url: event_result.img_url });
+	            }
+	        }
+	    }, {
+	        key: 'fail',
+	        value: function fail(error) {
+	            console.log("failed " + error);
+	            this.setState({ loaded: true });
+	        }
+	    }, {
+	        key: 'getEvent',
+	        value: function getEvent() {
+	            var query = this.props.location.query.q;
+
+	            fetch("/view/event?q=" + query).then(checkStatus).then(this.success_found_event).catch(this.fail);
+	        }
+	    }, {
 	        key: 'render',
 	        value: function render() {
+	            // stops the infinite looping & app crashing
+	            if (this.state.loaded == false) {
+	                this.getEvent();
+	            }
 
 	            return _react2.default.createElement(
 	                'div',
-	                null,
-	                'Name: ',
-	                this.state.name,
-	                ' ',
-	                _react2.default.createElement('br', null)
+	                { className: 'main' },
+	                _react2.default.createElement('br', null),
+	                _react2.default.createElement(
+	                    'center',
+	                    null,
+	                    _react2.default.createElement(
+	                        'h2',
+	                        null,
+	                        'Event: ',
+	                        this.state.name
+	                    )
+	                ),
+	                _react2.default.createElement('hr', null),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'row' },
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-md-8' },
+	                        _react2.default.createElement('img', { className: 'img-responsive', src: this.state.image_url, alt: '' })
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-md-4' },
+	                        _react2.default.createElement(
+	                            'h3',
+	                            null,
+	                            'Event Description'
+	                        ),
+	                        _react2.default.createElement(
+	                            'p',
+	                            null,
+	                            this.state.description
+	                        ),
+	                        _react2.default.createElement(
+	                            'h4',
+	                            null,
+	                            'Event Category'
+	                        ),
+	                        _react2.default.createElement(
+	                            'p',
+	                            null,
+	                            this.state.category
+	                        ),
+	                        _react2.default.createElement(
+	                            'h4',
+	                            null,
+	                            'Location'
+	                        ),
+	                        _react2.default.createElement(
+	                            'p',
+	                            null,
+	                            this.state.venue_address
+	                        ),
+	                        _react2.default.createElement(
+	                            'p',
+	                            null,
+	                            'Longitude: ',
+	                            this.state.venue_longitude
+	                        ),
+	                        _react2.default.createElement(
+	                            'p',
+	                            null,
+	                            'Latitude: ',
+	                            this.state.venue_latitude
+	                        )
+	                    )
+	                )
 	            );
 	        }
 	    }]);
 
-	    return UserPage;
+	    return PublicEventPage;
 	}(_react2.default.Component);
+
+	exports.default = (0, _reactRouter.withRouter)(PublicEventPage);
+
+/***/ },
+/* 257 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	__webpack_require__(246);
+
+	var _reactRouter = __webpack_require__(178);
+
+	var _createEventForm = __webpack_require__(258);
+
+	var _createEventForm2 = _interopRequireDefault(_createEventForm);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Created by gary on 2017-03-22.
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
+
+	var checkStatus = function checkStatus(response) {
+	    console.log("response = ", response);
+	    if (response.status >= 200 && response.status < 300) {
+	        return response.json();
+	    } else {
+	        var error = new Error(response.statusText);
+	        error.response = response;
+	        throw error;
+	    }
+	};
+
+	var CreateEvent = function (_React$Component) {
+	    _inherits(CreateEvent, _React$Component);
+
+	    function CreateEvent() {
+	        _classCallCheck(this, CreateEvent);
+
+	        var _this = _possibleConstructorReturn(this, (CreateEvent.__proto__ || Object.getPrototypeOf(CreateEvent)).call(this));
+
+	        _this.createEvent = _this.createEvent.bind(_this);
+	        _this.success = _this.success.bind(_this);
+	        _this.fail = _this.fail.bind(_this);
+
+	        _this.state = {
+	            new_event_name: 'default',
+	            new_event_description: '',
+	            new_event_location: '',
+	            created: false,
+	            create_success: true,
+	            new_event_id: '',
+	            error: '',
+	            auth: JSON.parse(localStorage.auth)
+	        };
+	        return _this;
+	    }
+
+	    _createClass(CreateEvent, [{
+	        key: 'createEvent',
+	        value: function createEvent(e) {
+	            e.preventDefault();
+	            var form = this.form.data();
+	            var token = this.state.auth.access_token;
+
+	            fetch("/api/event/create_event?event_name=" + form.event_name + "&event_description=" + form.event_description + "&event_location=" + form.event_location + "&event_date=" + form.event_date, {
+	                method: 'POST',
+	                headers: {
+	                    'Authorization': 'Bearer ' + token // pass authentication token as a header to the REST API call
+	                }
+	            }).then(checkStatus).then(this.success).catch(this.fail);
+	        }
+	    }, {
+	        key: 'success',
+	        value: function success(event) {
+	            console.log("created event! ", event);
+	            this.setState({ created: true, create_success: true, new_event_id: event.eventbrite_id });
+	        }
+	    }, {
+	        key: 'fail',
+	        value: function fail(error) {
+	            console.log("errorrrrr");
+	            if (error) {
+	                this.setState({ created: true, create_success: false, error: error.error });
+	            }
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            var _this2 = this;
+
+	            var Success = function Success() {
+	                return _react2.default.createElement(
+	                    'p',
+	                    { className: 'alert alert-success' },
+	                    _react2.default.createElement(
+	                        'a',
+	                        { href: "/event?q=" + _this2.state.new_event_id },
+	                        'Success! Created the event!'
+	                    )
+	                );
+	            };
+	            var Failed = function Failed() {
+	                return _react2.default.createElement(
+	                    'p',
+	                    { className: 'alert alert-danger' },
+	                    'Failed: ',
+	                    _this2.state.error
+	                );
+	            };
+	            return _react2.default.createElement(
+	                'div',
+	                { className: 'col-sm-4 col-sm-offset-4' },
+	                _react2.default.createElement(
+	                    'center',
+	                    null,
+	                    _react2.default.createElement(
+	                        'h2',
+	                        null,
+	                        ' Create an Event '
+	                    )
+	                ),
+	                _react2.default.createElement('hr', null),
+	                _react2.default.createElement(_createEventForm2.default, { onSubmit: this.createEvent, ref: function ref(_ref) {
+	                        return _this2.form = _ref;
+	                    } }),
+	                this.state.created ? this.state.create_success ? _react2.default.createElement(Success, null) : _react2.default.createElement(Failed, null) : null
+	            );
+	        }
+	    }]);
+
+	    return CreateEvent;
+	}(_react2.default.Component);
+
+	exports.default = (0, _reactRouter.withRouter)(CreateEvent);
+
+/***/ },
+/* 258 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactDom = __webpack_require__(32);
+
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+
+	__webpack_require__(246);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Created by gary on 2017-03-22.
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
+
+	var CreateEventForm = function (_React$Component) {
+	    _inherits(CreateEventForm, _React$Component);
+
+	    function CreateEventForm(props) {
+	        _classCallCheck(this, CreateEventForm);
+
+	        var _this = _possibleConstructorReturn(this, (CreateEventForm.__proto__ || Object.getPrototypeOf(CreateEventForm)).call(this, props));
+
+	        _this.state = {
+	            new_event_name: '',
+	            new_event_description: '',
+	            new_event_location: ''
+	        };
+
+	        _this.handleInputChange = _this.handleInputChange.bind(_this);
+	        return _this;
+	    }
+
+	    _createClass(CreateEventForm, [{
+	        key: 'handleInputChange',
+	        value: function handleInputChange(event) {
+	            var target = event.target;
+	            var value = target.type === 'checkbox' ? target.checked : target.value;
+	            var name = target.name;
+
+	            this.setState(_defineProperty({}, name, value));
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'form',
+	                { className: 'form-horizontal', name: 'createEventForm', onSubmit: this.props.onSubmit, ref: 'createEventForm' },
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'form-group' },
+	                    _react2.default.createElement(
+	                        'label',
+	                        { htmlFor: 'new_event_name', className: 'col-sm-4 control-label' },
+	                        'Name of the Event:'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-sm-8' },
+	                        _react2.default.createElement('input', { type: 'text',
+	                            className: 'form-control', id: 'new_event_name',
+	                            placeholder: 'Name for the event',
+	                            ref: 'new_event_name'
+	                        })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'form-group' },
+	                    _react2.default.createElement(
+	                        'label',
+	                        { htmlFor: 'new_event_description', className: 'col-sm-4 control-label' },
+	                        'Description:'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-sm-8' },
+	                        _react2.default.createElement('input', { type: 'text',
+	                            className: 'form-control', id: 'new_event_description',
+	                            placeholder: 'Tell us about the event...',
+	                            ref: 'new_event_description'
+	                        })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'form-group' },
+	                    _react2.default.createElement(
+	                        'label',
+	                        { htmlFor: 'new_event_location', className: 'col-sm-4 control-label' },
+	                        'Location:'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-sm-8' },
+	                        _react2.default.createElement('input', { type: 'text',
+	                            className: 'form-control', id: 'new_event_location',
+	                            placeholder: 'London, Ontario',
+	                            ref: 'new_event_location'
+	                        })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'form-group' },
+	                    _react2.default.createElement(
+	                        'label',
+	                        { htmlFor: 'new_event_date', className: 'col-sm-4 control-label' },
+	                        'Date:'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-sm-8' },
+	                        _react2.default.createElement('input', { type: 'text',
+	                            className: 'form-control', id: 'new_event_date',
+	                            placeholder: 'When will the event take place?',
+	                            ref: 'new_event_date'
+	                        })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'form-group' },
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-sm-offset-3 col-sm-9' },
+	                        _react2.default.createElement(
+	                            'button',
+	                            { type: 'submit', className: 'btn btn-default' },
+	                            'Create Event!'
+	                        )
+	                    )
+	                )
+	            );
+	        }
+	    }, {
+	        key: 'data',
+	        value: function data() {
+	            var form_event_name = _reactDom2.default.findDOMNode(this.refs.new_event_name).value.trim(),
+	                form_event_description = _reactDom2.default.findDOMNode(this.refs.new_event_description).value.trim(),
+	                form_event_location = _reactDom2.default.findDOMNode(this.refs.new_event_location).value.trim(),
+	                form_event_date = _reactDom2.default.findDOMNode(this.refs.new_event_date).value.trim();
+
+	            return {
+	                event_name: form_event_name,
+	                event_description: form_event_description,
+	                event_date: form_event_date,
+	                event_location: form_event_location
+	            };
+	        }
+	    }]);
+
+	    return CreateEventForm;
+	}(_react2.default.Component);
+
+	exports.default = CreateEventForm;
 
 /***/ }
 /******/ ]);
