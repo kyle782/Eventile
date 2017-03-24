@@ -62,6 +62,7 @@ class EventPage extends React.Component {
             loaded: false,
             users_rating: '',
             start_date_local: '',
+            start_date_local_time: '',
             start_date_timezone: '',
             auth: JSON.parse(localStorage.auth),
             event_comments_ids: [],
@@ -79,7 +80,7 @@ class EventPage extends React.Component {
             category: event_result.category_name, venue_address: event_result.venue_address,
             venue_longitude: event_result.longitude, venue_latitude: event_result.latitude,
             eventbrite_id: event_result.eventbrite_id, start_date_local: event_result.start_date_local,
-            start_date_timezone: event_result.start_date_timezone
+            start_date_timezone: event_result.start_date_timezone, start_date_local_time: event_result.start_date_local_time
         });
         if (event_result.num_ratings != 0) {
             this.setState({rating: event_result.average_rating})
@@ -184,9 +185,8 @@ class EventPage extends React.Component {
     }
 
     success_update_comment(comment_response){
-        console.log("SUCCESS UPDATED COMMENT");
         console.log("event results after updating comments =  ", comment_response);
-        this.setState({event_comments: this.state.event_comments.concat(comment_response.comment_body)});
+        this.setState({event_comments: this.state.event_comments.concat(comment_response.author_name + ": " + comment_response.comment_body)});
     }
 
     /**
@@ -452,6 +452,7 @@ class EventPage extends React.Component {
                         <h4>Location</h4>
                         <a href={"http://maps.google.com/maps?q=" + this.state.venue_latitude + "," + this.state.venue_longitude}> <p>{this.state.venue_address}</p> </a>
                         <p>Start Date: {this.state.start_date_local}</p>
+                        <p>Start Time: {this.state.start_date_local_time}</p>
                         <p>Time Zone: {this.state.start_date_timezone}</p>
 
                         <div className="row">

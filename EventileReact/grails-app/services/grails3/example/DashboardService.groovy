@@ -79,21 +79,25 @@ class DashboardService {
                 eventbrite_venue_id = ""
             }
 
-            String start_date_local
+            String start_date_local_full
             String start_date_timezone
             if (obj["events"][i].start != null){
-                start_date_local = obj["events"][i].start.local
+                start_date_local_full = obj["events"][i].start.local
                 start_date_timezone = obj["events"][i].start.timezone
             } else {
-                start_date_local = ""
+                start_date_local_full = ""
                 start_date_timezone = ""
             }
+
+            String start_date_local = start_date_local_full.substring(0, 10)
+            String start_date_local_time = start_date_local_full.substring(11, 19)
 
             // create new Event object, save to database after
             Event new_event = new Event(name: event_name, description: event_description_trimmed, start_date_local: start_date_local,
                     eventbrite_url: obj["events"][i].url, eventbrite_id: eventbrite_id,
                     category_name: eventbrite_category_name, num_ratings: 0, total_rating: 0, average_rating: 0,
                     img_url: eventbrite_img_url, eventbrite_venue_id: eventbrite_venue_id, start_date_timezone: start_date_timezone,
+                    start_date_local_time: start_date_local_time
             )
 
             // save to database, print errors for debugging if unable to save

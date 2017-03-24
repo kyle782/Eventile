@@ -4,7 +4,7 @@ class Event {
 
     static hasMany = [comments: Comment, ratings: Rating]
 
-    static belongsTo = [creator: User, attendees: User, new_attendees: User, previous_attendees: User]
+    static belongsTo = [creator: User, attendees: User]
 
     static constraints = {
         // need to make nullable since grails rejects storing the event in the database if they are null
@@ -24,14 +24,14 @@ class Event {
         creator nullable: true
         attendees nullable: true
         ratings nullable: true
-        new_attendees nullable: true
-        previous_attendees nullable: true
+        start_date_local_time nullable: true
     }
 
     String name
     String description
     String eventbrite_id
     String start_date_local
+    String start_date_local_time
     String start_date_timezone
     String eventbrite_url
     String category_name

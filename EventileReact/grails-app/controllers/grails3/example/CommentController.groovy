@@ -12,11 +12,11 @@ class CommentController {
 
     @Secured(['ROLE_USER'])
     def update_comment(String q, String c){
-        System.out.println("q = " + q + ", c = " + c)
         Event this_event = Event.findByEventbrite_id(q)
-        Comment new_comment = new Comment(comment_body: c, dateCreated: "testing date", event: this_event)
+        User author = User.get(springSecurityService.principal.id)
+        Comment new_comment = new Comment(comment_body: c, dateCreated: "testing date",
+                event: this_event, author: author, author_name: author.username)
         new_comment.save()
-        System.out.println("saved comment to event? " + this_event.comments)
         respond new_comment
     }
 

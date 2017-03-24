@@ -1,9 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import UserForm from './new-signup';
 import 'whatwg-fetch';
 import auth from './auth';
 import { withRouter } from 'react-router';
+
+import UserForm from './profile-edit-form';
 
 
 function checkStatus(response) {
@@ -30,8 +31,9 @@ class UserPage extends React.Component {
         this.getUserRatedEvents = this.getUserRatedEvents.bind(this);
         this.success_got_rated_events = this.success_got_rated_events.bind(this);
         this.getRatedEventName = this.getRatedEventName.bind(this);
-        this.edit = this.edit.bind(this);              
-        this.toggleEdit = this.toggleEdit.bind(this);    
+        this.submitEdit = this.submitEdit.bind(this);
+        this.toggleEdit = this.toggleEdit.bind(this);
+        this.success_edited = this.success_edited.bind(this);
 
         this.state = {
             name: '',
@@ -43,7 +45,7 @@ class UserPage extends React.Component {
             user_rsvp_events: [],
             user_ratings: [],
             rated_event: '',
-            edited: false,    
+            editing: false,
             auth: JSON.parse(localStorage.auth)
         }
     }
@@ -155,15 +157,40 @@ class UserPage extends React.Component {
 
         this.setState({rated_event: response_event});
     }
-    
-    edit() {
-        let token = this.state.auth.access_token;
 
-        fetch("/api/edit", {
+    submitEdit(e) {
+        e.preventDefault();
+        let token = this.state.auth.access_token;
+        console.log("token = " + token);
+        let form = this.form.data();
+        console.log("SUBMITTING EDIT!...", form);
+
+        fetch("/api/user/edit" + "?username=" + form.username + "&password=" + form.password + "&age=" + form.age +
+            "&location=" + form.location +
+            "&pref_music=" + form.pref_music +
+            "&pref_bus_prof=" + form.pref_bus_prof +
+            "&pref_food_drink=" + form.pref_food_drink +
+            "&pref_comm_culture=" + form.pref_comm_culture +
+            "&pref_perf_vis_art=" + form.pref_perf_vis_art +
+            "&pref_film_media_ent=" + form.pref_film_media_ent +
+            "&pref_sports_fitness=" + form.pref_sports_fitness +
+            "&pref_health_well=" + form.pref_health_well +
+            "&pref_sci_tech=" + form.pref_sci_tech +
+            "&pref_trav_outd=" + form.pref_trav_outd +
+            "&pref_char_games=" + form.pref_char_games +
+            "&pref_religion_spirit=" + form.pref_religion_spirit +
+            "&pref_family_edu=" + form.pref_family_edu +
+            "&pref_season_holi=" + form.pref_season_holi +
+            "&pref_gov_poli=" + form.pref_gov_poli +
+            "&pref_fash_beaut=" + form.pref_fash_beaut +
+            "&pref_home_life=" + form.pref_home_life +
+            "&pref_auto_boat_air=" + form.pref_auto_boat_air +
+            "&pref_hobbies_ints=" + form.pref_hobbies_ints +
+            "&pref_other=" + form.pref_other, {
             method: "PUT",
             headers: {
                 'Authorization': 'Bearer ' + token
-            }
+            },
         })
             .then(checkStatus)
             .then(this.success_edited)
@@ -172,13 +199,14 @@ class UserPage extends React.Component {
     }    
 
     toggleEdit() {
-        this.setState({edited: !this.state.edited})
+        this.setState({editing: !this.state.editing})
     }
 
-    success_edited(edits){
-        console.log("edited!!");
-        this.setState({edited: true});
-
+    success_edited(edited_user_response){
+        console.log("edited!! resposne = ", edited_user_response);
+        this.setState({editing: false});
+        this.setState({name: edited_user_response.username, age: edited_user_response.age, location: edited_user_response.location,
+            gotUser: true, user_preferences: edited_user_response.preferences});
     }
 
     render() {
@@ -186,10 +214,6 @@ class UserPage extends React.Component {
         // needed to stop the infinite looping
         if (this.state.gotUser == false){
             this.getUser();
-        }
-        
-        if (this.state.edited == false) {
-            this.edit();
         }
 
         let created_events = this.state.user_created_events.map( (created_event) => {
@@ -237,7 +261,11 @@ class UserPage extends React.Component {
                     <h2> Your Event Ratings: </h2>
                     {rated_events}
             
-                    <button onClick={this.edit} ref={ (ref) => this.form = ref }>Edit</button>
+                    <button className="btn btn-default" onClick={() => this.toggleEdit()} ref={ (ref) => this.form = ref }>Edit</button>
+                    {this.state.editing ?
+                        <UserForm submitLabel="Submit Changes" onSubmit={this.submitEdit} ref={ (ref) => this.form = ref }/>
+                        : null
+                    }
                     
                 </div>
             </div>
