@@ -89,8 +89,6 @@ class UserController {
 
         if (!(event.attendees = user)){
             System.out.println(event.errors)
-        } else {
-            System.out.println("was able to set the event to the user")
         }
         event.save()
 
@@ -105,10 +103,7 @@ class UserController {
 
         event.attendees = null
 
-        System.out.println("was able to remove the event from the user")
-
         event.save()
-        System.out.println("event's attendees now " + event.attendees)
 
         respond status: HttpStatus.ACCEPTED
 

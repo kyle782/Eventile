@@ -42,17 +42,14 @@ class EventController {
         boolean found = false
 
         for (User attendee : target_event.attendees){
-            System.out.println("event's attendee = " + attendee)
             if (attendee.username == user.username){
                 found = true
             }
         }
         if (found){
             response.add(0, "found")
-            System.out.println("returning true " + response)
             respond response
         } else {
-            System.out.println("returning false = " + response)
             respond response
         }
 
