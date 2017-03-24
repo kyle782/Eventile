@@ -29847,8 +29847,8 @@
 	        _this.checkUserRSVPd = _this.checkUserRSVPd.bind(_this);
 	        _this.success_check_user_rsvp = _this.success_check_user_rsvp.bind(_this);
 	        _this.success_remove_rsvp = _this.success_remove_rsvp.bind(_this);
-	        _this.handle_first_time = _this.handle_first_time(_this);
-	        _this.handle_have_gone = _this.handle_have_gone(_this);
+	        _this.handle_first_time = _this.handle_first_time.bind(_this);
+	        _this.handle_have_gone = _this.handle_have_gone.bind(_this);
 	        _this.update_comments = _this.update_comments.bind(_this);
 	        _this.success_update_comment = _this.success_update_comment.bind(_this);
 
@@ -30001,7 +30001,7 @@
 	    }, {
 	        key: 'update_rating',
 	        value: function update_rating(new_rating) {
-	            var token = this.state.auth.access_token;
+	            var token = this.state.auth.access_tokgen;
 	            var query = this.props.location.query.q;
 
 	            this.setState({ users_rating: new_rating });

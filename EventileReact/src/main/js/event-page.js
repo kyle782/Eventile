@@ -36,8 +36,8 @@ class EventPage extends React.Component {
         this.checkUserRSVPd = this.checkUserRSVPd.bind(this);
         this.success_check_user_rsvp = this.success_check_user_rsvp.bind(this);
         this.success_remove_rsvp = this.success_remove_rsvp.bind(this);
-        this.handle_first_time = this.handle_first_time(this);
-        this.handle_have_gone = this.handle_have_gone(this);
+        this.handle_first_time = this.handle_first_time.bind(this);
+        this.handle_have_gone = this.handle_have_gone.bind(this);
         this.update_comments = this.update_comments.bind(this);
         this.success_update_comment = this.success_update_comment.bind(this);
 
