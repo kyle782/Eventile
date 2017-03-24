@@ -203,7 +203,6 @@ class EventController {
 
         def num_related_events = related_events_all.size()
 
-
         def related_events = related_events_all.subList(0, 4)
 
         respond related_events
