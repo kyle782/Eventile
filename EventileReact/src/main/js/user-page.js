@@ -26,6 +26,10 @@ class UserPage extends React.Component {
         this.success_got_created_events = this.success_got_created_events.bind(this);
         this.getUserRSVPEvents = this.getUserRSVPEvents.bind(this);
         this.success_got_rsvp_events = this.success_got_rsvp_events.bind(this);
+        this.getUserRatedEvents = this.getUserRatedEvents.bind(this);
+        this.success_got_rated_events = this.success_got_rated_events.bind(this);
+        this.getRatedEventName = this.getRatedEventName.bind(this);
+
 
         this.state = {
             name: '',
@@ -35,6 +39,8 @@ class UserPage extends React.Component {
             user_preferences: [],
             user_created_events: [],
             user_rsvp_events: [],
+            user_ratings: [],
+            rated_event: '',
             auth: JSON.parse(localStorage.auth)
         }
     }
@@ -78,7 +84,26 @@ class UserPage extends React.Component {
         })
             .then(checkStatus)
             .then(this.success_got_rsvp_events)
+            .then(this.getUserRatedEvents)
             .catch(this.fail)
+    }
+
+    getUserRatedEvents(){
+        let token = this.state.auth.access_token;
+
+        fetch("/api/user/get_user_rated_events", {
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        })
+            .then(checkStatus)
+            .then(this.success_got_rated_events)
+            .catch(this.fail)
+    }
+
+    success_got_rated_events(rated_events){
+        console.log("VIEW: got user's rated events: ", rated_events);
+        this.setState({user_ratings: rated_events});
     }
 
     success_got_rsvp_events(rsvp_events){
@@ -112,6 +137,22 @@ class UserPage extends React.Component {
         }
     }
 
+    getRatedEventName(rated_event){
+        let token = this.state.auth.access_token;
+
+        let response_event = fetch("/api/event/show_rated_event?q=" + rated_event.event.id, {
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        })
+            .then(checkStatus)
+            .catch(this.fail);
+
+        console.log("rated event = ", response_event);
+
+        this.setState({rated_event: response_event});
+    }
+
     render() {
 
         // needed to stop the infinite looping
@@ -121,7 +162,7 @@ class UserPage extends React.Component {
 
         let created_events = this.state.user_created_events.map( (created_event) => {
             return <div>
-                <p>Name: {created_event.name}</p>
+                <a href={"/event?q=" + created_event.eventbrite_id} target="_self"><p>Name: {created_event.name}</p></a>
             </div>
         });
 
@@ -133,7 +174,14 @@ class UserPage extends React.Component {
 
         let rsvp_events = this.state.user_rsvp_events.map( (rsvp_event) => {
             return <div>
-                <p>Name: {rsvp_event.name}</p>
+                <a href={"/event?q=" + rsvp_event.eventbrite_id}><p>Name: {rsvp_event.name}</p></a>
+            </div>
+        });
+
+        let rated_events = this.state.user_ratings.map( (rated_event) => {
+            return <div>
+                <a href={"/event?q=" + rated_event.eventbrite_id}><p>Name: {rated_event.event_name}</p></a>
+                <p>Your Rating: {rated_event.users_rating}</p>
             </div>
         });
 
@@ -154,6 +202,8 @@ class UserPage extends React.Component {
                     {created_events}
                     <h2> Your RSVPs: </h2>
                     {rsvp_events}
+                    <h2> Your Event Ratings: </h2>
+                    {rated_events}
                 </div>
             </div>
 

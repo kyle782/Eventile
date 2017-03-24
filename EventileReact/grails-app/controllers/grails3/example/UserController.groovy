@@ -79,7 +79,6 @@ class UserController {
     @Secured(['ROLE_USER'])
     def show_user(){
         User user = User.get(springSecurityService.principal.id)
-
         respond user
     }
 
@@ -90,9 +89,20 @@ class UserController {
 
         if (!(event.attendees = user)){
             System.out.println(event.errors)
-        } else {
-            System.out.println("was able to set the event to the user")
         }
+        event.save()
+
+        respond status: HttpStatus.ACCEPTED
+
+    }
+
+    @Secured(['ROLE_USER'])
+    def remove_user_RSVP(@RequestParameter('eventbrite_id') String eventbrite_id){
+        User user = User.get(springSecurityService.principal.id)
+        Event event = Event.findByEventbrite_id(eventbrite_id)
+
+        event.attendees = null
+
         event.save()
 
         respond status: HttpStatus.ACCEPTED
@@ -105,4 +115,24 @@ class UserController {
         def rsvp_events = user.getRsvp_events()
         respond rsvp_events
     }
+
+    @Secured(['ROLE_USER'])
+    def get_user_rated_events(){
+        User user = User.get(springSecurityService.principal.id)
+        def user_ratings = user.getRatings()
+        respond user_ratings
+    }
+
+    @Secured(['ROLE_USER'])
+    def get_users_rating(@RequestParameter('event_id') String event_id){
+
+        User user = User.get(springSecurityService.principal.id)
+
+        Event event = Event.findByEventbrite_id(event_id)
+
+        def users_rating = Rating.findByEventAndRater(event, user)
+
+        respond users_rating
+    }
+
 }

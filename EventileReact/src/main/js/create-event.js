@@ -30,6 +30,8 @@ class CreateEvent extends React.Component {
             new_event_location: '',
             created: false,
             create_success: true,
+            new_event_id: '',
+            error: '',
             auth: JSON.parse(localStorage.auth)
         };
     }
@@ -54,7 +56,7 @@ class CreateEvent extends React.Component {
 
     success(event) {
         console.log("created event! ", event);
-        this.setState({created: true, create_success: true});
+        this.setState({created: true, create_success: true, new_event_id: event.eventbrite_id});
 
     }
 
@@ -62,14 +64,16 @@ class CreateEvent extends React.Component {
     fail(error) {
         console.log("errorrrrr");
         if (error){
-            this.setState({created: true, create_success: false})
+            this.setState({created: true, create_success: false, error: error.error})
         }
     }
 
 
     render () {
-        let Success = () => <p className="alert alert-success">Success! Created the event!</p>;
-        let Failed = () => <p className="alert alert-danger">Failed: The name, description, date, and location cannot be empty.</p>;
+        let Success = () => <p className="alert alert-success">
+            <a href={"/event?q=" + this.state.new_event_id}>Success! Created the event!</a>
+        </p>;
+        let Failed = () => <p className="alert alert-danger">Failed: {this.state.error}</p>;
         return (
 
                 <div className="col-sm-4 col-sm-offset-4">
