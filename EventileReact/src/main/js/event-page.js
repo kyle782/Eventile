@@ -235,7 +235,7 @@ class EventPage extends React.Component {
             })
                 .then(checkStatus)
                 .then(this.success_remove_rsvp)
-                .catch(this.fail);
+                .catch(this.fail_comment);
 
         } else {
             // user is not RSVP'd to the event, add it to their rsvp
@@ -252,7 +252,7 @@ class EventPage extends React.Component {
             })
                 .then(checkStatus)
                 .then(this.success_rsvp)
-                .catch(this.fail);
+                .catch(this.fail_comment);
 
 
         }
@@ -285,7 +285,7 @@ class EventPage extends React.Component {
                 }
             })
                 .then(checkStatus)
-                .catch(this.fail);
+                .catch(this.fail_comment);
 
         } else {
             // user is not RSVP'd to the event, add it to their rsvp
@@ -301,7 +301,7 @@ class EventPage extends React.Component {
                 }
             })
                 .then(checkStatus)
-                .catch(this.fail);
+                .catch(this.fail_comment);
 
 
         }
@@ -325,7 +325,7 @@ class EventPage extends React.Component {
                 }
             })
                 .then(checkStatus)
-                .catch(this.fail);
+                .catch(this.fail_comment);
 
         } else {
             // user is not RSVP'd to the event, add it to their rsvp
@@ -341,7 +341,7 @@ class EventPage extends React.Component {
                 }
             })
                 .then(checkStatus)
-                .catch(this.fail);
+                .catch(this.fail_comment);
 
 
         }
