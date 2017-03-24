@@ -29472,6 +29472,10 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
+	var _newSignup = __webpack_require__(248);
+
+	var _newSignup2 = _interopRequireDefault(_newSignup);
+
 	__webpack_require__(246);
 
 	var _auth = __webpack_require__(243);
@@ -29517,6 +29521,8 @@
 	        _this.getUserRatedEvents = _this.getUserRatedEvents.bind(_this);
 	        _this.success_got_rated_events = _this.success_got_rated_events.bind(_this);
 	        _this.getRatedEventName = _this.getRatedEventName.bind(_this);
+	        _this.edit = _this.edit.bind(_this);
+	        _this.toggleEdit = _this.toggleEdit.bind(_this);
 
 	        _this.state = {
 	            name: '',
@@ -29528,6 +29534,7 @@
 	            user_rsvp_events: [],
 	            user_ratings: [],
 	            rated_event: '',
+	            edited: false,
 	            auth: JSON.parse(localStorage.auth)
 	        };
 	        return _this;
@@ -29633,12 +29640,40 @@
 	            this.setState({ rated_event: response_event });
 	        }
 	    }, {
+	        key: 'edit',
+	        value: function edit() {
+	            var token = this.state.auth.access_token;
+
+	            fetch("/api/edit", {
+	                method: "PUT",
+	                headers: {
+	                    'Authorization': 'Bearer ' + token
+	                }
+	            }).then(checkStatus).then(this.success_edited).catch(this.fail);
+	        }
+	    }, {
+	        key: 'toggleEdit',
+	        value: function toggleEdit() {
+	            this.setState({ edited: !this.state.edited });
+	        }
+	    }, {
+	        key: 'success_edited',
+	        value: function success_edited(edits) {
+	            console.log("edited!!");
+	            this.setState({ edited: true });
+	        }
+	    }, {
 	        key: 'render',
 	        value: function render() {
+	            var _this2 = this;
 
 	            // needed to stop the infinite looping
 	            if (this.state.gotUser == false) {
 	                this.getUser();
+	            }
+
+	            if (this.state.edited == false) {
+	                this.edit();
 	            }
 
 	            var created_events = this.state.user_created_events.map(function (created_event) {
@@ -29764,7 +29799,14 @@
 	                        null,
 	                        ' Your Event Ratings: '
 	                    ),
-	                    rated_events
+	                    rated_events,
+	                    _react2.default.createElement(
+	                        'button',
+	                        { onClick: this.edit, ref: function ref(_ref) {
+	                                return _this2.form = _ref;
+	                            } },
+	                        'Edit'
+	                    )
 	                )
 	            );
 	        }
