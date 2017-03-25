@@ -32581,7 +32581,7 @@
 	                _react2.default.createElement('hr', null),
 	                _react2.default.createElement(
 	                    'div',
-	                    { className: 'row' },
+	                    { className: 'col-lg-12' },
 	                    this.state.loaded ? _react2.default.createElement(
 	                        'div',
 	                        { className: 'card-deck' },
