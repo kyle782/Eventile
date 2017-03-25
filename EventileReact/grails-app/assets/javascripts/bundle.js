@@ -30659,7 +30659,8 @@
 	            auth: JSON.parse(localStorage.auth),
 	            event_comments_ids: [],
 	            event_comments: [],
-	            related_events: []
+	            related_events: [],
+	            has_comments: false
 	        };
 
 	        return _this;
@@ -30684,7 +30685,9 @@
 	                this.setState({ image_url: event_result.img_url });
 	            }
 	            if (event_result.comments.length != 0) {
-	                this.setState({ event_comments: event_result.comments });
+	                this.setState({ event_comments: event_result.comments, has_comments: true });
+	            } else {
+	                this.setState({ has_comments: false });
 	            }
 	        }
 	    }, {
@@ -30694,7 +30697,7 @@
 	                _auth2.default.logOut();
 	                this.props.router.replace({
 	                    pathname: "/signin",
-	                    state: { nextPath: "/search" }
+	                    state: { nextPath: "/" }
 	                });
 	            }
 	            var token = this.state.auth.access_token;
@@ -30976,7 +30979,7 @@
 	                _auth2.default.logOut();
 	                this.props.router.replace({
 	                    pathname: "/signin",
-	                    state: { nextPath: "/search" }
+	                    state: { nextPath: "/" }
 	                });
 	            }
 	        }
@@ -31328,7 +31331,11 @@
 	                    ),
 	                    ' ',
 	                    _react2.default.createElement('hr', null),
-	                    comments,
+	                    this.state.has_comments ? { comments: comments } : _react2.default.createElement(
+	                        'p',
+	                        null,
+	                        'No comments yet. Be the first to comment!'
+	                    ),
 	                    _react2.default.createElement(_commentForm2.default, { submitLabel: 'Post Comment', onSubmit: this.update_comments, ref: function ref(_ref) {
 	                            return _this2.form = _ref;
 	                        } })
@@ -32077,7 +32084,7 @@
 	                _auth2.default.logOut();
 	                this.props.router.replace({
 	                    pathname: "/signin",
-	                    state: { nextPath: "/search" }
+	                    state: { nextPath: "/" }
 	                });
 	            }
 	            var query = this.props.location.query.q;

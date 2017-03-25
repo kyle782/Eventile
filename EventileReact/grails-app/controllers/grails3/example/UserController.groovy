@@ -237,10 +237,9 @@ class UserController {
             }
         }
 
-        /** change password too TODO **/
-        System.out.println("user.password = " + user.password)
-        System.out.println("password = " + password)
-
+        if (user.password != password){
+            user.password = password
+        }
 
         if (user.age != age){
             user.age = age
@@ -263,217 +262,217 @@ class UserController {
         }
 
         if (pref_bus_prof){
-            if (!user.preferences.contains("Business & Professional")) {
-                user.addToPreferences("Business & Professional").save()
+            if (!user.preferences.contains("Business and Professional")) {
+                user.addToPreferences("Business and Professional").save()
                 user.addToCategory_ids("101").save()
             }
         } else {
-            if (user.preferences.contains("Business & Professional")){
-                user.removeFromPreferences("Business & Professional").save()
+            if (user.preferences.contains("Business and Professional")){
+                user.removeFromPreferences("Business and Professional").save()
                 user.removeFromCategory_ids("101").save()
             }
         }
 
         if (pref_food_drink){
-            if (!user.preferences.contains("Food & Drink")) {
-                user.addToPreferences("Food & Drink").save()
+            if (!user.preferences.contains("Food and Drink")) {
+                user.addToPreferences("Food and Drink").save()
                 user.addToCategory_ids("110").save()
             }
         } else {
-            if (user.preferences.contains("Food & Drink")) {
-                user.removeFromPreferences("Food & Drink").save()
+            if (user.preferences.contains("Food and Drink")) {
+                user.removeFromPreferences("Food and Drink").save()
                 user.removeFromPreferences("110").save()
             }
         }
 
         if (pref_comm_culture){
-            if (!user.preferences.contains("Community & Culture")) {
-                user.addToPreferences("Community & Culture").save()
+            if (!user.preferences.contains("Community and Culture")) {
+                user.addToPreferences("Community and Culture").save()
                 user.addToCategory_ids("113").save()
             }
         } else {
-            if (user.preferences.contains("Community & Culture")) {
-                user.removeFromPreferences("Community & Culture").save()
+            if (user.preferences.contains("Community and Culture")) {
+                user.removeFromPreferences("Community and Culture").save()
                 user.removeFromPreferences("113").save()
             }
         }
 
         if (pref_perf_vis_art){
-            if (!user.preferences.contains("Performing & Visual Arts")) {
-                user.addToPreferences("Performing & Visual Arts").save()
+            if (!user.preferences.contains("Performing and Visual Arts")) {
+                user.addToPreferences("Performing and Visual Arts").save()
                 user.addToCategory_ids("105").save()
             }
         } else {
-            if (user.preferences.contains("Performing & Visual Arts")) {
-                user.removeFromPreferences("Performing & Visual Arts").save()
+            if (user.preferences.contains("Performing and Visual Arts")) {
+                user.removeFromPreferences("Performing and Visual Arts").save()
                 user.removeFromPreferences("105").save()
             }
         }
 
         if (pref_film_media_ent){
-            if (!user.preferences.contains("Film, Media & Entertainment")) {
-                user.addToPreferences("Film, Media & Entertainment").save()
+            if (!user.preferences.contains("Film, Media and Entertainment")) {
+                user.addToPreferences("Film, Media and Entertainment").save()
                 user.addToCategory_ids("104").save()
             }
         } else {
-            if (user.preferences.contains("Film, Media & Entertainment")) {
-                user.removeFromPreferences("Film, Media & Entertainment").save()
+            if (user.preferences.contains("Film, Media and Entertainment")) {
+                user.removeFromPreferences("Film, Media and Entertainment").save()
                 user.removeFromPreferences("104").save()
             }
         }
 
         if (pref_sports_fitness){
-            if (!user.preferences.contains("Sports & Fitness")) {
-                user.addToPreferences("Sports & Fitness").save()
+            if (!user.preferences.contains("Sports and Fitness")) {
+                user.addToPreferences("Sports and Fitness").save()
                 user.addToCategory_ids("108").save()
             }
         } else {
-            if (user.preferences.contains("Sports & Fitness")) {
-                user.removeFromPreferences("Sports & Fitness").save()
+            if (user.preferences.contains("Sports and Fitness")) {
+                user.removeFromPreferences("Sports and Fitness").save()
                 user.removeFromPreferences("108").save()
             }
         }
 
         if (pref_health_well){
-            if (!user.preferences.contains("Health & Wellness")) {
-                user.addToPreferences("Health & Wellness").save()
+            if (!user.preferences.contains("Health and Wellness")) {
+                user.addToPreferences("Health and Wellness").save()
                 user.addToCategory_ids("107").save()
             }
         } else {
-            if (user.preferences.contains("Health & Wellness")) {
-                user.removeFromPreferences("Health & Wellness").save()
+            if (user.preferences.contains("Health and Wellness")) {
+                user.removeFromPreferences("Health and Wellness").save()
                 user.removeFromPreferences("107").save()
             }
         }
 
         if (pref_sci_tech){
-            if (!user.preferences.contains("Science & Technology")) {
-                user.addToPreferences("Science & Technology").save()
+            if (!user.preferences.contains("Science and Technology")) {
+                user.addToPreferences("Science and Technology").save()
                 user.addToCategory_ids("102").save()
             }
         } else {
-            if (user.preferences.contains("Science & Technology")) {
-                user.removeFromPreferences("Science & Technology").save()
+            if (user.preferences.contains("Science and Technology")) {
+                user.removeFromPreferences("Science and Technology").save()
                 user.removeFromPreferences("102").save()
             }
         }
 
         if (pref_trav_outd){
-            if (!user.preferences.contains("Travel & Outdoor")) {
-                user.addToPreferences("Travel & Outdoor").save()
+            if (!user.preferences.contains("Travel and Outdoor")) {
+                user.addToPreferences("Travel and Outdoor").save()
                 user.addToCategory_ids("109").save()
             }
         } else {
-            if (user.preferences.contains("Travel & Outdoor")) {
-                user.removeFromPreferences("Travel & Outdoor").save()
+            if (user.preferences.contains("Travel and Outdoor")) {
+                user.removeFromPreferences("Travel and Outdoor").save()
                 user.removeFromPreferences("109").save()
             }
         }
 
         if (pref_char_games){
-            if (!user.preferences.contains("Charity & Games")) {
-                user.addToPreferences("Charity & Games").save()
+            if (!user.preferences.contains("Charity and Games")) {
+                user.addToPreferences("Charity and Games").save()
                 user.addToCategory_ids("111").save()
             }
         } else {
-            if (user.preferences.contains("Charity & Games")) {
-                user.removeFromPreferences("Charity & Games").save()
+            if (user.preferences.contains("Charity and Games")) {
+                user.removeFromPreferences("Charity and Games").save()
                 user.removeFromPreferences("111").save()
             }
         }
 
         if (pref_religion_spirit){
-            if (!user.preferences.contains("Religion & Spirituality")) {
-                user.addToPreferences("Religion & Spirituality").save()
+            if (!user.preferences.contains("Religion and Spirituality")) {
+                user.addToPreferences("Religion and Spirituality").save()
                 user.addToCategory_ids("114").save()
             }
         } else {
-            if (user.preferences.contains("Religion & Spirituality")) {
-                user.removeFromPreferences("Religion & Spirituality").save()
+            if (user.preferences.contains("Religion and Spirituality")) {
+                user.removeFromPreferences("Religion and Spirituality").save()
                 user.removeFromPreferences("114").save()
             }
         }
 
         if (pref_family_edu){
-            if (!user.preferences.contains("Family & Education")) {
-                user.addToPreferences("Family & Education").save()
+            if (!user.preferences.contains("Family and Education")) {
+                user.addToPreferences("Family and Education").save()
                 user.addToCategory_ids("115").save()
             }
         } else {
-            if (user.preferences.contains("Family & Education")) {
-                user.removeFromPreferences("Family & Education").save()
+            if (user.preferences.contains("Family and Education")) {
+                user.removeFromPreferences("Family and Education").save()
                 user.removeFromPreferences("115").save()
             }
         }
 
         if (pref_season_holi){
-            if (!user.preferences.contains("Seasonal & Holiday")) {
-                user.addToPreferences("Seasonal & Holiday").save()
+            if (!user.preferences.contains("Seasonal and Holiday")) {
+                user.addToPreferences("Seasonal and Holiday").save()
                 user.addToCategory_ids("116").save()
             }
         } else {
-            if (user.preferences.contains("Seasonal & Holiday")) {
-                user.removeFromPreferences("Seasonal & Holiday").save()
+            if (user.preferences.contains("Seasonal and Holiday")) {
+                user.removeFromPreferences("Seasonal and Holiday").save()
                 user.removeFromPreferences("116").save()
             }
         }
 
         if (pref_gov_poli){
-            if (!user.preferences.contains("Government & Politics")) {
-                user.addToPreferences("Government & Politics").save()
+            if (!user.preferences.contains("Government and Politics")) {
+                user.addToPreferences("Government and Politics").save()
                 user.addToCategory_ids("112").save()
             }
         } else {
-            if (user.preferences.contains("Government & Politics")) {
-                user.removeFromPreferences("Government & Politics").save()
+            if (user.preferences.contains("Government and Politics")) {
+                user.removeFromPreferences("Government and Politics").save()
                 user.removeFromPreferences("112").save()
             }
         }
 
         if (pref_fash_beaut){
-            if (!user.preferences.contains("Fashion & Beauty")) {
-                user.addToPreferences("Fashion & Beauty").save()
+            if (!user.preferences.contains("Fashion and Beauty")) {
+                user.addToPreferences("Fashion and Beauty").save()
                 user.addToCategory_ids("106").save()
             }
         } else {
-            if (user.preferences.contains("Fashion & Beauty")) {
-                user.removeFromPreferences("Fashion & Beauty").save()
+            if (user.preferences.contains("Fashion and Beauty")) {
+                user.removeFromPreferences("Fashion and Beauty").save()
                 user.removeFromPreferences("106").save()
             }
         }
 
         if (pref_home_life){
-            if (!user.preferences.contains("Home & Lifestyle")) {
-                user.addToPreferences("Home & Lifestyle").save()
+            if (!user.preferences.contains("Home and Lifestyle")) {
+                user.addToPreferences("Home and Lifestyle").save()
                 user.addToCategory_ids("117").save()
             }
         } else {
-            if (user.preferences.contains("Home & Lifestyle")) {
-                user.removeFromPreferences("Home & Lifestyle").save()
+            if (user.preferences.contains("Home and Lifestyle")) {
+                user.removeFromPreferences("Home and Lifestyle").save()
                 user.removeFromPreferences("117").save()
             }
         }
 
         if (pref_auto_boat_air){
-            if (!user.preferences.contains("Auto, Boat & Air")) {
-                user.addToPreferences("Auto, Boat & Air").save()
+            if (!user.preferences.contains("Auto, Boat and Air")) {
+                user.addToPreferences("Auto, Boat and Air").save()
                 user.addToCategory_ids("118").save()
             }
         } else {
-            if (user.preferences.contains("Auto, Boat & Air")) {
-                user.removeFromPreferences("Auto, Boat & Air").save()
+            if (user.preferences.contains("Auto, Boat and Air")) {
+                user.removeFromPreferences("Auto, Boat and Air").save()
                 user.removeFromPreferences("118").save()
             }
         }
 
         if (pref_hobbies_ints){
-            if (!user.preferences.contains("Hobbies & Special Interest")) {
-                user.addToPreferences("Hobbies & Special Interest").save()
+            if (!user.preferences.contains("Hobbies and Special Interest")) {
+                user.addToPreferences("Hobbies and Special Interest").save()
                 user.addToCategory_ids("119").save()
             }
         } else {
-            if (user.preferences.contains("Hobbies & Special Interest")) {
-                user.removeFromPreferences("Hobbies & Special Interest").save()
+            if (user.preferences.contains("Hobbies and Special Interest")) {
+                user.removeFromPreferences("Hobbies and Special Interest").save()
                 user.removeFromPreferences("119").save()
             }
         }

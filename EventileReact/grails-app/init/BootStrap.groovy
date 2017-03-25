@@ -12,11 +12,11 @@ class BootStrap {
         UserRole.create(user1, role, true)
         user1.addToPreferences("Music").save()
         user1.addToCategory_ids("103").save()
-        user1.addToPreferences("Film, Media & Entertainment").save()
+        user1.addToPreferences("Film, Media and Entertainment").save()
         user1.addToCategory_ids("104").save()
 
         def testEvent = new Event(name: "test1", description: "test", eventbrite_id: "0000",
-                start_date: "test", eventbrite_url: "test", category_name: "test", total_rating: 5,
+                start_date: "test", eventbrite_url: "test", category_name: "Music ", total_rating: 5,
                 num_ratings: 5, average_rating: 5.0, img_url: "test").save()
         testEvent.addToComments(new Comment(comment_body: "test comment")).save()
 

@@ -54,75 +54,75 @@ class UserService {
             user.addToCategory_ids("103").save()
         }
         if (pref_bus_prof){
-            user.addToPreferences("Business & Professional").save()
+            user.addToPreferences("Business and Professional").save()
             user.addToCategory_ids("101").save()
         }
         if (pref_food_drink){
-            user.addToPreferences("Food & Drink").save()
+            user.addToPreferences("Food and Drink").save()
             user.addToCategory_ids("110").save()
         }
         if (pref_comm_culture){
-            user.addToPreferences("Community & Culture").save()
+            user.addToPreferences("Community and Culture").save()
             user.addToCategory_ids("113").save()
         }
         if (pref_perf_vis_art){
-            user.addToPreferences("Performing & Visual Arts").save()
+            user.addToPreferences("Performing and Visual Arts").save()
             user.addToCategory_ids("105").save()
         }
         if (pref_film_media_ent){
-            user.addToPreferences("Film, Media & Entertainment").save()
+            user.addToPreferences("Film, Media and Entertainment").save()
             user.addToCategory_ids("104").save()
         }
         if (pref_sports_fitness){
-            user.addToPreferences("Sports & Fitness").save()
+            user.addToPreferences("Sports and Fitness").save()
             user.addToCategory_ids("108").save()
         }
         if (pref_health_well){
-            user.addToPreferences("Health & Wellness").save()
+            user.addToPreferences("Health and Wellness").save()
             user.addToCategory_ids("107").save()
         }
         if (pref_sci_tech){
-            user.addToPreferences("Science & Technology").save()
+            user.addToPreferences("Science and Technology").save()
             user.addToCategory_ids("102").save()
         }
         if (pref_trav_outd){
-            user.addToPreferences("Travel & Outdoor").save()
+            user.addToPreferences("Travel and Outdoor").save()
             user.addToCategory_ids("109").save()
         }
         if (pref_char_games){
-            user.addToPreferences("Charity & Games").save()
+            user.addToPreferences("Charity and Games").save()
             user.addToCategory_ids("111").save()
         }
         if (pref_religion_spirit){
-            user.addToPreferences("Religion & Spirituality").save()
+            user.addToPreferences("Religion and Spirituality").save()
             user.addToCategory_ids("114").save()
         }
         if (pref_family_edu){
-            user.addToPreferences("Family & Education").save()
+            user.addToPreferences("Family and Education").save()
             user.addToCategory_ids("115").save()
         }
         if (pref_season_holi){
-            user.addToPreferences("Seasonal & Holiday").save()
+            user.addToPreferences("Seasonal and Holiday").save()
             user.addToCategory_ids("116").save()
         }
         if (pref_gov_poli){
-            user.addToPreferences("Government & Politics").save()
+            user.addToPreferences("Government and Politics").save()
             user.addToCategory_ids("112").save()
         }
         if (pref_fash_beaut){
-            user.addToPreferences("Fashion & Beauty").save()
+            user.addToPreferences("Fashion and Beauty").save()
             user.addToCategory_ids("106").save()
         }
         if (pref_home_life){
-            user.addToPreferences("Home & Lifestyle").save()
+            user.addToPreferences("Home and Lifestyle").save()
             user.addToCategory_ids("117").save()
         }
         if (pref_auto_boat_air){
-            user.addToPreferences("Auto, Boat & Air").save()
+            user.addToPreferences("Auto, Boat and Air").save()
             user.addToCategory_ids("118").save()
         }
         if (pref_hobbies_ints){
-            user.addToPreferences("Hobbies & Special Interest").save()
+            user.addToPreferences("Hobbies and Special Interest").save()
             user.addToCategory_ids("119").save()
         }
         if (pref_other){

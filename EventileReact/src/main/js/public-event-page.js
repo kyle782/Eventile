@@ -83,7 +83,7 @@ class PublicEventPage extends React.Component {
             auth.logOut();
             this.props.router.replace({
                 pathname: "/signin",
-                state: {nextPath: "/search"}
+                state: {nextPath: "/"}
             })
         }
         let query = this.props.location.query.q;

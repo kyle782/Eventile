@@ -69,7 +69,8 @@ class EventPage extends React.Component {
             auth: JSON.parse(localStorage.auth),
             event_comments_ids: [],
             event_comments: [],
-            related_events: []
+            related_events: [],
+            has_comments: false
         }
 
     }
@@ -91,7 +92,9 @@ class EventPage extends React.Component {
             this.setState({image_url: event_result.img_url})
         }
         if (event_result.comments.length !=0){
-            this.setState({event_comments: event_result.comments})
+            this.setState({event_comments: event_result.comments, has_comments: true})
+        } else {
+            this.setState({has_comments: false})
         }
     }
 
@@ -101,7 +104,7 @@ class EventPage extends React.Component {
             auth.logOut();
             this.props.router.replace({
                 pathname: "/signin",
-                state: {nextPath: "/search"}
+                state: {nextPath: "/"}
             })
         }
         let token = this.state.auth.access_token;
@@ -402,7 +405,7 @@ class EventPage extends React.Component {
             auth.logOut();
             this.props.router.replace({
                 pathname: "/signin",
-                state: {nextPath: "/search"}
+                state: {nextPath: "/"}
             })
         }
     }
@@ -540,7 +543,7 @@ class EventPage extends React.Component {
 
                 <div className="col-md-10">
                     <h2> Comments: </h2> <hr/>
-                    {comments}
+                    {this.state.has_comments ? {comments} : <p>No comments yet. Be the first to comment!</p>}
                     <CommentForm submitLabel="Post Comment" onSubmit={this.update_comments} ref={ (ref) => this.form = ref }/>
                 </div>
 
