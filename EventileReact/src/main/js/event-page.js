@@ -58,7 +58,9 @@ class EventPage extends React.Component {
             user_RSVP: false,
             user_entered_RSVP: false,
             user_first_time: false,
+            user_entered_first_time: false,
             user_have_gone: false,
+            user_entered_have_gone: false,
             loaded: false,
             users_rating: '',
             start_date_local: '',
@@ -209,7 +211,7 @@ class EventPage extends React.Component {
         })
             .then(checkStatus)
             .then(this.success_update_rating)
-            .catch(this.fail);
+            .catch(this.fail_comment);
     }
 
     /**
@@ -289,6 +291,7 @@ class EventPage extends React.Component {
                 }
             })
                 .then(checkStatus)
+                .then(this.success_remove_first_time)
                 .catch(this.fail_comment);
 
         } else {
@@ -305,10 +308,19 @@ class EventPage extends React.Component {
                 }
             })
                 .then(checkStatus)
+                .then(this.success_first_time)
                 .catch(this.fail_comment);
-
-
         }
+    }
+
+    success_first_time(){
+        console.log("added first time!");
+        this.setState({user_first_time: true, user_entered_first_time: true});
+    }
+
+    success_remove_first_time(){
+        console.log("removed first time!");
+        this.setState({user_first_time: false, user_entered_first_time: true});
     }
 
 
@@ -329,6 +341,7 @@ class EventPage extends React.Component {
                 }
             })
                 .then(checkStatus)
+                .then(this.success_remove_have_gone)
                 .catch(this.fail_comment);
 
         } else {
@@ -345,10 +358,19 @@ class EventPage extends React.Component {
                 }
             })
                 .then(checkStatus)
+                .then(this.success_have_gone)
                 .catch(this.fail_comment);
-
-
         }
+    }
+
+    success_have_gone(){
+        console.log("added have gone!");
+        this.setState({user_have_gone: true, user_entered_have_gone: true});
+    }
+
+    success_remove_have_gone(){
+        console.log("removed have gone!");
+        this.setState({user_have_gone: false, user_entered_have_gone: true});
     }
 
     getRelatedEvents(){
@@ -461,10 +483,24 @@ class EventPage extends React.Component {
                                     <div>
                                         <button className="btn btn-default" type="RSVP" onClick={() => this.handleRSVP()}>Revoke RSVP</button>
                                         <RSVPCreated/>
-                                        <button className="btn btn-default" type="first-time" onClick={() => this.handle_first_time()}>First Time!</button>
-                                        <AnticipationCreated/>
-                                        <button className="btn btn-default" type="have-gone" onClick={() => this.handle_have_gone()}>I Have Gone Before!</button>
-                                        <AnticipationRemoved/>
+                                        {this.state.user_entered_first_time ? this.state.user_first_time ?
+                                                <div>
+                                                    <button className="btn btn-default" type="first-time" onClick={() => this.handle_first_time()}>Revoke</button>
+                                                    <AnticipationCreated/>
+                                                </div>
+                                                : <div><button className="btn btn-default" type="first-time" onClick={() => this.handle_first_time()}>My First Time!</button>
+                                                    <AnticipationRemoved/></div>
+                                            : <button className="btn btn-default" type="first-time" onClick={() => this.handle_first_time()}>My First Time!</button>
+                                        }
+                                        {this.state.user_entered_have_gone ? this.state.user_have_gone ?
+                                                <div>
+                                                    <button className="btn btn-default" type="first-time" onClick={() => this.handle_have_gone()}>Revoke</button>
+                                                    <AnticipationCreated/>
+                                                </div>
+                                                : <div><button className="btn btn-default" type="first-time" onClick={() => this.handle_have_gone()}>I've Gone Before!</button>
+                                                    <AnticipationRemoved/></div>
+                                            : <button className="btn btn-default" type="first-time" onClick={() => this.handle_have_gone()}>I've Gone Before!</button>
+                                        }
                                     </div>
                                     : <div><button className="btn btn-default" type="RSVP" onClick={() => this.handleRSVP()}>RSVP!</button>
                                         <RSVPRemoved/></div>
