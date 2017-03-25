@@ -637,3 +637,32 @@ p.copyright {
 .selectpicker {
     margin: 15px;   
 }
+
+.option {
+    display:flex;
+    justify-content:space-between;
+    padding:5px;
+}
+
+.registration-page {
+    padding-right: 50px;
+}
+
+.profile-page {
+    width:250px;
+    margin-right:auto;
+    margin-left:auto;
+}
+
+.interests {
+    width:500px;
+    margin-right:auto;
+    margin-left:auto; 
+}
+
+.test {
+    width:500px;
+    margin-right:auto;
+    margin-left:auto; 
+}
+
