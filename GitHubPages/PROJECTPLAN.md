@@ -55,9 +55,5 @@ We Implemented all 14 of our list of user stories. Here are the 14 broken down i
 **_Social Media Integration_** <br>
   We have been looking into integrating the Facebook API into the application. This will allow for users to connect their Eventile profile to their Facebook accounts so that they can keep track of their friends' events.
 
-## Looking Forward (ver 1.2) <br>
-
-  Next features for implementation are the event sorting and event browsing features. These features, along with the catering of events to a user's preferences are all features which we expect to complete well before the Stage 3 deadline. After these features, final work can be done on integrating other search API's (Eventful and Ticketmaster) as well as fleshing out the event details with consolidated categories and a list of attendees.
-
 
 [Go back to Home Page](../README.md)
