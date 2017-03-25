@@ -14,11 +14,11 @@ Eventile is the one stop shop for events happening across the major event platfo
   
   Users are now also able to advertise their own events which will show on the site as a regular event. In each event, the user will now not only be able to see a brief description of the event, but also rate, comment, RSVP, or show their excitement for the event. Relevant events will now also be shown in the event page, allowing users to navigate to other events similar to the one that they have chosen previously.
   
-  User profiles now can 
+  User profiles and information can now be changed by the user with one click in the user profile page. They will be given the option to change the the information that they signed up with and replace it with new ones if they wish. The profile page also now shows much more information than it did before. The page will now also show the user events that they created as well as events that they have RSVP'ed to and rated. The list of preferences that the user signed up with will also be shown, and of course, the user can change their preferences anytime in the profile page.
   
   
   
-## Basic Features
+## Features implemented
 
 **_User Profile Stores Information_** <br> 
   Users of Eventile can sign up for a profile where they will be asked to provide their interests in terms of event categories. Such categories are decided depending on the APIs of the various event platforms that Eventile will be pulling from. Examples are concerts, seminars, parties, etc.
