@@ -12,7 +12,7 @@ Eventile is the one stop shop for events happening across the major event platfo
   
   In the search page, the user now has the ability to sort their searches by date, distance, relevancy, or if they choose, filters to show only the free events. The events will be shown in the same way that it was in the welcome page but filtered to fit the choice made by the user. 
   
-  Users are now also able to advertise their own events which will show on the site as a regular event. In each event, the user will now not only be able to see a brief description of the event, but also rate, comment, RSVP, or show their excitement for the event. 
+  Users are now also able to advertise their own events which will show on the site as a regular event. In each event, the user will now not only be able to see a brief description of the event, but also rate, comment, RSVP, or show their excitement for the event. Relevant events will now also be shown
   
   
   
