@@ -29214,8 +29214,6 @@
 	            events: [],
 	            auth: JSON.parse(localStorage.auth),
 	            value: "",
-	            sort_date: false,
-	            sort_dist: false,
 	            found_events: true
 	        };
 	        return _this;
@@ -29381,7 +29379,7 @@
 	                    _react2.default.createElement(
 	                        'label',
 	                        null,
-	                        'Sort By',
+	                        'Sort By \xA0',
 	                        _react2.default.createElement(
 	                            'select',
 	                            { className: 'selectpicker', value: this.state.value, onChange: this.change },
@@ -29404,6 +29402,11 @@
 	                                'option',
 	                                { value: 'free' },
 	                                'Free Events Only'
+	                            ),
+	                            _react2.default.createElement(
+	                                'option',
+	                                { value: 'paid' },
+	                                'Paid Events Only'
 	                            )
 	                        )
 	                    )
@@ -31432,7 +31435,7 @@
 	                    { className: 'form-group' },
 	                    _react2.default.createElement(
 	                        'div',
-	                        { className: 'col-sm-offset-3 col-sm-5' },
+	                        { className: 'post-comment' },
 	                        _react2.default.createElement(
 	                            'button',
 	                            { type: 'submit', className: 'btn btn-default' },
@@ -32394,6 +32397,11 @@
 	            new_event_name: 'default',
 	            new_event_description: '',
 	            new_event_location: '',
+	            new_event_date: '',
+	            new_event_time: '',
+	            new_event_timezone: '',
+	            new_event_category: '',
+	            new_event_img: '',
 	            created: false,
 	            create_success: true,
 	            new_event_id: '',
@@ -32410,7 +32418,7 @@
 	            var form = this.form.data();
 	            var token = this.state.auth.access_token;
 
-	            fetch("/api/event/create_event?event_name=" + form.event_name + "&event_description=" + form.event_description + "&event_location=" + form.event_location + "&event_date=" + form.event_date, {
+	            fetch("/api/event/create_event?event_name=" + form.event_name + "&event_description=" + form.event_description + "&event_location=" + form.event_location + "&event_date=" + form.event_date + "&event_time=" + form.event_time + "&event_timezone=" + form.event_timezone + "&event_category=" + form.event_category + "&event_img=" + form.event_img, {
 	                method: 'POST',
 	                headers: {
 	                    'Authorization': 'Bearer ' + token // pass authentication token as a header to the REST API call
@@ -32426,9 +32434,9 @@
 	    }, {
 	        key: 'fail',
 	        value: function fail(error) {
-	            console.log("errorrrrr");
+	            console.log("errorrrrr ", error.message);
 	            if (error) {
-	                this.setState({ created: true, create_success: false, error: error.error });
+	                this.setState({ created: true, create_success: false, error: error.message });
 	            }
 	        }
 	    }, {
@@ -32527,7 +32535,12 @@
 	        _this.state = {
 	            new_event_name: '',
 	            new_event_description: '',
-	            new_event_location: ''
+	            new_event_location: '',
+	            new_event_date: '',
+	            new_event_category: '',
+	            new_event_timezone: '',
+	            new_event_time: '',
+	            new_event_img: ''
 	        };
 
 	        _this.handleInputChange = _this.handleInputChange.bind(_this);
@@ -32625,6 +32638,78 @@
 	                    'div',
 	                    { className: 'form-group' },
 	                    _react2.default.createElement(
+	                        'label',
+	                        { htmlFor: 'new_event_time', className: 'col-sm-4 control-label' },
+	                        'Time:'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-sm-8' },
+	                        _react2.default.createElement('input', { type: 'text',
+	                            className: 'form-control', id: 'new_event_time',
+	                            placeholder: 'What time will event start?',
+	                            ref: 'new_event_time'
+	                        })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'form-group' },
+	                    _react2.default.createElement(
+	                        'label',
+	                        { htmlFor: 'new_event_timezone', className: 'col-sm-4 control-label' },
+	                        'Timezone:'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-sm-8' },
+	                        _react2.default.createElement('input', { type: 'text',
+	                            className: 'form-control', id: 'new_event_timezone',
+	                            placeholder: 'What is the time zone of event location?',
+	                            ref: 'new_event_timezone'
+	                        })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'form-group' },
+	                    _react2.default.createElement(
+	                        'label',
+	                        { htmlFor: 'new_event_category', className: 'col-sm-4 control-label' },
+	                        'Category:'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-sm-8' },
+	                        _react2.default.createElement('input', { type: 'text',
+	                            className: 'form-control', id: 'new_event_category',
+	                            placeholder: 'What kind of event is it?',
+	                            ref: 'new_event_category'
+	                        })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'form-group' },
+	                    _react2.default.createElement(
+	                        'label',
+	                        { htmlFor: 'new_event_img', className: 'col-sm-4 control-label' },
+	                        'Image:'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-sm-8' },
+	                        _react2.default.createElement('input', { type: 'text',
+	                            className: 'form-control', id: 'new_event_img',
+	                            placeholder: 'Include Image URL (Not Required)',
+	                            ref: 'new_event_img'
+	                        })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'form-group' },
+	                    _react2.default.createElement(
 	                        'div',
 	                        { className: 'col-sm-offset-3 col-sm-9' },
 	                        _react2.default.createElement(
@@ -32642,13 +32727,21 @@
 	            var form_event_name = _reactDom2.default.findDOMNode(this.refs.new_event_name).value.trim(),
 	                form_event_description = _reactDom2.default.findDOMNode(this.refs.new_event_description).value.trim(),
 	                form_event_location = _reactDom2.default.findDOMNode(this.refs.new_event_location).value.trim(),
-	                form_event_date = _reactDom2.default.findDOMNode(this.refs.new_event_date).value.trim();
+	                form_event_date = _reactDom2.default.findDOMNode(this.refs.new_event_date).value.trim(),
+	                form_event_time = _reactDom2.default.findDOMNode(this.refs.new_event_time).value.trim(),
+	                form_event_timezone = _reactDom2.default.findDOMNode(this.refs.new_event_timezone).value.trim(),
+	                form_event_category = _reactDom2.default.findDOMNode(this.refs.new_event_category).value.trim(),
+	                form_event_img = _reactDom2.default.findDOMNode(this.refs.new_event_img).value.trim();
 
 	            return {
 	                event_name: form_event_name,
 	                event_description: form_event_description,
 	                event_date: form_event_date,
-	                event_location: form_event_location
+	                event_location: form_event_location,
+	                event_time: form_event_time,
+	                event_timezone: form_event_timezone,
+	                event_category: form_event_category,
+	                event_img: form_event_img
 	            };
 	        }
 	    }]);

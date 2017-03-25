@@ -72,9 +72,9 @@ class CreateEvent extends React.Component {
 
 
     fail(error) {
-        console.log("errorrrrr");
+        console.log("errorrrrr ", error.message);
         if (error){
-            this.setState({created: true, create_success: false, error: error.error})
+            this.setState({created: true, create_success: false, error: error.message})
         }
     }
 
@@ -83,7 +83,8 @@ class CreateEvent extends React.Component {
         let Success = () => <p className="alert alert-success">
             <a href={"/event?q=" + this.state.new_event_id}>Success! Created the event!</a>
         </p>;
-        let Failed = () => <p className="alert alert-danger">Failed: {this.state.error}</p>;
+        let Failed = () => <p className="alert alert-danger">Failed: {this.state.error} <br/>
+            All fields are required, except for the image URL. </p>;
         return (
 
             <div className="col-sm-4 col-sm-offset-4">
