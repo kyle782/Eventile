@@ -10,17 +10,40 @@ class DashboardService {
 
     def serviceMethod() {}
 
-    ArrayList<Event> search(String prefs){
+    ArrayList<Event> search(String prefs, String sort){
 
         ArrayList<Event> event_results = new ArrayList<Event>()
         def response_eventbrite
 
 
         if (prefs){
-            // perform a GET call to Eventbrite's REST API, returns JSON response
-            response_eventbrite = new RestBuilder().get("https://www.eventbriteapi.com/v3/events/search/?categories={query}"){
-                header "Authorization", "Bearer 2S34UCIHKW5MXVP4S5M7" // authenticate with header
-                urlVariables query:prefs
+
+            if (sort == "") {
+                // perform a GET call to Eventbrite's REST API, returns JSON response
+                response_eventbrite = new RestBuilder().get("https://www.eventbriteapi.com/v3/events/search/?categories={query}"){
+                    header "Authorization", "Bearer 2S34UCIHKW5MXVP4S5M7" // authenticate with header
+                    urlVariables query:prefs
+                }
+            }
+            else if (sort == "free") {
+                // perform a GET call to Eventbrite's REST API, returns JSON response
+                response_eventbrite = new RestBuilder().get("https://www.eventbriteapi.com/v3/events/search/?categories={query}&price=free"){
+                    header "Authorization", "Bearer 2S34UCIHKW5MXVP4S5M7" // authenticate with header
+                    urlVariables query:prefs
+                }
+            }
+            else if (sort == "paid") {
+                // perform a GET call to Eventbrite's REST API, returns JSON response
+                response_eventbrite = new RestBuilder().get("https://www.eventbriteapi.com/v3/events/search/?categories={query}&price=paid"){
+                    header "Authorization", "Bearer 2S34UCIHKW5MXVP4S5M7" // authenticate with header
+                    urlVariables query:prefs
+                }
+            }
+            else {
+                response_eventbrite = new RestBuilder().get("https://www.eventbriteapi.com/v3/events/search/?categories={query}&sort_by=" + sort){
+                    header "Authorization", "Bearer 2S34UCIHKW5MXVP4S5M7" // authenticate with header
+                    urlVariables query:prefs
+                }
             }
 
         } else {

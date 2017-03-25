@@ -27,6 +27,8 @@ class Search extends React.Component {
             events: [],
             auth: JSON.parse(localStorage.auth),
             value: "",
+            sort_date: false,
+            sort_dist: false,
             found_events: true
         }
     }

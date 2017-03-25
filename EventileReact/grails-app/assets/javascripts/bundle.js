@@ -29214,6 +29214,8 @@
 	            events: [],
 	            auth: JSON.parse(localStorage.auth),
 	            value: "",
+	            sort_date: false,
+	            sort_dist: false,
 	            found_events: true
 	        };
 	        return _this;
@@ -31776,6 +31778,8 @@
 	        var _this = _possibleConstructorReturn(this, (HomeDashboard.__proto__ || Object.getPrototypeOf(HomeDashboard)).call(this));
 
 	        _this.getPreferenceEvents = _this.getPreferenceEvents.bind(_this);
+	        _this.search = _this.search.bind(_this);
+	        _this.change = _this.change.bind(_this);
 	        _this.getLocation = _this.getLocation.bind(_this);
 	        _this.fail = _this.fail.bind(_this);
 	        _this.success = _this.success.bind(_this);
@@ -31785,6 +31789,7 @@
 	        _this.state = {
 	            events: [],
 	            loaded: false,
+	            value: "",
 	            location: 'London, Ontario',
 	            user_has_prefs: false,
 	            user_prefs_ids: [],
@@ -31863,9 +31868,29 @@
 	                // search based on the preferred categories if they have preferences
 	                console.log("user selected prefs");
 
-	                fetch("/api/dashboard?prefs=" + preference_ids, {
+	                fetch("/api/dashboard?prefs=" + preference_ids + "&sort=" + this.state.value, {
 	                    headers: {
 	                        'Authorization': 'Bearer ' + token // pass authentication token as a header to the REST API call
+	                    }
+	                }).then(checkStatus).then(this.success).catch(this.fail);
+	            }
+	        }
+	    }, {
+	        key: 'search',
+	        value: function search(e) {
+
+	            e.preventDefault();
+	            // search based on the preferred categories if they have preferences
+	            var token = this.state.auth.access_token;
+	            var preference_ids = this.state.user_prefs_ids;
+	            var has_prefs = this.state.user_has_prefs;
+
+	            if (!has_prefs) {
+	                fetch("/welcome_search?location=" + "London, Ontario" + "&sort=" + this.state.value).then(checkStatus).then(this.success).catch(this.fail);
+	            } else {
+	                fetch("/api/dashboard?prefs=" + preference_ids + "&sort=" + this.state.value, {
+	                    headers: {
+	                        'Authorization': 'Bearer ' + token
 	                    }
 	                }).then(checkStatus).then(this.success).catch(this.fail);
 	            }
@@ -31874,6 +31899,11 @@
 	        key: 'getImageURL',
 	        value: function getImageURL(event) {
 	            return event.img_url;
+	        }
+	    }, {
+	        key: 'change',
+	        value: function change(event) {
+	            this.setState({ value: event.target.value });
 	        }
 	    }, {
 	        key: 'render',
@@ -31937,25 +31967,65 @@
 	                    'div',
 	                    null,
 	                    _react2.default.createElement(
-	                        'center',
-	                        null,
+	                        'form',
+	                        { onSubmit: this.search },
 	                        _react2.default.createElement(
-	                            'h2',
+	                            'center',
 	                            null,
-	                            ' Your Home Dashboard '
+	                            _react2.default.createElement(
+	                                'h2',
+	                                null,
+	                                ' Your Home Dashboard '
+	                            )
+	                        ),
+	                        _react2.default.createElement('hr', null),
+	                        _react2.default.createElement(
+	                            'h3',
+	                            null,
+	                            'Here are your personalized events:'
+	                        ),
+	                        _react2.default.createElement('br', null),
+	                        _react2.default.createElement(
+	                            'select',
+	                            { className: 'selectpicker', value: this.state.value, onChange: this.change },
+	                            _react2.default.createElement(
+	                                'option',
+	                                { value: '' },
+	                                'Most Relevant'
+	                            ),
+	                            _react2.default.createElement(
+	                                'option',
+	                                { value: 'date' },
+	                                'Date'
+	                            ),
+	                            _react2.default.createElement(
+	                                'option',
+	                                { value: 'distance' },
+	                                'Distance'
+	                            ),
+	                            _react2.default.createElement(
+	                                'option',
+	                                { value: 'free' },
+	                                'Free Events Only'
+	                            ),
+	                            _react2.default.createElement(
+	                                'option',
+	                                { value: 'paid' },
+	                                'Paid Events Only'
+	                            )
+	                        ),
+	                        ' \xA0',
+	                        _react2.default.createElement(
+	                            'button',
+	                            { type: 'submit', className: 'btn btn-default' },
+	                            'Search!'
+	                        ),
+	                        _react2.default.createElement('hr', null),
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'card-columns' },
+	                            events
 	                        )
-	                    ),
-	                    _react2.default.createElement('hr', null),
-	                    _react2.default.createElement(
-	                        'h3',
-	                        null,
-	                        'Here are your personalized events:'
-	                    ),
-	                    _react2.default.createElement('br', null),
-	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'card-columns' },
-	                        events
 	                    )
 	                )
 	            );
