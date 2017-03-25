@@ -30627,6 +30627,8 @@
 	        _this.checkUserRSVPd = _this.checkUserRSVPd.bind(_this);
 	        _this.success_check_user_rsvp = _this.success_check_user_rsvp.bind(_this);
 	        _this.success_remove_rsvp = _this.success_remove_rsvp.bind(_this);
+	        _this.handle_first_time = _this.handle_first_time.bind(_this);
+	        _this.handle_have_gone = _this.handle_have_gone.bind(_this);
 	        _this.update_comments = _this.update_comments.bind(_this);
 	        _this.success_update_comment = _this.success_update_comment.bind(_this);
 	        _this.getRelatedEvents = _this.getRelatedEvents.bind(_this);
@@ -30645,6 +30647,10 @@
 	            eventbrite_id: '',
 	            user_RSVP: false,
 	            user_entered_RSVP: false,
+	            user_first_time: false,
+	            user_entered_first_time: false,
+	            user_have_gone: false,
+	            user_entered_have_gone: false,
 	            loaded: false,
 	            users_rating: '',
 	            start_date_local: '',
@@ -30778,7 +30784,7 @@
 	    }, {
 	        key: 'update_rating',
 	        value: function update_rating(new_rating) {
-	            var token = this.state.auth.access_token;
+	            var token = this.state.auth.access_tokgen;
 	            var query = this.props.location.query.q;
 
 	            this.setState({ users_rating: new_rating });
@@ -30789,7 +30795,7 @@
 	                headers: {
 	                    'Authorization': 'Bearer ' + token
 	                }
-	            }).then(checkStatus).then(this.success_update_rating).catch(this.fail);
+	            }).then(checkStatus).then(this.success_update_rating).catch(this.fail_comment);
 	        }
 
 	        /**
@@ -30820,7 +30826,7 @@
 	                    headers: {
 	                        'Authorization': 'Bearer ' + token
 	                    }
-	                }).then(checkStatus).then(this.success_remove_rsvp).catch(this.fail);
+	                }).then(checkStatus).then(this.success_remove_rsvp).catch(this.fail_comment);
 	            } else {
 	                // user is not RSVP'd to the event, add it to their rsvp
 	                var _token = this.state.auth.access_token;
@@ -30833,7 +30839,7 @@
 	                    headers: {
 	                        'Authorization': 'Bearer ' + _token
 	                    }
-	                }).then(checkStatus).then(this.success_rsvp).catch(this.fail);
+	                }).then(checkStatus).then(this.success_rsvp).catch(this.fail_comment);
 	            }
 	        }
 	    }, {
@@ -30847,6 +30853,96 @@
 	        value: function success_remove_rsvp() {
 	            console.log("removed rsvp!");
 	            this.setState({ user_RSVP: false, user_entered_RSVP: true });
+	        }
+	    }, {
+	        key: 'handle_first_time',
+	        value: function handle_first_time() {
+	            if (this.state.user_RSVP) {
+	                // user is RSVP'd to the event, remove the first time
+	                this.setState({ user_first_time: false });
+
+	                var token = this.state.auth.access_token;
+
+	                var eventbrite_id = this.state.eventbrite_id;
+
+	                // make PUT REST call to be handled by UserController (mapped in urlMappings.groovy)
+	                fetch("/api/user/remove_first_time?eventbrite_id=" + eventbrite_id, {
+	                    method: 'PUT',
+	                    headers: {
+	                        'Authorization': 'Bearer ' + token
+	                    }
+	                }).then(checkStatus).then(this.success_remove_first_time).catch(this.fail_comment);
+	            } else {
+	                // user is not RSVP'd to the event, add it to their rsvp
+	                var _token2 = this.state.auth.access_token;
+
+	                var _eventbrite_id2 = this.state.eventbrite_id;
+
+	                // make PUT REST call to be handled by UserController (mapped in urlMappings.groovy)
+	                fetch("/api/user/add_first_time?eventbrite_id=" + _eventbrite_id2, {
+	                    method: 'PUT',
+	                    headers: {
+	                        'Authorization': 'Bearer ' + _token2
+	                    }
+	                }).then(checkStatus).then(this.success_first_time).catch(this.fail_comment);
+	            }
+	        }
+	    }, {
+	        key: 'success_first_time',
+	        value: function success_first_time() {
+	            console.log("added first time!");
+	            this.setState({ user_first_time: true, user_entered_first_time: true });
+	        }
+	    }, {
+	        key: 'success_remove_first_time',
+	        value: function success_remove_first_time() {
+	            console.log("removed first time!");
+	            this.setState({ user_first_time: false, user_entered_first_time: true });
+	        }
+	    }, {
+	        key: 'handle_have_gone',
+	        value: function handle_have_gone() {
+	            if (this.state.user_RSVP) {
+	                // user is RSVP'd to the event, remove the have gone
+	                this.setState({ user_have_gone: false });
+
+	                var token = this.state.auth.access_token;
+
+	                var eventbrite_id = this.state.eventbrite_id;
+
+	                // make PUT REST call to be handled by UserController (mapped in urlMappings.groovy)
+	                fetch("/api/user/remove_have_gone?eventbrite_id=" + eventbrite_id, {
+	                    method: 'PUT',
+	                    headers: {
+	                        'Authorization': 'Bearer ' + token
+	                    }
+	                }).then(checkStatus).then(this.success_remove_have_gone).catch(this.fail_comment);
+	            } else {
+	                // user is not RSVP'd to the event, add it to their rsvp
+	                var _token3 = this.state.auth.access_token;
+
+	                var _eventbrite_id3 = this.state.eventbrite_id;
+
+	                // make PUT REST call to be handled by UserController (mapped in urlMappings.groovy)
+	                fetch("/api/user/add_have_gone?eventbrite_id=" + _eventbrite_id3, {
+	                    method: 'PUT',
+	                    headers: {
+	                        'Authorization': 'Bearer ' + _token3
+	                    }
+	                }).then(checkStatus).then(this.success_have_gone).catch(this.fail_comment);
+	            }
+	        }
+	    }, {
+	        key: 'success_have_gone',
+	        value: function success_have_gone() {
+	            console.log("added have gone!");
+	            this.setState({ user_have_gone: true, user_entered_have_gone: true });
+	        }
+	    }, {
+	        key: 'success_remove_have_gone',
+	        value: function success_remove_have_gone() {
+	            console.log("removed have gone!");
+	            this.setState({ user_have_gone: false, user_entered_have_gone: true });
 	        }
 	    }, {
 	        key: 'getRelatedEvents',
@@ -30917,6 +31013,20 @@
 	                    'p',
 	                    { className: 'alert alert-info' },
 	                    'You are no longer RSVP\'d to this event.'
+	                );
+	            };
+	            var AnticipationCreated = function AnticipationCreated() {
+	                return _react2.default.createElement(
+	                    'p',
+	                    { className: 'alert alert-success' },
+	                    'You have added you anticipation! Check it out in your profile page.'
+	                );
+	            };
+	            var AnticipationRemoved = function AnticipationRemoved() {
+	                return _react2.default.createElement(
+	                    'p',
+	                    { className: 'alert alert-info' },
+	                    'You have removed your anticipation to this event.'
 	                );
 	            };
 
@@ -31066,7 +31176,65 @@
 	                                            } },
 	                                        'Revoke RSVP'
 	                                    ),
-	                                    _react2.default.createElement(RSVPCreated, null)
+	                                    _react2.default.createElement(RSVPCreated, null),
+	                                    this.state.user_entered_first_time ? this.state.user_first_time ? _react2.default.createElement(
+	                                        'div',
+	                                        null,
+	                                        _react2.default.createElement(
+	                                            'button',
+	                                            { className: 'btn btn-default', type: 'first-time', onClick: function onClick() {
+	                                                    return _this2.handle_first_time();
+	                                                } },
+	                                            'Revoke'
+	                                        ),
+	                                        _react2.default.createElement(AnticipationCreated, null)
+	                                    ) : _react2.default.createElement(
+	                                        'div',
+	                                        null,
+	                                        _react2.default.createElement(
+	                                            'button',
+	                                            { className: 'btn btn-default', type: 'first-time', onClick: function onClick() {
+	                                                    return _this2.handle_first_time();
+	                                                } },
+	                                            'My First Time!'
+	                                        ),
+	                                        _react2.default.createElement(AnticipationRemoved, null)
+	                                    ) : _react2.default.createElement(
+	                                        'button',
+	                                        { className: 'btn btn-default', type: 'first-time', onClick: function onClick() {
+	                                                return _this2.handle_first_time();
+	                                            } },
+	                                        'My First Time!'
+	                                    ),
+	                                    this.state.user_entered_have_gone ? this.state.user_have_gone ? _react2.default.createElement(
+	                                        'div',
+	                                        null,
+	                                        _react2.default.createElement(
+	                                            'button',
+	                                            { className: 'btn btn-default', type: 'first-time', onClick: function onClick() {
+	                                                    return _this2.handle_have_gone();
+	                                                } },
+	                                            'Revoke'
+	                                        ),
+	                                        _react2.default.createElement(AnticipationCreated, null)
+	                                    ) : _react2.default.createElement(
+	                                        'div',
+	                                        null,
+	                                        _react2.default.createElement(
+	                                            'button',
+	                                            { className: 'btn btn-default', type: 'first-time', onClick: function onClick() {
+	                                                    return _this2.handle_have_gone();
+	                                                } },
+	                                            'I\'ve Gone Before!'
+	                                        ),
+	                                        _react2.default.createElement(AnticipationRemoved, null)
+	                                    ) : _react2.default.createElement(
+	                                        'button',
+	                                        { className: 'btn btn-default', type: 'first-time', onClick: function onClick() {
+	                                                return _this2.handle_have_gone();
+	                                            } },
+	                                        'I\'ve Gone Before!'
+	                                    )
 	                                ) : _react2.default.createElement(
 	                                    'div',
 	                                    null,

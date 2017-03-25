@@ -36,6 +36,8 @@ class EventPage extends React.Component {
         this.checkUserRSVPd = this.checkUserRSVPd.bind(this);
         this.success_check_user_rsvp = this.success_check_user_rsvp.bind(this);
         this.success_remove_rsvp = this.success_remove_rsvp.bind(this);
+        this.handle_first_time = this.handle_first_time.bind(this);
+        this.handle_have_gone = this.handle_have_gone.bind(this);
         this.update_comments = this.update_comments.bind(this);
         this.success_update_comment = this.success_update_comment.bind(this);
         this.getRelatedEvents = this.getRelatedEvents.bind(this);
@@ -55,6 +57,10 @@ class EventPage extends React.Component {
             eventbrite_id: '',
             user_RSVP: false,
             user_entered_RSVP: false,
+            user_first_time: false,
+            user_entered_first_time: false,
+            user_have_gone: false,
+            user_entered_have_gone: false,
             loaded: false,
             users_rating: '',
             start_date_local: '',
@@ -190,7 +196,7 @@ class EventPage extends React.Component {
      * @param new_rating, from the form on the page (just the button for now)
      */
     update_rating(new_rating) {
-        let token = this.state.auth.access_token;
+        let token = this.state.auth.access_tokgen;
         let query = this.props.location.query.q;
 
         this.setState({users_rating: new_rating});
@@ -204,7 +210,7 @@ class EventPage extends React.Component {
         })
             .then(checkStatus)
             .then(this.success_update_rating)
-            .catch(this.fail);
+            .catch(this.fail_comment);
     }
 
     /**
@@ -234,7 +240,7 @@ class EventPage extends React.Component {
             })
                 .then(checkStatus)
                 .then(this.success_remove_rsvp)
-                .catch(this.fail);
+                .catch(this.fail_comment);
 
         } else {
             // user is not RSVP'd to the event, add it to their rsvp
@@ -251,7 +257,7 @@ class EventPage extends React.Component {
             })
                 .then(checkStatus)
                 .then(this.success_rsvp)
-                .catch(this.fail);
+                .catch(this.fail_comment);
 
 
         }
@@ -265,6 +271,105 @@ class EventPage extends React.Component {
     success_remove_rsvp(){
         console.log("removed rsvp!");
         this.setState({user_RSVP: false, user_entered_RSVP: true});
+    }
+
+    handle_first_time(){
+        if (this.state.user_RSVP){
+            // user is RSVP'd to the event, remove the first time
+            this.setState({user_first_time: false});
+
+            let token = this.state.auth.access_token;
+
+            let eventbrite_id = this.state.eventbrite_id;
+
+            // make PUT REST call to be handled by UserController (mapped in urlMappings.groovy)
+            fetch("/api/user/remove_first_time?eventbrite_id=" + eventbrite_id, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                }
+            })
+                .then(checkStatus)
+                .then(this.success_remove_first_time)
+                .catch(this.fail_comment);
+
+        } else {
+            // user is not RSVP'd to the event, add it to their rsvp
+            let token = this.state.auth.access_token;
+
+            let eventbrite_id = this.state.eventbrite_id;
+
+            // make PUT REST call to be handled by UserController (mapped in urlMappings.groovy)
+            fetch("/api/user/add_first_time?eventbrite_id=" + eventbrite_id, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                }
+            })
+                .then(checkStatus)
+                .then(this.success_first_time)
+                .catch(this.fail_comment);
+        }
+    }
+
+    success_first_time(){
+        console.log("added first time!");
+        this.setState({user_first_time: true, user_entered_first_time: true});
+    }
+
+    success_remove_first_time(){
+        console.log("removed first time!");
+        this.setState({user_first_time: false, user_entered_first_time: true});
+    }
+
+
+    handle_have_gone(){
+        if (this.state.user_RSVP){
+            // user is RSVP'd to the event, remove the have gone
+            this.setState({user_have_gone: false});
+
+            let token = this.state.auth.access_token;
+
+            let eventbrite_id = this.state.eventbrite_id;
+
+            // make PUT REST call to be handled by UserController (mapped in urlMappings.groovy)
+            fetch("/api/user/remove_have_gone?eventbrite_id=" + eventbrite_id, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                }
+            })
+                .then(checkStatus)
+                .then(this.success_remove_have_gone)
+                .catch(this.fail_comment);
+
+        } else {
+            // user is not RSVP'd to the event, add it to their rsvp
+            let token = this.state.auth.access_token;
+
+            let eventbrite_id = this.state.eventbrite_id;
+
+            // make PUT REST call to be handled by UserController (mapped in urlMappings.groovy)
+            fetch("/api/user/add_have_gone?eventbrite_id=" + eventbrite_id, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                }
+            })
+                .then(checkStatus)
+                .then(this.success_have_gone)
+                .catch(this.fail_comment);
+        }
+    }
+
+    success_have_gone(){
+        console.log("added have gone!");
+        this.setState({user_have_gone: true, user_entered_have_gone: true});
+    }
+
+    success_remove_have_gone(){
+        console.log("removed have gone!");
+        this.setState({user_have_gone: false, user_entered_have_gone: true});
     }
 
     getRelatedEvents(){
@@ -314,6 +419,9 @@ class EventPage extends React.Component {
         });
         let RSVPCreated = () => <p className="alert alert-success">You are now RSVP'd to this event! Check it out in your profile page.</p>;
         let RSVPRemoved = () => <p className="alert alert-info">You are no longer RSVP'd to this event.</p>;
+        let AnticipationCreated = () => <p className="alert alert-success">You have added you anticipation! Check it out in your profile page.</p>;
+        let AnticipationRemoved = () => <p className="alert alert-info">You have removed your anticipation to this event.</p>;
+
 
         let related_events = this.state.related_events.map( (related_event) => {
             return <div className="card">
@@ -374,6 +482,24 @@ class EventPage extends React.Component {
                                     <div>
                                         <button className="btn btn-default" type="RSVP" onClick={() => this.handleRSVP()}>Revoke RSVP</button>
                                         <RSVPCreated/>
+                                        {this.state.user_entered_first_time ? this.state.user_first_time ?
+                                                <div>
+                                                    <button className="btn btn-default" type="first-time" onClick={() => this.handle_first_time()}>Revoke</button>
+                                                    <AnticipationCreated/>
+                                                </div>
+                                                : <div><button className="btn btn-default" type="first-time" onClick={() => this.handle_first_time()}>My First Time!</button>
+                                                    <AnticipationRemoved/></div>
+                                            : <button className="btn btn-default" type="first-time" onClick={() => this.handle_first_time()}>My First Time!</button>
+                                        }
+                                        {this.state.user_entered_have_gone ? this.state.user_have_gone ?
+                                                <div>
+                                                    <button className="btn btn-default" type="first-time" onClick={() => this.handle_have_gone()}>Revoke</button>
+                                                    <AnticipationCreated/>
+                                                </div>
+                                                : <div><button className="btn btn-default" type="first-time" onClick={() => this.handle_have_gone()}>I've Gone Before!</button>
+                                                    <AnticipationRemoved/></div>
+                                            : <button className="btn btn-default" type="first-time" onClick={() => this.handle_have_gone()}>I've Gone Before!</button>
+                                        }
                                     </div>
                                     : <div><button className="btn btn-default" type="RSVP" onClick={() => this.handleRSVP()}>RSVP!</button>
                                         <RSVPRemoved/></div>
