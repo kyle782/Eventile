@@ -12,7 +12,12 @@ class CreateEventForm extends React.Component {
         this.state = {
             new_event_name: '',
             new_event_description: '',
-            new_event_location: ''
+            new_event_location: '',
+            new_event_date: '',
+            new_event_category: '',
+            new_event_timezone: '',
+            new_event_time: '',
+            new_event_img: ''
         };
 
         this.handleInputChange = this.handleInputChange.bind(this);
@@ -72,6 +77,46 @@ class CreateEventForm extends React.Component {
                         />
                     </div>
                 </div>
+                <div className="form-group">
+                    <label htmlFor="new_event_time" className="col-sm-4 control-label">Time:</label>
+                    <div className="col-sm-8">
+                        <input type="text"
+                               className="form-control" id="new_event_time"
+                               placeholder="What time will event start?"
+                               ref="new_event_time"
+                        />
+                    </div>
+                </div>
+                <div className="form-group">
+                    <label htmlFor="new_event_timezone" className="col-sm-4 control-label">Timezone:</label>
+                    <div className="col-sm-8">
+                        <input type="text"
+                               className="form-control" id="new_event_timezone"
+                               placeholder="What is the time zone of event location?"
+                               ref="new_event_timezone"
+                        />
+                    </div>
+                </div>
+                <div className="form-group">
+                    <label htmlFor="new_event_category" className="col-sm-4 control-label">Category:</label>
+                    <div className="col-sm-8">
+                        <input type="text"
+                               className="form-control" id="new_event_category"
+                               placeholder="What kind of event is it?"
+                               ref="new_event_category"
+                        />
+                    </div>
+                </div>
+                <div className="form-group">
+                    <label htmlFor="new_event_img" className="col-sm-4 control-label">Image:</label>
+                    <div className="col-sm-8">
+                        <input type="text"
+                               className="form-control" id="new_event_img"
+                               placeholder="Include Image URL (Not Required)"
+                               ref="new_event_img"
+                        />
+                    </div>
+                </div>
 
                 {/** Submit button **/}
 
@@ -89,14 +134,22 @@ class CreateEventForm extends React.Component {
         let form_event_name = ReactDOM.findDOMNode(this.refs.new_event_name).value.trim(),
             form_event_description = ReactDOM.findDOMNode(this.refs.new_event_description).value.trim(),
             form_event_location = ReactDOM.findDOMNode(this.refs.new_event_location).value.trim(),
-            form_event_date = ReactDOM.findDOMNode(this.refs.new_event_date).value.trim();
+            form_event_date = ReactDOM.findDOMNode(this.refs.new_event_date).value.trim(),
+            form_event_time = ReactDOM.findDOMNode(this.refs.new_event_time).value.trim(),
+            form_event_timezone = ReactDOM.findDOMNode(this.refs.new_event_timezone).value.trim(),
+            form_event_category = ReactDOM.findDOMNode(this.refs.new_event_category).value.trim(),
+            form_event_img = ReactDOM.findDOMNode(this.refs.new_event_img).value.trim();
 
 
         return {
             event_name: form_event_name,
             event_description: form_event_description,
             event_date: form_event_date,
-            event_location: form_event_location
+            event_location: form_event_location,
+            event_time: form_event_time,
+            event_timezone: form_event_timezone,
+            event_category: form_event_category,
+            event_img: form_event_img
         }
     }
 
