@@ -540,16 +540,13 @@ class EventPage extends React.Component {
                     </div>
                 </div>
 
-
                 <div className="col-md-10">
                     <h2> Comments: </h2> <hr/>
                     {this.state.has_comments ? {comments} : <p>No comments yet. Be the first to comment!</p>}
                     <CommentForm submitLabel="Post Comment" onSubmit={this.update_comments} ref={ (ref) => this.form = ref }/>
                 </div>
 
-                <hr/>
-
-                <div className="row">
+                <div className="col-lg-12">
                 {this.state.loaded ?
                     <div className="card-deck">
                         {related_events}
