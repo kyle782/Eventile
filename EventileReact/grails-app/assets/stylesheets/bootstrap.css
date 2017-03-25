@@ -2551,6 +2551,7 @@ output {
 .form-control {
   display: block;
   width: 100%;
+  min-width:315px;
   height: 34px;
   padding: 6px 12px;
   font-size: 14px;
@@ -2979,6 +2980,7 @@ select[multiple].input-lg {
 .form-horizontal .form-group {
   margin-right: -15px;
   margin-left: -15px;
+  width:115%;
 }
 @media (min-width: 768px) {
   .form-horizontal .control-label {

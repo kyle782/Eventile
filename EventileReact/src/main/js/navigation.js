@@ -29,12 +29,15 @@ class Navigation extends React.Component {
             <nav className="navbar navbar-default navbar-static-top">
                 <div className="container-fluid">
                     <div className="navbar-header">
-                        <Link to="/" className="navbar-brand">Eventile</Link>
+                        { this.state.loggedIn ? <Link to="/home" className="navbar-brand">Eventile</Link>
+                            :
+                            <Link to="/welcome" className="navbar-brand">Eventile</Link>
+                        }
                     </div>
                     { this.state.loggedIn ?
                         <ul className="nav navbar-nav">
                             <li><Link to="/search">Search</Link></li>
-                            <li><Link to="/user-page">Profile</Link></li>
+                            <li><Link to="/create-event">Create Event</Link></li>
                         </ul> : null
                     }
 
@@ -46,7 +49,15 @@ class Navigation extends React.Component {
 
                     { this.state.loggedIn ? null :
                         <ul className="nav navbar-nav navbar-right">
-                            <li><Link to="/signin">Sign in</Link></li>
+                            <li><Link to="/signup">Register</Link></li>
+                        </ul>
+                    }
+
+                    { this.state.loggedIn ? <ul className="nav navbar-nav navbar-right">
+                            <li><Link to="/user-page">Profile</Link></li>
+                        </ul>:
+                        <ul className="nav navbar-nav navbar-right">
+                            <li><Link to="/signin">Login</Link></li>
                         </ul>
                     }
                 </div>

@@ -23,6 +23,7 @@ class SignIn extends React.Component {
             error: ''
         };
         this.signIn = this.signIn.bind(this);
+
     }
 
     signIn(e) {
@@ -47,8 +48,8 @@ class SignIn extends React.Component {
         console.log("Signed in", authObject);
         auth.signIn(authObject);
         let locationState = this.props.location.state,
-            nextPath = locationState ? locationState.nextPath : "/";
-        this.props.router.replace(nextPath ? nextPath : "/");
+            nextPath = locationState ? locationState.nextPath : "/home";
+        this.props.router.replace(nextPath ? nextPath : "/home");
         this.props.router.reload();
     }
 
@@ -58,12 +59,16 @@ class SignIn extends React.Component {
     }
 
     render () {
-        let Error = () => <p className="alert alert-danger">{this.state.error} <Link to="/signup">Sign up</Link></p>;
+        let Error = () => <p className="alert alert-danger">{this.state.error}</p>;
         return (
 
             <div className="col-sm-4 col-sm-offset-4">
                 { this.state.error ? <Error/> : null }
-                <UserForm submitLabel="Sign in" onSubmit={this.signIn} ref={ (ref) => this.form = ref }/>
+                <center><h2> Login Page </h2></center>
+                <hr/>
+                <UserForm submitLabel="Login!" onSubmit={this.signIn} ref={ (ref) => this.form = ref }/>
+                <hr/>
+                <p>No account? <Link to="/signup">Register here</Link></p>
 
             </div>
         )
