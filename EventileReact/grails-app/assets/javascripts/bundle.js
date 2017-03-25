@@ -32195,7 +32195,7 @@
 	                        _react2.default.createElement(
 	                            'button',
 	                            { type: 'submit', className: 'btn btn-default' },
-	                            'Search!'
+	                            'Filter!'
 	                        ),
 	                        _react2.default.createElement('hr', null),
 	                        _react2.default.createElement(
@@ -32707,7 +32707,10 @@
 	                    'p',
 	                    { className: 'alert alert-danger' },
 	                    'Failed: ',
-	                    _this2.state.error
+	                    _this2.state.error,
+	                    ' ',
+	                    _react2.default.createElement('br', null),
+	                    'All fields are required, except for the image URL. '
 	                );
 	            };
 	            return _react2.default.createElement(
