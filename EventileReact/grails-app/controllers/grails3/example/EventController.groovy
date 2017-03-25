@@ -24,6 +24,11 @@ class EventController {
         respond target_event, status: HttpStatus.ACCEPTED
     }
 
+    def show_created_event_public(String q){
+        def target_event = Event.findByEventbrite_id(q)
+        respond target_event, status: HttpStatus.ACCEPTED
+    }
+
     @Secured(['ROLE_USER'])
     def show_rated_event(String q){
         Long id = Integer.parseInt(q)
@@ -198,6 +203,17 @@ class EventController {
 
     @Secured(['ROLE_USER'])
     def get_related_events(String current_event_category, String q){
+
+        def related_events_all = Event.findAllByCategory_name(current_event_category)
+
+        def num_related_events = related_events_all.size()
+
+        def related_events = related_events_all.subList(0, 4)
+
+        respond related_events
+    }
+
+    def get_related_events_public(String current_event_category, String q){
 
         def related_events_all = Event.findAllByCategory_name(current_event_category)
 

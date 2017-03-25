@@ -29679,7 +29679,7 @@
 	                        _react2.default.createElement(
 	                            'p',
 	                            null,
-	                            'Name: ',
+	                            'Event: ',
 	                            created_event.name
 	                        )
 	                    )
@@ -29708,7 +29708,7 @@
 	                        _react2.default.createElement(
 	                            'p',
 	                            null,
-	                            'Name: ',
+	                            'Event: ',
 	                            rsvp_event.name
 	                        )
 	                    )
@@ -29725,7 +29725,7 @@
 	                        _react2.default.createElement(
 	                            'p',
 	                            null,
-	                            'Name: ',
+	                            'Event: ',
 	                            rated_event.event_name
 	                        )
 	                    ),
@@ -29793,8 +29793,7 @@
 	                                        null,
 	                                        this.state.name,
 	                                        ' '
-	                                    ),
-	                                    _react2.default.createElement('hr', null)
+	                                    )
 	                                ),
 	                                _react2.default.createElement(
 	                                    'ul',
@@ -29805,7 +29804,6 @@
 	                                        'Location: ',
 	                                        this.state.location
 	                                    ),
-	                                    _react2.default.createElement('br', null),
 	                                    _react2.default.createElement(
 	                                        'h4',
 	                                        null,
@@ -29814,6 +29812,7 @@
 	                                        ' ',
 	                                        _react2.default.createElement('br', null)
 	                                    ),
+	                                    _react2.default.createElement('br', null),
 	                                    _react2.default.createElement(
 	                                        'h2',
 	                                        null,
@@ -29829,7 +29828,7 @@
 	                                    _react2.default.createElement(
 	                                        'h2',
 	                                        null,
-	                                        ' Your RSVPs: '
+	                                        ' Your RSVPs '
 	                                    ),
 	                                    rsvp_events,
 	                                    _react2.default.createElement(
@@ -31238,7 +31237,7 @@
 	                    { className: 'form-group' },
 	                    _react2.default.createElement(
 	                        'label',
-	                        { htmlFor: 'comment', className: 'col-sm-4 control-label' },
+	                        { htmlFor: 'comment', className: 'col-sm-4-control-label' },
 	                        'Write Your Comment:'
 	                    ),
 	                    _react2.default.createElement(
@@ -31849,18 +31848,31 @@
 	        _this.fail = _this.fail.bind(_this);
 	        _this.success_found_event = _this.success_found_event.bind(_this);
 	        _this.render = _this.render.bind(_this);
+	        _this.getRelatedEvents = _this.getRelatedEvents.bind(_this);
+	        _this.success_got_related_events = _this.success_got_related_events.bind(_this);
 
 	        _this.state = {
 	            name: 'Loading...',
 	            description: '',
 	            category: '',
 	            rating: '.....',
+	            rated: false,
 	            image_url: '',
 	            venue_address: '',
 	            venue_longitude: '',
 	            venue_latitude: '',
+	            eventbrite_id: '',
+	            user_RSVP: false,
+	            user_entered_RSVP: false,
 	            loaded: false,
-	            comments: []
+	            users_rating: '',
+	            start_date_local: '',
+	            start_date_local_time: '',
+	            start_date_timezone: '',
+	            event_comments_ids: [],
+	            event_comments: [],
+	            related_events: [],
+	            has_comments: false
 	        };
 
 	        return _this;
@@ -31869,10 +31881,14 @@
 	    _createClass(PublicEventPage, [{
 	        key: 'success_found_event',
 	        value: function success_found_event(event_result) {
+	            console.log("got event with address info? ", event_result);
+	            this.setState({ loaded: true });
 	            this.setState({
 	                name: event_result.name, description: event_result.description,
 	                category: event_result.category_name, venue_address: event_result.venue_address,
-	                venue_longitude: event_result.longitude, venue_latitude: event_result.latitude
+	                venue_longitude: event_result.longitude, venue_latitude: event_result.latitude,
+	                eventbrite_id: event_result.eventbrite_id, start_date_local: event_result.start_date_local,
+	                start_date_timezone: event_result.start_date_timezone, start_date_local_time: event_result.start_date_local_time
 	            });
 	            if (event_result.num_ratings != 0) {
 	                this.setState({ rating: event_result.average_rating });
@@ -31880,31 +31896,120 @@
 	            if (event_result.image_url != "") {
 	                this.setState({ image_url: event_result.img_url });
 	            }
+	            if (event_result.comments.length != 0) {
+	                this.setState({ event_comments: event_result.comments, has_comments: true });
+	            } else {
+	                this.setState({ has_comments: false });
+	            }
 	        }
 	    }, {
 	        key: 'fail',
 	        value: function fail(error) {
-	            console.log("failed " + error);
-	            this.setState({ loaded: true });
+	            if (error.response.status == 401) {
+	                _auth2.default.logOut();
+	                this.props.router.replace({
+	                    pathname: "/signin",
+	                    state: { nextPath: "/search" }
+	                });
+	            }
+	            var query = this.props.location.query.q;
+	            fetch("/show_created_event_public?q=" + query).then(checkStatus).then(this.success_found_event).catch(this.fail);
 	        }
 	    }, {
 	        key: 'getEvent',
 	        value: function getEvent() {
 	            var query = this.props.location.query.q;
-
-	            fetch("/view/event?q=" + query).then(checkStatus).then(this.success_found_event).catch(this.fail);
+	            fetch("/view/event?q=" + query).then(checkStatus).then(this.success_found_event).then(this.getRelatedEvents).catch(this.fail);
+	        }
+	    }, {
+	        key: 'getRelatedEvents',
+	        value: function getRelatedEvents() {
+	            var query = this.props.location.query.q;
+	            fetch("/get_related_events_public?current_event_category=" + this.state.category + "&q=" + query).then(checkStatus).then(this.success_got_related_events).catch(this.failed_related);
+	        }
+	    }, {
+	        key: 'success_got_related_events',
+	        value: function success_got_related_events(related_events) {
+	            console.log("got related events = ", related_events);
+	            this.setState({ related_events: related_events });
+	            console.log("related_events state is now " + this.state.related_events);
+	        }
+	    }, {
+	        key: 'getImageURL',
+	        value: function getImageURL(event) {
+	            return event.img_url;
+	        }
+	    }, {
+	        key: 'failed_related',
+	        value: function failed_related(error) {
+	            console.log("failed getting related events ", error);
 	        }
 	    }, {
 	        key: 'render',
 	        value: function render() {
+	            var _this2 = this;
+
 	            // stops the infinite looping & app crashing
 	            if (this.state.loaded == false) {
 	                this.getEvent();
 	            }
+	            var comments = this.state.event_comments.map(function (comment) {
+	                return _react2.default.createElement(
+	                    'div',
+	                    { className: 'row' },
+	                    _react2.default.createElement(
+	                        'p',
+	                        null,
+	                        comment,
+	                        ' '
+	                    )
+	                );
+	            });
+	            var related_events = this.state.related_events.map(function (related_event) {
+	                return _react2.default.createElement(
+	                    'div',
+	                    { className: 'card' },
+	                    _react2.default.createElement(
+	                        'a',
+	                        { href: "/event?q=" + related_event.eventbrite_id, target: '_self' },
+	                        _react2.default.createElement('img', { className: 'card-img-top img-fluid', src: _this2.getImageURL(related_event) })
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'card-block' },
+	                        _react2.default.createElement(
+	                            'a',
+	                            { href: "/event?q=" + related_event.eventbrite_id, target: '_self' },
+	                            _react2.default.createElement(
+	                                'h4',
+	                                { className: 'card-title' },
+	                                related_event.name
+	                            )
+	                        ),
+	                        _react2.default.createElement(
+	                            'p',
+	                            { className: 'card-text' },
+	                            related_event.description
+	                        ),
+	                        _react2.default.createElement('br', null)
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'card-footer' },
+	                        _react2.default.createElement(
+	                            'small',
+	                            { className: 'text-muted' },
+	                            'Category: ',
+	                            related_event.category_name,
+	                            ' '
+	                        )
+	                    )
+	                );
+	            });
 
 	            return _react2.default.createElement(
 	                'div',
-	                { className: 'main' },
+	                { className: 'container' },
 	                _react2.default.createElement('br', null),
 	                _react2.default.createElement(
 	                    'center',
@@ -31922,12 +32027,20 @@
 	                    { className: 'row' },
 	                    _react2.default.createElement(
 	                        'div',
-	                        { className: 'col-md-8' },
-	                        _react2.default.createElement('img', { className: 'img-responsive', src: this.state.image_url, alt: '' })
+	                        { className: 'col-md-7' },
+	                        _react2.default.createElement('img', { className: 'img-responsive', src: this.state.image_url, alt: '' }),
+	                        _react2.default.createElement('br', null),
+	                        this.state.loaded ? _react2.default.createElement(
+	                            'div',
+	                            { className: 'col-md-6' },
+	                            _react2.default.createElement('iframe', { width: '550', height: '450', src: "https://www.google.com/maps/embed/v1/place?q=" + this.state.venue_address + "&zoom=17&key=AIzaSyDxYMTYMBgLXzsw8WXEHuPX8g2sNzHEzyk" })
+	                        ) : null,
+	                        _react2.default.createElement('br', null)
 	                    ),
+	                    _react2.default.createElement('br', null),
 	                    _react2.default.createElement(
 	                        'div',
-	                        { className: 'col-md-4' },
+	                        { className: 'col-md-5' },
 	                        _react2.default.createElement(
 	                            'h3',
 	                            null,
@@ -31954,23 +32067,84 @@
 	                            'Location'
 	                        ),
 	                        _react2.default.createElement(
-	                            'p',
-	                            null,
-	                            this.state.venue_address
+	                            'a',
+	                            { href: "http://maps.google.com/maps?q=" + this.state.venue_latitude + "," + this.state.venue_longitude },
+	                            ' ',
+	                            _react2.default.createElement(
+	                                'p',
+	                                null,
+	                                this.state.venue_address
+	                            ),
+	                            ' '
 	                        ),
 	                        _react2.default.createElement(
 	                            'p',
 	                            null,
-	                            'Longitude: ',
-	                            this.state.venue_longitude
+	                            'Start Date: ',
+	                            this.state.start_date_local
 	                        ),
 	                        _react2.default.createElement(
 	                            'p',
 	                            null,
-	                            'Latitude: ',
-	                            this.state.venue_latitude
+	                            'Start Time: ',
+	                            this.state.start_date_local_time
+	                        ),
+	                        _react2.default.createElement(
+	                            'p',
+	                            null,
+	                            'Time Zone: ',
+	                            this.state.start_date_timezone
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'row' },
+	                            _react2.default.createElement(
+	                                'div',
+	                                { className: 'col-md-4' },
+	                                _react2.default.createElement(
+	                                    'fieldset',
+	                                    { className: 'rating' },
+	                                    _react2.default.createElement(
+	                                        'legend',
+	                                        null,
+	                                        'Ratings'
+	                                    ),
+	                                    _react2.default.createElement(
+	                                        'p',
+	                                        null,
+	                                        'Average Rating: ',
+	                                        this.state.rating
+	                                    )
+	                                )
+	                            )
 	                        )
 	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'col-md-10' },
+	                    _react2.default.createElement(
+	                        'h2',
+	                        null,
+	                        ' Comments: '
+	                    ),
+	                    ' ',
+	                    _react2.default.createElement('hr', null),
+	                    this.state.has_comments ? { comments: comments } : _react2.default.createElement(
+	                        'p',
+	                        null,
+	                        'No comments yet! Register or login and be the first to comment!'
+	                    )
+	                ),
+	                _react2.default.createElement('hr', null),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'row' },
+	                    this.state.loaded ? _react2.default.createElement(
+	                        'div',
+	                        { className: 'card-deck' },
+	                        related_events
+	                    ) : null
 	                )
 	            );
 	        }

@@ -40,10 +40,14 @@ class UrlMappings {
         "/api/event/show_rated_event"(controller: "event", action: "show_rated_event", method: "GET", parseRequest: true)
 
         "/api/event/show_created_event"(controller: "event", action: "show_created_event", method: "GET", parseRequest: true)
+        "/show_created_event_public"(controller: "event", action: "get_related_events_public", method: "GET", parseRequest: true)
+
 
         "/api/event/check_user_rsvp"(controller: "event", action: "check_if_user_rsvpd", method: "GET", parseRequest: true)
 
         "/api/event/get_related_events"(controller: "event", action: "get_related_events", method: "GET", parseRequest: true)
+        "/get_related_events_public"(controller: "event", action: "get_related_events_public", method: "GET", parseRequest: true)
+
 
     }
 }

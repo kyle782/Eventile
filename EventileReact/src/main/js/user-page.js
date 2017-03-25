@@ -236,7 +236,7 @@ class UserPage extends React.Component {
 
         let created_events = this.state.user_created_events.map( (created_event) => {
             return <div>
-                <a href={"/event?q=" + created_event.eventbrite_id} target="_self"><p>Name: {created_event.name}</p></a>
+                <a href={"/event?q=" + created_event.eventbrite_id} target="_self"><p>Event: {created_event.name}</p></a>
             </div>
         });
 
@@ -248,13 +248,13 @@ class UserPage extends React.Component {
 
         let rsvp_events = this.state.user_rsvp_events.map( (rsvp_event) => {
             return <div>
-                <a href={"/event?q=" + rsvp_event.eventbrite_id}><p>Name: {rsvp_event.name}</p></a>
+                <a href={"/event?q=" + rsvp_event.eventbrite_id}><p>Event: {rsvp_event.name}</p></a>
             </div>
         });
 
         let rated_events = this.state.user_ratings.map( (rated_event) => {
             return <div>
-                <a href={"/event?q=" + rated_event.eventbrite_id}><p>Name: {rated_event.event_name}</p></a>
+                <a href={"/event?q=" + rated_event.eventbrite_id}><p>Event: {rated_event.event_name}</p></a>
                 <p>Your Rating: {rated_event.users_rating}</p>
             </div>
         });
@@ -279,7 +279,7 @@ class UserPage extends React.Component {
                                 </div>
 
                                 <ul className="container details">
-                                    <h4>Location: {this.state.location}</h4><br/>
+                                    <h4>Location: {this.state.location}</h4>
                                     <h4>Age: {this.state.age} <br/></h4>
                                     <br/>
                                     <h2> Your Preferences </h2>

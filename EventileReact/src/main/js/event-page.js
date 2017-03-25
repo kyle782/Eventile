@@ -133,7 +133,6 @@ class EventPage extends React.Component {
 
     }
 
-
     checkUserRSVPd(){
         let token = this.state.auth.access_token;
         let query = this.props.location.query.q;
