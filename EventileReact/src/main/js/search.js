@@ -128,7 +128,7 @@ class Search extends React.Component {
                 </div>
                 <br/>
 
-                <div>
+                <div className="container">
                     <label>
                         Sort By &nbsp;
                         <select className="selectpicker" value={this.state.value} onChange={this.change}>
