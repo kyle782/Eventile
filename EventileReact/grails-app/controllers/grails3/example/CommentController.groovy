@@ -12,6 +12,7 @@ class CommentController {
 
     @Secured(['ROLE_USER'])
     def update_comment(String q, String c){
+
         Event this_event = Event.findByEventbrite_id(q)
         User author = User.get(springSecurityService.principal.id)
         Comment new_comment = new Comment(comment_body: c, dateCreated: "testing date",

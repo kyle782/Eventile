@@ -70,7 +70,7 @@ class EventPage extends React.Component {
             event_comments_ids: [],
             event_comments: [],
             related_events: [],
-            has_comments: false
+            event_comments_obj: []
         }
 
     }
@@ -91,11 +91,9 @@ class EventPage extends React.Component {
         if (event_result.image_url != ""){
             this.setState({image_url: event_result.img_url})
         }
-        if (event_result.comments.length !=0){
-            this.setState({event_comments: event_result.comments, has_comments: true})
-        } else {
-            this.setState({has_comments: false})
-        }
+        /**if (event_result.comments.length !=0){
+            this.setState({event_comments_obj: event_result.comments})
+        } **/
     }
 
 
@@ -123,6 +121,10 @@ class EventPage extends React.Component {
 
     fail_comment(error) {
         console.log("FAILED UPDATING COMMENT = ", error);
+    }
+
+    fail_do_nothing(error){
+        console.log("failed: ", error);
     }
 
     getEvent() {
@@ -173,19 +175,23 @@ class EventPage extends React.Component {
         let form = this.form.data();
         console.log("COMMENT FORM = ", form);
 
-        let token = this.state.auth.access_token;
-        let query = this.props.location.query.q;
+        if (form.comment == ""){
+            console.log("blank comment");
+        } else {
+            let token = this.state.auth.access_token;
+            let query = this.props.location.query.q;
 
-        // make PUT REST call to be handled by EventController (mapped in urlMappings.groovy)
-        fetch("/api/event/update_comments?q=" + query + "&c=" + form.comment, { // parameters for the method
-            method: 'PUT',
-            headers: {
-                'Authorization': 'Bearer ' + token
-            }
-        })
-            .then(checkStatus)
-            .then(this.success_update_comment)
-            .catch(this.fail_comment);
+            // make PUT REST call to be handled by EventController (mapped in urlMappings.groovy)
+            fetch("/api/event/update_comments?q=" + query + "&c=" + form.comment, { // parameters for the method
+                method: 'PUT',
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                }
+            })
+                .then(checkStatus)
+                .then(this.success_update_comment)
+                .catch(this.fail_comment);
+        }
     }
 
     success_update_comment(comment_response){
@@ -213,7 +219,7 @@ class EventPage extends React.Component {
         })
             .then(checkStatus)
             .then(this.success_update_rating)
-            .catch(this.fail_comment);
+            .catch(this.fail_do_nothing);
     }
 
     /**
@@ -243,7 +249,7 @@ class EventPage extends React.Component {
             })
                 .then(checkStatus)
                 .then(this.success_remove_rsvp)
-                .catch(this.fail_comment);
+                .catch(this.fail_do_nothing);
 
         } else {
             // user is not RSVP'd to the event, add it to their rsvp
@@ -542,7 +548,7 @@ class EventPage extends React.Component {
 
                 <div className="col-md-10">
                     <h2> Comments: </h2> <hr/>
-                    {this.state.has_comments ? {comments} : <p>No comments yet. Be the first to comment!</p>}
+                    {comments}
                     <CommentForm submitLabel="Post Comment" onSubmit={this.update_comments} ref={ (ref) => this.form = ref }/>
                 </div>
 

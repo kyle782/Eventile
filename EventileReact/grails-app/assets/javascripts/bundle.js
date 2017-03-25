@@ -30660,7 +30660,7 @@
 	            event_comments_ids: [],
 	            event_comments: [],
 	            related_events: [],
-	            has_comments: false
+	            event_comments_obj: []
 	        };
 
 	        return _this;
@@ -30684,11 +30684,9 @@
 	            if (event_result.image_url != "") {
 	                this.setState({ image_url: event_result.img_url });
 	            }
-	            if (event_result.comments.length != 0) {
-	                this.setState({ event_comments: event_result.comments, has_comments: true });
-	            } else {
-	                this.setState({ has_comments: false });
-	            }
+	            /**if (event_result.comments.length !=0){
+	                this.setState({event_comments_obj: event_result.comments})
+	            } **/
 	        }
 	    }, {
 	        key: 'fail',
@@ -30712,6 +30710,11 @@
 	        key: 'fail_comment',
 	        value: function fail_comment(error) {
 	            console.log("FAILED UPDATING COMMENT = ", error);
+	        }
+	    }, {
+	        key: 'fail_do_nothing',
+	        value: function fail_do_nothing(error) {
+	            console.log("failed: ", error);
 	        }
 	    }, {
 	        key: 'getEvent',
@@ -30760,16 +30763,20 @@
 	            var form = this.form.data();
 	            console.log("COMMENT FORM = ", form);
 
-	            var token = this.state.auth.access_token;
-	            var query = this.props.location.query.q;
+	            if (form.comment == "") {
+	                console.log("blank comment");
+	            } else {
+	                var token = this.state.auth.access_token;
+	                var query = this.props.location.query.q;
 
-	            // make PUT REST call to be handled by EventController (mapped in urlMappings.groovy)
-	            fetch("/api/event/update_comments?q=" + query + "&c=" + form.comment, { // parameters for the method
-	                method: 'PUT',
-	                headers: {
-	                    'Authorization': 'Bearer ' + token
-	                }
-	            }).then(checkStatus).then(this.success_update_comment).catch(this.fail_comment);
+	                // make PUT REST call to be handled by EventController (mapped in urlMappings.groovy)
+	                fetch("/api/event/update_comments?q=" + query + "&c=" + form.comment, { // parameters for the method
+	                    method: 'PUT',
+	                    headers: {
+	                        'Authorization': 'Bearer ' + token
+	                    }
+	                }).then(checkStatus).then(this.success_update_comment).catch(this.fail_comment);
+	            }
 	        }
 	    }, {
 	        key: 'success_update_comment',
@@ -30798,7 +30805,7 @@
 	                headers: {
 	                    'Authorization': 'Bearer ' + token
 	                }
-	            }).then(checkStatus).then(this.success_update_rating).catch(this.fail_comment);
+	            }).then(checkStatus).then(this.success_update_rating).catch(this.fail_do_nothing);
 	        }
 
 	        /**
@@ -30829,7 +30836,7 @@
 	                    headers: {
 	                        'Authorization': 'Bearer ' + token
 	                    }
-	                }).then(checkStatus).then(this.success_remove_rsvp).catch(this.fail_comment);
+	                }).then(checkStatus).then(this.success_remove_rsvp).catch(this.fail_do_nothing);
 	            } else {
 	                // user is not RSVP'd to the event, add it to their rsvp
 	                var _token = this.state.auth.access_token;
@@ -31331,11 +31338,7 @@
 	                    ),
 	                    ' ',
 	                    _react2.default.createElement('hr', null),
-	                    this.state.has_comments ? { comments: comments } : _react2.default.createElement(
-	                        'p',
-	                        null,
-	                        'No comments yet. Be the first to comment!'
-	                    ),
+	                    comments,
 	                    _react2.default.createElement(_commentForm2.default, { submitLabel: 'Post Comment', onSubmit: this.update_comments, ref: function ref(_ref) {
 	                            return _this2.form = _ref;
 	                        } })

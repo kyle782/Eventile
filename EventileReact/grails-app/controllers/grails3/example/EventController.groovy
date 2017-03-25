@@ -204,12 +204,7 @@ class EventController {
     @Secured(['ROLE_USER'])
     def get_related_events(String current_event_category, String q){
 
-        System.out.print("current cat = " + current_event_category + " q = " + q)
-
         def related_events_all = Event.findAllByCategory_name(current_event_category)
-
-        System.out.println("related events all secured = " + related_events_all)
-
         def related_events = related_events_all.subList(0, 4)
 
         respond related_events
@@ -217,11 +212,7 @@ class EventController {
 
     def get_related_events_public(String current_event_category, String q){
 
-        System.out.print("current cat = " + current_event_category + " q = " + q)
-
         def related_events_all = Event.findAllByCategory_name(current_event_category)
-
-        System.out.println("related events all public = " + related_events_all)
         def related_events = related_events_all.subList(0, 4)
 
         respond related_events
