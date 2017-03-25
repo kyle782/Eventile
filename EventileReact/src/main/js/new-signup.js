@@ -48,89 +48,90 @@ class UserForm extends React.Component {
     render() {
         return (
 
-            <form className="form-horizontal" name="signInForm" onSubmit={this.props.onSubmit} ref="signInForm">
-                <div className="form-group">
-                    <label htmlFor="signin-name" className="col-sm-3 control-label">Username</label>
-                    <div className="col-sm-9">
-                        <input type="text"
-                               className="form-control" id="signin-name"
-                               placeholder="Username"
-                               ref="name"
-                        />
+              <form className="form-horizontal" name="signInForm" onSubmit={this.props.onSubmit} ref="signInForm">
+                <div className="registration-page">
+                    <div className="form-group">
+                        <label htmlFor="signin-name" className="col-sm-3 control-label">Username</label>
+                        <div className="col-sm-9">
+                            <input type="text"
+                                   className="form-control" id="signin-name"
+                                   placeholder="Username"
+                                   ref="name"
+                            />
+                        </div>
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="inputPassword3" className="col-sm-3 control-label">Password</label>
+                        <div className="col-sm-9">
+                            <input type="password"
+                                   className="form-control"
+                                   id="signin-password"
+                                   placeholder="Password"
+                                   ref="password"
+                            />
+                        </div>
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="signin-age" className="col-sm-3 control-label">Age</label>
+                        <div className="col-sm-3">
+                            <input type="age"
+                                   className="form-control"
+                                   id="signin-age"
+                                   placeholder="Age"
+                                   ref="age"
+                            />
+                        </div>
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="userlocation" className="col-sm-3 control-label">Location</label>
+                        <div className="col-sm-9">
+                            <input type="location"
+                                   className="form-control"
+                                   id="signin-location"
+                                   placeholder="Location"
+                                   ref="location"
+                            />
+                        </div>
                     </div>
                 </div>
-                <div className="form-group">
-                    <label htmlFor="inputPassword3" className="col-sm-3 control-label">Password</label>
-                    <div className="col-sm-9">
-                        <input type="password"
-                               className="form-control"
-                               id="signin-password"
-                               placeholder="Password"
-                               ref="password"
-                        />
-                    </div>
-                </div>
-                <div className="form-group">
-                    <label htmlFor="signin-age" className="col-sm-3 control-label">Age</label>
-                    <div className="col-sm-3">
-                        <input type="age"
-                               className="form-control"
-                               id="signin-age"
-                               placeholder="Age"
-                               ref="age"
-                        />
-                    </div>
-                </div>
-                <div className="form-group">
-                    <label htmlFor="userlocation" className="col-sm-3 control-label">Location</label>
-                    <div className="col-sm-9">
-                        <input type="location"
-                               className="form-control"
-                               id="signin-location"
-                               placeholder="Location"
-                               ref="location"
-                        />
-                    </div>
-                </div>
-
-                {/** Checkboxes for preferences **/}
+               {/** Checkboxes for preferences **/}
 
                 <hr/>
 
                 <center><h4> Tell us what you are interested in: </h4></center>
                 <br/>
 
-                <div className="form-group">
-                    <label htmlFor="pref_music" className="col-sm-3 control-label">Music</label>
-                    <div className="col-sm-9">
-                        <input
-                            name="pref_music"
-                            className="form-check" /** might have to change this to align horizontally **/
-                            type="checkbox"
-                            checked={this.state.pref_music}
-                            onChange={this.handleInputChange}
-                            ref="pref_music"
-                        />
-                    </div>
+                <div className="option">
+                        <div className="option-name"><label htmlFor="pref_music" className="">Music</label></div>
+                        <div className="check-box">
+                            <input
+                                name="pref_music"
+                                className="form-check" /** might have to change this to align horizontally **/
+                                type="checkbox"
+                                checked={this.state.pref_music}
+                                onChange={this.handleInputChange}
+                                ref="pref_music"
+                            />
+                        </div>
                 </div>
 
-                <div className="form-group">
-                    <label htmlFor="pref_bus_prof" className="col-sm-3 control-label">Business & Professional</label>
-                    <div className="col-sm-9">
-                        <input
-                            name="pref_bus_prof"
-                            className="form-check"
-                            type="checkbox"
-                            checked={this.state.pref_bus_prof}
-                            onChange={this.handleInputChange}
-                            ref="pref_bus_prof"
-                        />
-                    </div>
+                <div className="option">
+                        <div className="option-name"><label htmlFor="pref_bus_prof" className="">Business & Professional</label></div>
+                        <div className="check-box">
+                            <input
+                                name="pref_bus_prof"
+                                className="form-check"
+                                type="checkbox"
+                                checked={this.state.pref_bus_prof}
+                                onChange={this.handleInputChange}
+                                ref="pref_bus_prof"
+                            />
+                        </div>
                 </div>
 
-                <div className="form-group">
-                    <label htmlFor="pref_food_drink" className="col-sm-3 control-label">Food & Drink</label>
-                    <div className="col-sm-9">
+                <div className="option">
+                    <div className="option-name"><label htmlFor="pref_food_drink" className="">Food & Drink</label></div>
+                    <div className="check-box">
                         <input
                             name="pref_food_drink"
                             className="form-check"
@@ -142,9 +143,9 @@ class UserForm extends React.Component {
                     </div>
                 </div>
 
-                <div className="form-group">
-                    <label htmlFor="pref_comm_culture" className="col-sm-3 control-label">Community & Culture</label>
-                    <div className="col-sm-9">
+                <div className="option">
+                   <div className="option-name"> <label htmlFor="pref_comm_culture" className="">Community & Culture</label></div>
+                    <div className="check-box">
                         <input
                             name="pref_comm_culture"
                             className="form-check"
@@ -156,9 +157,9 @@ class UserForm extends React.Component {
                     </div>
                 </div>
 
-                <div className="form-group">
-                    <label htmlFor="pref_perf_vis_art" className="col-sm-3 control-label">Performing & Visual Arts</label>
-                    <div className="col-sm-9">
+                <div className="option">
+                    <div className="option-name"><label htmlFor="pref_perf_vis_art" className="">Performing & Visual Arts</label></div>
+                    <div className="check-box">
                         <input
                             name="pref_perf_vis_art"
                             className="form-check"
@@ -170,9 +171,9 @@ class UserForm extends React.Component {
                     </div>
                 </div>
 
-                <div className="form-group">
-                    <label htmlFor="pref_film_media_ent" className="col-sm-3 control-label">Film, Media & Entertainment</label>
-                    <div className="col-sm-9">
+                <div className="option">
+                    <div className="option-name"><label htmlFor="pref_film_media_ent" className="">Film, Media & Entertainment</label></div>
+                    <div className="check-box">
                         <input
                             name="pref_film_media_ent"
                             className="form-check"
@@ -184,9 +185,9 @@ class UserForm extends React.Component {
                     </div>
                 </div>
 
-                <div className="form-group">
-                    <label htmlFor="pref_sports_fitness" className="col-sm-3 control-label">Sports & Fitness</label>
-                    <div className="col-sm-9">
+                <div className="option">
+                    <div className="option-name"><label htmlFor="pref_sports_fitness" className="">Sports & Fitness</label></div>
+                    <div className="check-box">
                         <input
                             name="pref_sports_fitness"
                             className="form-check"
@@ -198,9 +199,9 @@ class UserForm extends React.Component {
                     </div>
                 </div>
 
-                <div className="form-group">
-                    <label htmlFor="pref_health_well" className="col-sm-3 control-label">Health & Wellness</label>
-                    <div className="col-sm-9">
+                <div className="option">
+                    <div className="option-name"><label htmlFor="pref_health_well" className="">Health & Wellness</label></div>
+                    <div className="check-box">
                         <input
                             name="pref_health_well"
                             className="form-check"
@@ -212,9 +213,9 @@ class UserForm extends React.Component {
                     </div>
                 </div>
 
-                <div className="form-group">
-                    <label htmlFor="pref_sci_tech" className="col-sm-3 control-label">Science & Technology</label>
-                    <div className="col-sm-9">
+                <div className="option">
+                    <div className="option-name"><label htmlFor="pref_sci_tech" className="">Science & Technology</label></div>
+                    <div className="check-box">
                         <input
                             name="pref_sci_tech"
                             className="form-check"
@@ -226,9 +227,9 @@ class UserForm extends React.Component {
                     </div>
                 </div>
 
-                <div className="form-group">
-                    <label htmlFor="pref_trav_outd" className="col-sm-3 control-label">Travel & Outdoor</label>
-                    <div className="col-sm-9">
+                <div className="option">
+                    <div className="option-name"><label htmlFor="pref_trav_outd" className="">Travel & Outdoor</label></div>
+                    <div className="check-box">
                         <input
                             name="pref_trav_outd"
                             className="form-check"
@@ -240,9 +241,9 @@ class UserForm extends React.Component {
                     </div>
                 </div>
 
-                <div className="form-group">
-                    <label htmlFor="pref_char_games" className="col-sm-3 control-label">Charity & Games</label>
-                    <div className="col-sm-9">
+                <div className="option">
+                    <div className="option-name"><label htmlFor="pref_char_games" className="">Charity & Games</label></div>
+                    <div className="check-box">
                         <input
                             name="pref_char_games"
                             className="form-check"
@@ -254,9 +255,9 @@ class UserForm extends React.Component {
                     </div>
                 </div>
 
-                <div className="form-group">
-                    <label htmlFor="pref_religion_spirit" className="col-sm-3 control-label">Religion & Spirituality</label>
-                    <div className="col-sm-9">
+                <div className="option">
+                    <div className="option-name"><label htmlFor="pref_religion_spirit" className="">Religion & Spirituality</label></div>
+                    <div className="check-box">
                         <input
                             name="pref_religion_spirit"
                             className="form-check"
@@ -268,9 +269,9 @@ class UserForm extends React.Component {
                     </div>
                 </div>
 
-                <div className="form-group">
-                    <label htmlFor="pref_family_edu" className="col-sm-3 control-label">Family & Education</label>
-                    <div className="col-sm-9">
+                <div className="option">
+                   <div className="option-name"> <label htmlFor="pref_family_edu" className="">Family & Education</label></div>
+                    <div className="check-box">
                         <input
                             name="pref_family_edu"
                             className="form-check"
@@ -282,9 +283,9 @@ class UserForm extends React.Component {
                     </div>
                 </div>
 
-                <div className="form-group">
-                    <label htmlFor="pref_season_holi" className="col-sm-3 control-label">Seasonal & Holiday</label>
-                    <div className="col-sm-9">
+                <div className="option">
+                    <div className="option-name"><label htmlFor="pref_season_holi" className="">Seasonal & Holiday</label></div>
+                    <div className="check-box">
                         <input
                             name="pref_season_holi"
                             className="form-check"
@@ -296,9 +297,9 @@ class UserForm extends React.Component {
                     </div>
                 </div>
 
-                <div className="form-group">
-                    <label htmlFor="pref_gov_poli" className="col-sm-3 control-label">Government & Politics</label>
-                    <div className="col-sm-9">
+                <div className="option">
+                    <div className="option-name"><label htmlFor="pref_gov_poli" className="">Government & Politics</label></div>
+                    <div className="check-box">
                         <input
                             name="pref_gov_poli"
                             className="form-check"
@@ -310,9 +311,9 @@ class UserForm extends React.Component {
                     </div>
                 </div>
 
-                <div className="form-group">
-                    <label htmlFor="pref_fash_beaut" className="col-sm-3 control-label">Fashion & Beauty</label>
-                    <div className="col-sm-9">
+                <div className="option">
+                    <div className="option-name"><label htmlFor="pref_fash_beaut" className="">Fashion & Beauty</label></div>
+                    <div className="check-box">
                         <input
                             name="pref_fash_beaut"
                             className="form-check"
@@ -324,9 +325,9 @@ class UserForm extends React.Component {
                     </div>
                 </div>
 
-                <div className="form-group">
-                    <label htmlFor="pref_home_life" className="col-sm-3 control-label">Home & Lifestyle</label>
-                    <div className="col-sm-9">
+                <div className="option">
+                    <div className="option-name"><label htmlFor="pref_home_life" className="">Home & Lifestyle</label></div>
+                    <div className="check-box">
                         <input
                             name="pref_home_life"
                             className="form-check"
@@ -338,9 +339,9 @@ class UserForm extends React.Component {
                     </div>
                 </div>
 
-                <div className="form-group">
-                    <label htmlFor="pref_auto_boat_air" className="col-sm-3 control-label">Auto, Boat & Air</label>
-                    <div className="col-sm-9">
+                <div className="option">
+                    <div className="option-name"><label htmlFor="pref_auto_boat_air" className="">Auto, Boat & Air</label></div>
+                    <div className="check-box">
                         <input
                             name="pref_auto_boat_air"
                             className="form-check"
@@ -352,9 +353,9 @@ class UserForm extends React.Component {
                     </div>
                 </div>
 
-                <div className="form-group">
-                    <label htmlFor="pref_hobbies_ints" className="col-sm-3 control-label">Hobbies & Special Interest</label>
-                    <div className="col-sm-9">
+                <div className="option">
+                    <div className="option-name"><label htmlFor="pref_hobbies_ints" className="">Hobbies & Special Interest</label></div>
+                    <div className="check-box">
                         <input
                             name="pref_hobbies_ints"
                             className="form-check"
@@ -366,9 +367,9 @@ class UserForm extends React.Component {
                     </div>
                 </div>
 
-                <div className="form-group">
-                    <label htmlFor="pref_other" className="col-sm-3 control-label">Other</label>
-                    <div className="col-sm-9">
+                <div className="option">
+                    <div className="option-name"><label htmlFor="pref_other" className="">Other</label> </div>
+                    <div className="check-box">
                         <input
                             name="pref_other"
                             className="form-check"
@@ -429,3 +430,4 @@ class UserForm extends React.Component {
 }
 
 export default UserForm;
+
