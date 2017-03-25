@@ -4,9 +4,6 @@
 
 Eventile is the one stop shop for events happening across the major event platforms (EventBrite, Ticketmaster, and Eventful) on the internet. Eventile allows for users to search for events across the major platforms and displays the events as tiles in the browser. Eventile also allows users to create their own customized profile where they can pick and choose event categories that they are interested in. The users will then be shown events matching their interest. Below are some of the basic features that will be implemented in Eventile.
 
-## Updates Summary, ver 1.1 (03/03/2017)
-  Stage 2 has completed classes to handle user account creation and some event searching (more detail below). When a particular account is already created but a then a user attempts to create an account under that name, an error message is thrown and the duplicate account cannot be created. 
-
 ## Updates Summary, ver 1.2 (03/24/2017)
   In Stage 3 we have created multiple classes and controllers to handle various aspects of the app based on our user stories. Before a user is signed in, the welcome page will show popular events in the form of a "tile", which includes an image of the event and a brief description. 
   
