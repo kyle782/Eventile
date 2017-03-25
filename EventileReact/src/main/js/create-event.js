@@ -28,6 +28,11 @@ class CreateEvent extends React.Component {
             new_event_name: 'default',
             new_event_description: '',
             new_event_location: '',
+            new_event_date: '',
+            new_event_time: '',
+            new_event_timezone: '',
+            new_event_category: '',
+            new_event_img: '',
             created: false,
             create_success: true,
             new_event_id: '',
@@ -41,9 +46,14 @@ class CreateEvent extends React.Component {
         let form = this.form.data();
         let token = this.state.auth.access_token;
 
-        fetch("/api/event/create_event?event_name=" + form.event_name + "&event_description=" + form.event_description +
-        "&event_location=" + form.event_location +
-        "&event_date=" + form.event_date, {
+        fetch("/api/event/create_event?event_name=" + form.event_name +
+            "&event_description=" + form.event_description +
+            "&event_location=" + form.event_location +
+            "&event_date=" + form.event_date +
+            "&event_time=" + form.event_time +
+            "&event_timezone=" + form.event_timezone +
+            "&event_category=" + form.event_category +
+            "&event_img=" + form.event_img, {
             method: 'POST',
             headers: {
                 'Authorization': 'Bearer ' + token // pass authentication token as a header to the REST API call
@@ -76,12 +86,12 @@ class CreateEvent extends React.Component {
         let Failed = () => <p className="alert alert-danger">Failed: {this.state.error}</p>;
         return (
 
-                <div className="col-sm-4 col-sm-offset-4">
-                    <center><h2> Create an Event </h2></center>
-                    <hr/>
-                    <CreateEventForm onSubmit={this.createEvent} ref={ (ref) => this.form = ref }/>
-                    {this.state.created ? this.state.create_success ? <Success/> : <Failed/> : null }
-                </div>
+            <div className="col-sm-4 col-sm-offset-4">
+                <center><h2> Create an Event </h2></center>
+                <hr/>
+                <CreateEventForm onSubmit={this.createEvent} ref={ (ref) => this.form = ref }/>
+                {this.state.created ? this.state.create_success ? <Success/> : <Failed/> : null }
+            </div>
 
         )
     }

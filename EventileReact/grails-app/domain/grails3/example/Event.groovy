@@ -10,7 +10,6 @@ class Event {
         // need to make nullable since grails rejects storing the event in the database if they are null
         description nullable: true
         start_date_local nullable: true
-        start_date_local nullable: true
         start_date_timezone nullable: true
         total_rating nullable: true
         num_ratings nullable: true
@@ -25,6 +24,7 @@ class Event {
         attendees nullable: true
         ratings nullable: true
         start_date_local_time nullable: true
+        category_name nullable: true;
     }
 
     String name

@@ -104,11 +104,15 @@ class EventController {
     @Secured(['ROLE_USER'])
     // obtain parameters from the REST call in createEvent() in create-event.js
     def create_event(@RequestParameter('event_name') String event_name,
-                     @RequestParameter('event_date') String event_date,
+                     @RequestParameter('event_description') String event_description,
                      @RequestParameter('event_location') String event_location,
-                     @RequestParameter('event_description') String event_description){
+                     @RequestParameter('event_date') String event_date,
+                     @RequestParameter('event_time') String event_time,
+                     @RequestParameter('event_timezone') String event_timezone,
+                     @RequestParameter('event_category') String event_category,
+                     @RequestParameter('event_img') String event_img){
 
-        if (!event_name || !event_date || !event_location || !event_description){
+        if (!event_name || !event_date || !event_location || !event_description || !event_category || !event_time || !event_timezone){
             throw new IllegalArgumentException("You must enter a name, description, location, and start date for the event!")
         }
 
@@ -118,9 +122,9 @@ class EventController {
         int random_id_int = Math.abs(new Random().nextInt() % 15000000) + 1
         String random_id = String.valueOf(random_id_int)
 
-        Event new_event = new Event(name: event_name, description: event_description,
-                location: event_location, start_date: event_date, category_name: "test cat", eventbrite_id: random_id,
-                eventbrite_url: "blahblah", creator: user)
+        Event new_event = new Event(name: event_name, description: event_description, venue_address: event_location,
+                start_date_local: event_date, start_date_local_time: event_time, start_date_timezone: event_timezone,
+                category_name: event_category, img_url: event_img, eventbrite_id: random_id, eventbrite_url: "blahblah", creator: user)
 
         if (!new_event.save()){
             System.out.println(new_event.errors)

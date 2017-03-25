@@ -27,8 +27,6 @@ class Search extends React.Component {
             events: [],
             auth: JSON.parse(localStorage.auth),
             value: "",
-            sort_date: false,
-            sort_dist: false,
             found_events: true
         }
     }
@@ -130,12 +128,13 @@ class Search extends React.Component {
 
                 <div>
                     <label>
-                        Sort By
+                        Sort By &nbsp;
                         <select className="selectpicker" value={this.state.value} onChange={this.change}>
                             <option value="">Most Relevant</option>
                             <option value="date">Date</option>
                             <option value="distance">Distance</option>
                             <option value="free">Free Events Only</option>
+                            <option value="paid">Paid Events Only</option>
                         </select>
                     </label>
                 </div>
