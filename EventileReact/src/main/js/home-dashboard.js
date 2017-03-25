@@ -24,6 +24,8 @@ class HomeDashboard extends React.Component {
     constructor() {
         super();
         this.getPreferenceEvents = this.getPreferenceEvents.bind(this);
+        this.search = this.search.bind(this);
+        this.change = this.change.bind(this);
         this.getLocation = this.getLocation.bind(this);
         this.fail = this.fail.bind(this);
         this.success = this.success.bind(this);
@@ -33,6 +35,7 @@ class HomeDashboard extends React.Component {
         this.state = {
             events: [],
             loaded: false,
+            value: "",
             location: 'London, Ontario',
             user_has_prefs: false,
             user_prefs_ids: [],
@@ -113,7 +116,7 @@ class HomeDashboard extends React.Component {
             // search based on the preferred categories if they have preferences
             console.log("user selected prefs");
 
-            fetch("/api/dashboard?prefs=" + preference_ids , {
+            fetch("/api/dashboard?prefs=" + preference_ids + "&sort=" + this.state.value, {
                 headers: {
                     'Authorization': 'Bearer ' + token // pass authentication token as a header to the REST API call
                 }
@@ -124,8 +127,38 @@ class HomeDashboard extends React.Component {
         }
     }
 
+    search(e) {
+
+        e.preventDefault();
+        // search based on the preferred categories if they have preferences
+        let token = this.state.auth.access_token;
+        let preference_ids = this.state.user_prefs_ids;
+        let has_prefs = this.state.user_has_prefs;
+
+        if (!has_prefs) {
+            fetch("/welcome_search?location=" + "London, Ontario" + "&sort=" + this.state.value)
+                .then(checkStatus)
+                .then(this.success)
+                .catch(this.fail)
+        }
+        else {
+            fetch("/api/dashboard?prefs=" + preference_ids + "&sort=" + this.state.value, {
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                }
+            })
+                .then(checkStatus)
+                .then(this.success)
+                .catch(this.fail)
+        }
+    }
+
     getImageURL(event){
         return event.img_url;
+    }
+
+    change(event) {
+        this.setState({value: event.target.value});
     }
 
     render() {
@@ -157,13 +190,24 @@ class HomeDashboard extends React.Component {
 
             <div className="container">
                 <div>
+                    <form onSubmit={this.search}>
                     <center><h2> Your Home Dashboard </h2></center>
                     <hr/>
                     <h3>Here are your personalized events:</h3>
                     <br/>
+                    <select className="selectpicker" value={this.state.value} onChange={this.change}>
+                        <option value="">Most Relevant</option>
+                        <option value="date">Date</option>
+                        <option value="distance">Distance</option>
+                        <option value="free">Free Events Only</option>
+                        <option value="paid">Paid Events Only</option>
+                    </select> &nbsp;
+                    <button type="submit" className="btn btn-default">Filter!</button>
+                    <hr/>
                     <div className="card-columns">
                         {events}
                     </div>
+                    </form>
                 </div>
             </div>
 

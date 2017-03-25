@@ -11,10 +11,10 @@ class DashboardController {
 
     def DashboardService
 
-    def search(String prefs){
+    def search(String prefs, String sort){
 
         // perform a GET requestion to Eventbrite's API using WelcomeService class
-        def response_eventbrite = DashboardService.search(prefs)
+        def response_eventbrite = DashboardService.search(prefs, sort)
         respond response_eventbrite
     }
 
