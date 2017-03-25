@@ -206,8 +206,9 @@ class PublicEventPage extends React.Component {
                 </div>
 
                 <hr/>
+                <br/>
 
-                <div className="row">
+                <div className="col-lg-12">
                     {this.state.loaded ?
                         <div className="card-deck">
                             {related_events}
@@ -215,6 +216,19 @@ class PublicEventPage extends React.Component {
                         : null
                     }
                 </div>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+
+
+
+
+
+
+
             </div>
 
         )

@@ -32564,15 +32564,22 @@
 	                    )
 	                ),
 	                _react2.default.createElement('hr', null),
+	                _react2.default.createElement('br', null),
 	                _react2.default.createElement(
 	                    'div',
-	                    { className: 'row' },
+	                    { className: 'col-lg-12' },
 	                    this.state.loaded ? _react2.default.createElement(
 	                        'div',
 	                        { className: 'card-deck' },
 	                        related_events
 	                    ) : null
-	                )
+	                ),
+	                _react2.default.createElement('br', null),
+	                _react2.default.createElement('br', null),
+	                _react2.default.createElement('br', null),
+	                _react2.default.createElement('br', null),
+	                _react2.default.createElement('br', null),
+	                _react2.default.createElement('br', null)
 	            );
 	        }
 	    }]);
