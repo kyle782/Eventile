@@ -29464,7 +29464,7 @@
 	                _react2.default.createElement('br', null),
 	                _react2.default.createElement(
 	                    'div',
-	                    null,
+	                    { className: 'container' },
 	                    _react2.default.createElement(
 	                        'label',
 	                        null,
@@ -31754,7 +31754,7 @@
 	        key: 'handleSubmit',
 	        value: function handleSubmit(event) {
 	            console.log("new location: " + this.state.new_location);
-	            this.setState({ location: this.state.new_location, searching: true, loaded: false });
+	            this.setState({ location: this.state.new_location, searching: true, loaded: false }, this.getNearbyEvents);
 	            this.getNearbyEvents();
 	            event.preventDefault();
 	        }
@@ -31872,13 +31872,17 @@
 	                            ),
 	                            _react2.default.createElement('input', { type: 'text', value: this.state.new_location, onChange: this.handleChange,
 	                                className: 'form-control', placeholder: 'London, Ontario' }),
-	                            _react2.default.createElement('input', { type: 'submit', value: 'Submit', className: 'btn btn-default' })
+	                            _react2.default.createElement('input', { disabled: this.state.searching, type: 'submit', value: 'Submit', className: 'btn btn-default' })
 	                        ),
 	                        _react2.default.createElement('br', null),
 	                        this.state.searching ? _react2.default.createElement(
-	                            'p',
+	                            'center',
 	                            null,
-	                            'Searching....please wait...'
+	                            _react2.default.createElement(
+	                                'h4',
+	                                null,
+	                                'Searching...please wait'
+	                            )
 	                        ) : null,
 	                        _react2.default.createElement(
 	                            'div',
@@ -31970,6 +31974,7 @@
 	            location: 'London, Ontario',
 	            user_has_prefs: false,
 	            user_prefs_ids: [],
+	            searching: false,
 	            auth: JSON.parse(localStorage.auth)
 	        };
 	        return _this;
@@ -31986,7 +31991,7 @@
 	        key: 'success',
 	        value: function success(events) {
 	            console.log("Search result", events);
-	            this.setState({ events: events, loaded: true });
+	            this.setState({ events: events, loaded: true, searching: false });
 	        }
 	    }, {
 	        key: 'success_ip',
@@ -32011,7 +32016,7 @@
 	        key: 'fail',
 	        value: function fail(error) {
 	            console.error("Search has failed", error);
-	            this.setState({ loaded: true });
+	            this.setState({ loaded: true, searching: false });
 	        }
 	    }, {
 	        key: 'getUser',
@@ -32061,6 +32066,8 @@
 	            var token = this.state.auth.access_token;
 	            var preference_ids = this.state.user_prefs_ids;
 	            var has_prefs = this.state.user_has_prefs;
+
+	            this.setState({ searching: true });
 
 	            if (!has_prefs) {
 	                fetch("/welcome_search?location=" + "London, Ontario" + "&sort=" + this.state.value).then(checkStatus).then(this.success).catch(this.fail);
@@ -32194,15 +32201,23 @@
 	                        ' \xA0',
 	                        _react2.default.createElement(
 	                            'button',
-	                            { type: 'submit', className: 'btn btn-default' },
+	                            { type: 'submit', disabled: this.state.searching, className: 'btn btn-default' },
 	                            'Filter!'
 	                        ),
-	                        _react2.default.createElement('hr', null),
+	                        _react2.default.createElement('hr', null)
+	                    ),
+	                    this.state.searching ? _react2.default.createElement(
+	                        'center',
+	                        null,
 	                        _react2.default.createElement(
-	                            'div',
-	                            { className: 'card-columns' },
-	                            events
+	                            'h4',
+	                            null,
+	                            'Searching...please wait'
 	                        )
+	                    ) : _react2.default.createElement(
+	                        'div',
+	                        { className: 'card-columns' },
+	                        events
 	                    )
 	                )
 	            );

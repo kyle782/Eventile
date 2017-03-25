@@ -39,6 +39,7 @@ class HomeDashboard extends React.Component {
             location: 'London, Ontario',
             user_has_prefs: false,
             user_prefs_ids: [],
+            searching: false,
             auth: JSON.parse(localStorage.auth)
         }
     }
@@ -54,7 +55,7 @@ class HomeDashboard extends React.Component {
 
     success(events) {
         console.log("Search result", events);
-        this.setState({events: events, loaded: true});
+        this.setState({events: events, loaded: true, searching: false});
     }
 
     success_ip(ip) {
@@ -76,7 +77,7 @@ class HomeDashboard extends React.Component {
 
     fail(error) {
         console.error("Search has failed", error);
-        this.setState({loaded: true});
+        this.setState({loaded: true, searching: false});
     }
 
     getUser(){
@@ -134,6 +135,8 @@ class HomeDashboard extends React.Component {
         let token = this.state.auth.access_token;
         let preference_ids = this.state.user_prefs_ids;
         let has_prefs = this.state.user_has_prefs;
+
+        this.setState({searching: true});
 
         if (!has_prefs) {
             fetch("/welcome_search?location=" + "London, Ontario" + "&sort=" + this.state.value)
@@ -202,12 +205,13 @@ class HomeDashboard extends React.Component {
                         <option value="free">Free Events Only</option>
                         <option value="paid">Paid Events Only</option>
                     </select> &nbsp;
-                    <button type="submit" className="btn btn-default">Filter!</button>
+                    <button type="submit" disabled={this.state.searching} className="btn btn-default">Filter!</button>
                     <hr/>
-                    <div className="card-columns">
-                        {events}
-                    </div>
                     </form>
+                    {this.state.searching ? <center><h4>Searching...please wait</h4></center> : <div className="card-columns">
+                            {events}
+                        </div>
+                    }
                 </div>
             </div>
 

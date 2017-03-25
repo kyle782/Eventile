@@ -74,7 +74,7 @@ class WelcomePage extends React.Component {
 
     handleSubmit(event) {
         console.log("new location: " + this.state.new_location);
-        this.setState({location: this.state.new_location, searching: true, loaded: false});
+        this.setState({location: this.state.new_location, searching: true, loaded: false}, this.getNearbyEvents);
         this.getNearbyEvents();
         event.preventDefault();
     }
@@ -127,11 +127,11 @@ class WelcomePage extends React.Component {
                             <label>Not your location? Change it here: &ensp; </label>
                             <input type="text" value={this.state.new_location} onChange={this.handleChange}
                                    className="form-control" placeholder="London, Ontario"/>
-                            <input type="submit" value="Submit" className="btn btn-default"/>
+                            <input disabled={this.state.searching} type="submit" value="Submit" className="btn btn-default"/>
                         </form>
                         <br/>
                         { this.state.searching ?
-                            <p>Searching....please wait...</p> :
+                            <center><h4>Searching...please wait</h4></center> :
                             null
                         }
                         <div className="card-columns">
