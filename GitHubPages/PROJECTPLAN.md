@@ -8,8 +8,12 @@ Eventile is the one stop shop for events happening across the major event platfo
   Stage 2 has completed classes to handle user account creation and some event searching (more detail below). When a particular account is already created but a then a user attempts to create an account under that name, an error message is thrown and the duplicate account cannot be created. 
 
 ## Updates Summary, ver 1.2 (03/24/2017)
-  Stage 3 has created multiple classes and controllers to handle various aspects of the app. Before a user is signed in, the home dashboard consists of a welcome page alone with popular events shown under in the form of a "tile", which includes images and descriptions. When the user searches, they have the option of searching for checking whether the date and/or distance is close. The events pop up in the form of a tile after searched, and if an event is clicked on, the user is proceeded to an event page that now consists of "advanced features". This includes having the option to rate an event or being able to comment on an event (along with a comment section), which are all saved within the database.
-  Users are now able to advertise their own event consisting of a name, location, description, and date. User ages are updated automatically, and the user profile information is able to be changed.
+  In Stage 3 we have created multiple classes and controllers to handle various aspects of the app based on our user stories. Before a user is signed in, the welcome page will show popular events in the form of a "tile", which includes an image of the event and a brief description. 
+  
+  In the search page, the user now has the ability to sort their searches by date, distance, relevancy, or if they choose, filters to show only the free events. The events will be shown in the same way that it was in the welcome page but filtered to fit the choice made by the user. 
+  
+  Users are now also able to advertise their own events which will show on the site as a regular event. In each event, the user will now not only be able to see a brief description of the event, but also rate, comment, RSVP, or show their excitement for the event. 
+  
   
   
 ## Basic Features
