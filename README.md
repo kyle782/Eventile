@@ -4,7 +4,7 @@ We are currently developing an **event finder web application** that allows user
 
 ## Software
 
-We will be using Grails for our web application framework. Our back-end database will be using SQLite3 (built-in with Grails) along with , and our front-end uses the React Javascript library.
+We will be using Grails for our web application framework. Our back-end database will be using SQLite3 (built-in with Grails) and our front-end uses the React Javascript library.
 
 Our software stack includes the following:
 
