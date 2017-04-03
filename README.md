@@ -62,16 +62,6 @@ Once the JVM is obtained, Grails can be downloaded and installed through termina
 
 - Navigate to [http://localhost:8080](http://localhost:8080) in your favourite web browser and enjoy.
 
-## Branding
-
-### Project Logo
-
-<img src="GitHubPages/Images/Eventile Logo.png" alt="Eventile Logo" style="width:100px; height:100px;">
-
-### Alternative Project Logo/Banner
-
-<img src="GitHubPages/Images/eventile_alt_logo.png" alt="Alt_Logo">
-
 ### Directories
 
 [Team Webpage](https://jlee2967.github.io/Eventile/)
@@ -84,4 +74,4 @@ Once the JVM is obtained, Grails can be downloaded and installed through termina
 
 [Project Plan Page](GitHubPages/PROJECTPLAN.md)
 
-
+[Project Retrospective Page](GitHubPages/PROJECTRETROSPECTIVE.md)
