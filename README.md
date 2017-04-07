@@ -2,6 +2,8 @@
 
 We are currently developing an **event finder web application** that allows users to specify their interests and present nearby upcoming/on-going events that matches their interests.
 
+[Video Demonstration of Eventile](https://www.youtube.com/watch?v=3WWt2063-3U)
+
 ## Software
 
 We will be using Grails for our web application framework. Our back-end database will be using SQLite3 (built-in with Grails) and our front-end uses the React Javascript library.
